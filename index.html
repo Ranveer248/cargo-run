@@ -95,6 +95,10 @@ input { -webkit-user-select: text; user-select: text; }
 .btn.c-blue { background: #3d7bff; color: #fff; } .btn.c-green { background: #22c46f; color: #fff; } .btn.c-orange { background: #ff7a2f; color: #fff; }
 .btn.c-purple { background: #8f5cff; color: #fff; } .btn.c-grey { background: #5b6380; color: #fff; } .btn.c-pink { background: #ff4f9a; color: #fff; }
 .btn.c-teal { background: #13a89e; color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,0.35); }
+.btn.c-navy { background: #24408f; color: #fff; text-shadow: 0 2px 0 rgba(0,0,0,0.35); }
+.job .wcv { width: 54px; height: 72px; flex-shrink: 0; }
+.job.lock { opacity: .55; }
+.job .stars { color: #ffc21a; font-size: 15px; letter-spacing: .08em; }
 .btn.c-blue, .btn.c-green, .btn.c-orange, .btn.c-purple, .btn.c-grey, .btn.c-pink { text-shadow: 0 2px 0 rgba(0,0,0,0.35); }
 .btn:active:not(:disabled) { transform: translateY(4px); box-shadow: inset 0 -3px 0 rgba(0,0,0,0.2), 0 1px 0 var(--edge); }
 .btn:disabled { opacity: .45; cursor: default; filter: grayscale(.4); }
@@ -103,7 +107,7 @@ input { -webkit-user-select: text; user-select: text; }
 .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 10px; }
 .grid2 > :last-child:nth-child(odd) { grid-column: 1 / -1; justify-content: center; }
 .mbtn { display: flex; align-items: center; justify-content: flex-start; gap: 8px; font-size: clamp(15px, 4.3vw, 19px); padding: 10px 9px; min-width: 0; overflow: hidden; }
-.mbtn svg { width: 24px; height: 24px; flex-shrink: 0; filter: drop-shadow(0 2px 0 rgba(0,0,0,0.3)); }
+.mbtn svg { width: 32px; height: 32px; flex-shrink: 0; padding: 3px; border-radius: 10px; background: rgba(255,255,255,0.2); box-shadow: inset 0 -2px 0 rgba(0,0,0,0.18); filter: drop-shadow(0 2px 0 rgba(0,0,0,0.25)); }
 .row2 { display: flex; justify-content: space-between; align-items: center; }
 .link { background: none; border: 0; color: var(--dim); font: 800 15px var(--body); cursor: pointer; padding: 8px 4px; text-decoration: underline; text-underline-offset: 3px; }
 .topline { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
@@ -479,7 +483,8 @@ var UPG = [
 function upgCost(u, lvl) { return Math.round(u.base * (1 + lvl * 0.95 + lvl * lvl * 0.13) / 50) * 50; }
 // NOS was removed from the game: these upgrades and mods are refunded in normalize()
 var RETIRED_UPG = [{ id: 'nos', base: 700 }, { id: 'charge', base: 650 }, { id: 'start', base: 550 }, { id: 'bumper', base: 650 }];
-var RETIRED_PERKS = { turbo: 2200, purge: 2400 };
+// the Air horn was removed (it cleared whole lanes): owners get their money back
+var RETIRED_PERKS = { turbo: 2200, purge: 2400, horn: 2800 };
 
 var PERKS = [
   { id: 'coil',    name: 'Magnet coil',      desc: 'Magnet lasts 40% longer and reaches farther', cost: 2200 },
@@ -493,7 +498,6 @@ var PERKS = [
   { id: 'hook',    name: 'Salvage hook',     desc: 'Wrecked cars drop cash crates',          cost: 3200 },
   { id: 'hybrid',  name: 'Hybrid engine',    desc: 'Fuel drains 12% slower',                 cost: 2800 },
   { id: 'over',    name: 'Overdrive',        desc: 'Crate streak multiplier goes up to x8',  cost: 4000 },
-  { id: 'horn',    name: 'Air horn',         desc: 'Slow cars ahead in your lane try to move over', cost: 2800 },
   { id: 'gps',     name: 'Traffic GPS',      desc: 'Warns you about stalled cars and jams ahead', cost: 2200 },
   { id: 'plating', name: 'Armour plating',   desc: 'Rocks, potholes and barrels can’t hurt you', cost: 3600 },
   { id: 'scoop',   name: 'Crate scoop',      desc: 'Grabs crates from the next lane over',    cost: 3000 },
@@ -548,7 +552,9 @@ var CLASSIC = [
   { id: 'dunes', name: 'Dune Road',     cls: 'Classic', price: 2500,  lanes: 4, verge: '#c9a56b', road: '#8a6a4a', line: '#f3e6c4', dark: false, decor: 'cacti', weather: 'none',   cash: 1.2,  drain: 1.1, steer: 1,   traffic: 1,    aggr: 0.85, hz: {} },
   { id: 'frost', name: 'Frost Pass',    cls: 'Classic', price: 5000,  lanes: 4, verge: '#dfe8f2', road: '#4a5568', line: '#f2f6fb', dark: false, decor: 'snow',  weather: 'snow',   cash: 1.35, drain: 1,   steer: 0.7, traffic: 1,    aggr: 0.95, hz: {} },
   { id: 'neon',  name: 'Neon District', cls: 'Classic', price: 9000,  lanes: 5, verge: '#120a24', road: '#1d1735', line: '#ff4fd8', dark: true,  decor: 'city',  weather: 'none',   cash: 1.5,  drain: 1,   steer: 1,   traffic: 1.15, aggr: 1.2, hz: {} },
-  { id: 'ember', name: 'Ember Canyon',  cls: 'Classic', price: 15000, lanes: 4, verge: '#2a0f0a', road: '#3a2a26', line: '#ffb35c', dark: true,  decor: 'lava',  weather: 'embers', cash: 1.7,  drain: 1,   steer: 1,   traffic: 1,    aggr: 1.3, hz: { rock: 0.9 } }
+  { id: 'ember', name: 'Ember Canyon',  cls: 'Classic', price: 15000, lanes: 4, verge: '#2a0f0a', road: '#3a2a26', line: '#ffb35c', dark: true,  decor: 'lava',  weather: 'embers', cash: 1.7,  drain: 1,   steer: 1,   traffic: 1,    aggr: 1.3, hz: { rock: 0.9 } },
+  // the twistiest road in the game: tight bends, 3 lanes and falling rocks
+  { id: 'pass',  name: 'Hairpin Pass',  cls: 'Classic', price: 20000, lanes: 3, verge: '#3d6b3f', road: '#3b3f46', line: '#f4f0dc', dark: false, decor: 'trees', leaf: '#2f6b3f', weather: 'none', cash: 1.9, drain: 1.05, steer: 1, traffic: 0.9, aggr: 1, hz: { rock: 0.4 }, curve: 2.6 }
 ];
 var THEMES = [
   { k: 'pine',    name: 'Pinewood',     verge: '#1d3a26', road: '#3b4148', line: '#e4dfc6', decor: 'trees',   leaf: '#2f6b3f', haz: ['rock', 'pothole'],   lanes: 4, cashF: 1 },
@@ -582,6 +588,7 @@ var VARS = [
 var HZ_NAMES = { rock: 'Rockfalls', barrel: 'Explosive barrels', oil: 'Oil slicks', pothole: 'Potholes' };
 function mapInfo(m) {
   var p = [m.lanes + ' lanes'];
+  if (m.curve > 1.5) p.push('Hairpin bends');
   if (m.cash !== 1) p.push((m.cash > 1 ? '+' : '') + Math.round((m.cash - 1) * 100) + '% cash');
   if (m.weather === 'rain') p.push('Rain'); if (m.weather === 'fog') p.push('Fog'); if (m.weather === 'snow') p.push('Snow');
   if (m.lightning) p.push('Lightning');
@@ -823,15 +830,20 @@ function wrapDraw(g, kind, x, y0, hw, L) {
   else if (kind === 'zebra') { g.strokeStyle = 'rgba(12,12,14,0.7)'; g.lineWidth = 2.4; for (i = 0; i < 9; i++) { var yy = y0 + L * i / 9; g.beginPath(); g.moveTo(x - hw, yy); g.quadraticCurveTo(x, yy + 6 * (i & 1 ? 1 : -1), x + hw, yy + 3); g.stroke(); } }
   else if (kind === 'hex') { g.strokeStyle = 'rgba(0,0,0,0.3)'; g.lineWidth = .8; for (i = 0; i * 6 < L; i++) for (j = -3; j <= 3; j++) { g.beginPath(); g.arc(x + j * 6 + (i & 1) * 3, y0 + i * 6, 3, 0, TAU); g.stroke(); } }
 }
+// turn signals: big amber lamps front and back with a glow, blinking about 1.5 times a second so they're easy to spot
 function signalLights(g, x, y0, y1, hw, o) {
   if (!o.sig) return;
-  var on = Math.sin((o.clock || 0) * 14) > 0;
+  var on = Math.sin((o.clock || 0) * 9.5) > -0.2;
   if (!on) return;
-  g.fillStyle = '#ffab1a';
-  if (!o.lq) { g.shadowColor = '#ffab1a'; g.shadowBlur = 8; }
   var sides = o.sig === 2 ? [-1, 1] : [o.sig];
-  sides.forEach(function (sx) { g.fillRect(x + sx * hw - (sx > 0 ? 3.5 : 0), y0 + 1, 3.5, 3.5); g.fillRect(x + sx * hw - (sx > 0 ? 3.5 : 0), y1 - 4.5, 3.5, 3.5); });
-  g.shadowBlur = 0;
+  sides.forEach(function (sx) {
+    [y0 + 3, y1 - 3].forEach(function (yy) {
+      var lx = x + sx * (hw - 1.5);
+      if (!o.lq) { g.fillStyle = 'rgba(255,171,26,0.35)'; g.beginPath(); g.arc(lx, yy, 8, 0, TAU); g.fill(); }
+      g.fillStyle = '#ffb21f'; g.beginPath(); g.arc(lx, yy, 3.4, 0, TAU); g.fill();
+      g.fillStyle = '#fff3c4'; g.beginPath(); g.arc(lx, yy, 1.4, 0, TAU); g.fill();
+    });
+  });
 }
 function stripesDraw(g, st, x, y0, y1, hw, L) {
   g.fillStyle = st.color;
@@ -1444,10 +1456,11 @@ function buildings(g, kind) {
 
 /* ================= save data ================= */
 var KEY = 'cargorun-save-v4', KEY_OLD = 'cargorun-save-v3';
-var DEFSET = { sfx: true, sfxVol: 80, music: true, musicVol: 40, vibe: true, shake: true, quality: 'high', ctrl: 'tap', nosSide: 'center', fps: false, motion: true };
+var DEFSET = { view: '2d', sfx: true, sfxVol: 80, music: true, musicVol: 40, vibe: true, shake: true, quality: 'high', ctrl: 'tap', nosSide: 'center', fps: false, motion: true };
 var EMPTY_G = { paints: {}, mods: {}, opt: {} };
 function defaults() {
   return { name: '', wallet: 0, best: 0, car: 'hauler', map: 'night', owned: { hauler: 1 }, maps: { night: 1 }, garage: {}, codes: {}, lbBest: 0, lbQueue: null,
+           police: { caught: [], best: 0, busts: 0, cars: { p_cruiser: 1 }, car: 'p_cruiser', lbBusts: 0, bq: 0 },
            stats: { runs: 0, km: 0, booms: 0, near: 0, crates: 0, earned: 0, jobs: 0 }, settings: {}, jobs: { board: [], active: [], n: 0 }, rev: 0, ts: 0 };
 }
 function normalize(s) {
@@ -1459,6 +1472,13 @@ function normalize(s) {
   for (k in DEFSET) if (s.settings[k] === undefined) s.settings[k] = DEFSET[k];
   if (!s.jobs || !Array.isArray(s.jobs.board)) s.jobs = { board: [], active: [], n: 0 };
   if (!Array.isArray(s.jobs.active)) s.jobs.active = [];
+  if (!Array.isArray(s.police.caught)) s.police.caught = [];
+  for (k = 0; k < 8; k++) s.police.caught[k] = s.police.caught[k] | 0;
+  s.police.best = +s.police.best || 0; s.police.busts = s.police.busts | 0; s.police.lbBusts = s.police.lbBusts | 0; s.police.bq = s.police.bq | 0;
+  if (!s.police.cars || typeof s.police.cars !== 'object') s.police.cars = {};
+  s.police.cars.p_cruiser = 1;
+  if (!s.police.cars[s.police.car]) s.police.car = 'p_cruiser';
+  ['deliv'].forEach(function (x) { if (typeof s.stats[x] !== 'number') s.stats[x] = 0; });
   s.owned.hauler = 1; s.maps.night = 1;
   var refund = 0;
   Object.keys(s.maps).forEach(function (id) { if (!MAPS.some(function (m) { return m.id === id; })) { refund += RETIRED_PRICE[id] || 0; delete s.maps[id]; } });
@@ -1639,6 +1659,8 @@ var Aud = {
       case 'buy': this.osc('sine', 523, 523, 0.09, 0.25, t, d); this.osc('sine', 659, 659, 0.09, 0.25, t + 0.08, d); this.osc('sine', 784, 784, 0.16, 0.25, t + 0.16, d); break;
       case 'deny': this.osc('square', 180, 140, 0.15, 0.18, t, d); break;
       case 'horn': this.osc('square', 330, 330, 0.18, 0.12, t, d); this.osc('square', 415, 415, 0.18, 0.1, t, d); break;
+      case 'siren': this.osc('triangle', 650, 1050, 0.55, 0.07, t, d); this.osc('triangle', 1050, 650, 0.55, 0.07, t + 0.55, d); break;
+      case 'bust': this.osc('square', 392, 392, 0.12, 0.18, t, d); this.osc('square', 523, 523, 0.12, 0.18, t + 0.12, d); this.osc('square', 659, 659, 0.12, 0.18, t + 0.24, d); this.osc('sine', 1046, 1046, 0.4, 0.25, t + 0.36, d); break;
     }
   },
   engine: function (on, frac) {
@@ -1686,8 +1708,11 @@ var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-moti
 
 var state = 'menu', clock = 0, scroll = 0, t = 0, cash = 0, dist = 0, lives = 3, maxLives = 3, streak = 0, inv = 0, shakeT = 0, spawnT = 0;
 var fuel = 100, shield = 0, magnet = 0, dbl = 0, slip = 0, crumpleUsed = false, countT = 0, lastCount = -1;
+var nitro = 0, NITRO_T = 4;   // nitro pickup: seconds of boost left (faster, and you smash through traffic)
 var run = { crates: 0, near: 0, booms: 0, smash: 0, fuel: 0, lastHit: 0, cleanMax: 0, jobsDone: [] };
 var reserveUsed = false, jobTick = 0, hornT = 0;
+var mode = 'cargo', chaseLvl = 0, chase = null;   // police mode: which wanted level, and the live chase
+var smug = null;   // normal mode: the hot-cargo delivery run (deliveries, heat, cops)
 var M = mapById(save.map), S = statsFor(save.car);
 var P = { lane: 1, x: 0, y: 520, w: 34, h: 70, tilt: 0 };
 var traffic = [], items = [], parts = [], pops = [], wx = [], warns = [];
@@ -1751,6 +1776,8 @@ function buildPool() {
   pool = (POOLS[M.decor] || POOLS.lamps).split(' ');
   if (M.aggr >= 1.25) pool = pool.concat(['muscle', 'sports', 'police']);
   if (M.aggr >= 1.5) pool = pool.concat(['super', 'muscle', 'police']);
+  // no police cars on the road in normal mode: they only show up on police bounties
+  if (mode !== 'police') pool = pool.map(function (k) { return k === 'police' ? 'sedan' : k; });
 }
 
 function applyMap(m) { M = m; LANES = m.lanes; LANE_W = ROAD_W / LANES; buildPool(); initWx(); }
@@ -1764,21 +1791,25 @@ function initWx() {
 function speedNow() {
   if (state === 'count') return 120;
   if (state !== 'play') return state === 'menu' ? 160 : 0;
-  return Math.min(720, 280 + t * 7);
+  return Math.min(720, 280 + t * 7) * (nitro > 0 ? 1.5 : 1);
 }
 function multNow() { return Math.min(S.multCap, 1 + Math.floor(streak / S.streakStep)); }
 function darkA() { var a = M.darkA || 0; return S.vision ? a * 0.45 : a; }
 
 function reset() {
   t = 0; cash = 0; dist = 0; streak = 0; inv = 0; shakeT = 0; spawnT = 0.6; slip = 0; dbl = 0;
-  lives = maxLives = S.lives; fuel = 100; shield = S.startShield ? 1 : 0; magnet = 0; crumpleUsed = false; reserveUsed = false; jobTick = 0; hornT = 0;
+  lives = maxLives = S.lives; fuel = 100; shield = S.startShield ? 1 : 0; magnet = 0; nitro = 0; crumpleUsed = false; reserveUsed = false; jobTick = 0; hornT = 0;
   run = { crates: 0, near: 0, booms: 0, smash: 0, fuel: 0, lastHit: 0, cleanMax: 0, jobsDone: [] };
   P.lane = Math.floor((LANES - 1) / 2); P.x = laneX(P.lane); P.w = S.w; P.h = S.h; P.tilt = 0;
   traffic = []; items = []; parts = []; pops = []; warns = []; flash = 0; nextBolt = 4 + Math.random() * 6;
+  chase = null; smug = null;
 }
 function prepare() { applyMap(mapById(save.map)); S = statsFor(save.car); reset(); }
 function startRun() {
   prepare();
+  // police bounties are driven in your police car; everything else in your own car with hot cargo on board
+  if (mode === 'police') { S = policeStats(pcById(save.police.car)); reset(); chase = newChase(); newSuspect(); }
+  else { smug = newSmuggle(); newDelivery(); }
   state = 'count'; countT = 3.2; lastCount = -1;
   Aud.init(); Aud.engine(true, 0.1);
   UIH.play();
@@ -1793,7 +1824,7 @@ function resumeGame() { if (state === 'paused') { state = 'count'; countT = 1.2;
    The whole game is one file (index.html). When the game opens, or comes back from the background, it downloads
    a fresh copy of itself and reads the version written in it; if that is newer it reloads (never during a run).
    Bump APP_VERSION for every release. */
-var APP_VERSION = '2026-10-07.1', updBusy = false;
+var APP_VERSION = '2026-10-08.1', updBusy = false;
 function inRun() { return state === 'play' || state === 'count' || state === 'paused'; }
 function checkForUpdate() {
   if (updBusy || inRun() || !/^https?:$/.test(location.protocol)) return;
@@ -1843,6 +1874,20 @@ function lbFlush() {
   }, function () { return false; });
 }
 function lbTop() { return lbFetch('/top_runs?select=name,score,car,map&order=score.desc&limit=50'); }
+// Top cops: every driver's lifetime criminals busted. Sent whenever the total goes up; a failed send is retried later.
+function bustSubmit() {
+  var p = save.police;
+  if (p.busts > p.lbBusts && save.name) { p.bq = p.busts; persist(); }
+  return bustFlush();
+}
+function bustFlush() {
+  var p = save.police, n = p.bq;
+  if (!n || !save.name) return Promise.resolve(false);
+  return lbFetch('/busts', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ name: save.name.slice(0, 12), busts: Math.min(100000, n) }) }).then(function () {
+    p.lbBusts = Math.max(p.lbBusts, n); if (p.bq === n) p.bq = 0; persist(); return true;
+  }, function () { return false; });
+}
+function copsTop() { return lbFetch('/top_cops?select=name,busts&order=busts.desc&limit=50'); }
 
 function finish(reason) {
   if (state === 'over') return;
@@ -1850,10 +1895,18 @@ function finish(reason) {
   state = 'over'; Aud.engine(false, 0); Aud.sfx('lose'); vibe([80, 60, 120]);
   var earned = Math.round(cash);
   save.wallet += earned;
-  var newBest = earned > save.best; if (newBest) save.best = earned;
-  var st = save.stats; st.runs++; st.km += dist / 1000; st.booms += run.booms; st.near += run.near; st.crates += run.crates; st.earned += earned;
-  persist();
-  var res = { reason: reason, earned: earned, best: save.best, newBest: newBest, km: dist / 1000, run: run, sub: lbSubmit(earned) };
+  var st = save.stats; st.runs++; st.km += dist / 1000; st.booms += run.booms; st.near += run.near; st.crates += run.crates; st.earned += earned; st.deliv += run.deliv || 0;
+  var res;
+  if (chase) {
+    // police shifts have their own best and stay off the Top runs leaderboard
+    var pb = earned > save.police.best; if (pb) save.police.best = earned;
+    persist();
+    res = { reason: reason, earned: earned, best: save.police.best, newBest: pb, km: dist / 1000, run: run, police: { busts: chase.busts, bounty: chase.total, lvl: chase.lvl }, sub: bustSubmit() };
+  } else {
+    var newBest = earned > save.best; if (newBest) save.best = earned;
+    persist();
+    res = { reason: reason, earned: earned, best: save.best, newBest: newBest, km: dist / 1000, run: run, sub: lbSubmit(earned) };
+  }
   setTimeout(function () { if (state === 'over') UIH.over(res); }, 800);
 }
 
@@ -1919,9 +1972,14 @@ function laneClear(c, l) {
   var lx = laneX(l), i, o;
   for (i = 0; i < traffic.length; i++) { o = traffic[i]; if (o !== c && Math.abs(o.x - lx) < (o.w + c.w) / 2 + 2 && Math.abs(o.y - c.y) < (o.h + c.h) / 2 + 34) return false; }
   for (i = 0; i < items.length; i++) { o = items[i]; if ((o.type === 'rock' || o.type === 'barrel') && Math.abs(o.x - lx) < 30 && Math.abs(o.y - c.y) < c.h / 2 + 60) return false; }
+  // nobody moves over into the side of your car
+  if (l === laneOf(P.x) && Math.abs(P.y - c.y) < (P.h + c.h) / 2 + 70) return false;
+  // traffic doesn't change lanes into the police suspect either
+  if (chase && chase.sus && c !== chase.sus) { o = chase.sus; if (Math.abs(o.x - lx) < (o.w + c.w) / 2 + 2 && Math.abs(o.y - c.y) < (o.h + c.h) / 2 + 34) return false; }
   return true;
 }
-function wantLane(c, nl, tm) { if (c.pend != null) return; c.pend = nl; c.sigT = tm != null ? tm : (c.big ? 1.1 : 0.65); c.sig = nl > c.lane ? 1 : -1; c.sigHold = 0; }
+// lane rule: ordinary traffic never cuts across lanes. Only police cars change lanes, and cars pull aside for your police siren (force).
+function wantLane(c, nl, tm, force) { if (c.pend != null || !force) return; c.pend = nl; c.sigT = tm != null ? tm : (c.big ? 1.1 : 0.65); c.sig = nl > c.lane ? 1 : -1; c.sigHold = 0; }
 function spawnTick(iv) {
   var i, lane, all = [], near = {}, nearCount = 0, ag = M.aggr * (1 + Math.min(1, t / 150) * 0.5);
   for (i = 0; i < LANES; i++) all.push(i);
@@ -1936,8 +1994,7 @@ function spawnTick(iv) {
     if (!free.length || nearCount >= limit) break;
     lane = takeLane(free);
     var r = Math.random(), beh = 'norm', f = 0.32 + Math.random() * (0.3 + 0.1 * ag);
-    if (r < 0.1 * ag) { beh = 'weave'; }
-    else if (r < 0.1 * ag + 0.12 * ag) { beh = 'speed'; f = 0.1 + Math.random() * 0.15; }
+    if (r < 0.12 * ag) { beh = 'speed'; f = 0.1 + Math.random() * 0.15; }
     var c = mkCar(lane, -90 - Math.random() * 20, f, beh);
     traffic.push(c); nearCount++;
   }
@@ -1951,7 +2008,7 @@ function spawnTick(iv) {
   var lead = S.radar ? 1.7 : 0.9;
   if (ag >= 1.15 && t > 12 && Math.random() < 0.05 * (ag - 0.75) && free.length) {
     lane = takeLane(free); warns.push({ lane: lane, side: 'top', t: lead, max: lead });
-  } else if (ag >= 0.85 && t > 18 && Math.random() < 0.04 * ag) {
+  } else if (false) {   // overtakers from behind are gone: they would have to cut lanes
     var cand = all.filter(function (l) { return !traffic.some(function (c) { return c.lane === l && c.y > H - 260; }); });
     if (cand.length) { lane = pick(cand, Math.random()); warns.push({ lane: lane, side: 'bottom', t: lead, max: lead }); }
   }
@@ -1972,7 +2029,7 @@ function spawnTick(iv) {
     if (r2 < fr * iv) type = 'fuel';
     else if (Math.random() < 0.13 * iv * luck) {
       var p = Math.random();
-      type = p < 0.3 ? 'shield' : p < 0.58 ? 'magnet' : p < 0.76 ? 'dbl' : p < 0.9 ? 'bag' : (lives < maxLives ? 'repair' : 'bag');
+      type = p < 0.25 ? 'shield' : p < 0.47 ? 'magnet' : p < 0.62 ? 'dbl' : p < 0.78 ? 'nos' : p < 0.9 ? 'bag' : (lives < maxLives ? 'repair' : 'bag');
     }
     if (type) { lane = takeLane(free); items.push({ type: type, lane: lane, x: laneX(lane), y: -30, w: 30, h: 30 }); }
   }
@@ -1992,19 +2049,22 @@ function hit(a, b, pad) { pad = pad == null ? 4 : pad; return Math.abs(a.x - b.x
 function cashGain(base) { return Math.max(5, Math.round(base * S.pay * M.cash * (dbl > 0 ? 2 : 1) / 5) * 5); }
 function wreckCar(c, boomPower, safe) {
   if (c.wreck) return;
-  c.wreck = true; c.f = 1; c.eff = 1; c.beh = 'wreck'; c.burn = 6 + Math.random() * 4;
+  c.wreck = true; c.f = 1; c.eff = 1; c.beh = 'wreck'; c.burn = 6 + Math.random() * 4; copDown(c);
   explode(c.x, c.y, boomPower || 1, safe);
   if (S.hook && state === 'play' && Math.random() < 0.8) items.push({ type: 'crate', lane: c.lane, x: c.x + (Math.random() - .5) * 20, y: c.y - c.h / 2 - 20, w: 30, h: 30, salvage: true });
 }
 
 function takeHit(why) {
   if (inv > 0 || state !== 'play') return false;
+  // in a chase, any crash costs ground on the suspect and the clean-catch bonus
+  if (chase && chase.sus) { chase.kv += 600; chase.hits++; }
   if (S.crumple && !crumpleUsed) { crumpleUsed = true; inv = 1.2; shakeT = 0.6; pop(P.x, P.y - 60, 'Crumple zone saved you', '#9be7ff', true); Aud.sfx('crash'); return false; }
   shakeT = 1; vibe(70); Aud.sfx('crash');
   if (!S.bull) streak = 0;
   burst(P.x, P.y - P.h / 2, 16, '#ffd060', 160, 0.4, 2.5, 0);
   if (shield > 0) { shield--; inv = 1.0; run.cleanMax = Math.max(run.cleanMax, (dist - run.lastHit) / 1000); run.lastHit = dist; pop(P.x, P.y - 60, shield > 0 ? 'Shield ' + shield + ' left' : 'Shield down', '#5bc0ff'); return false; }
   run.cleanMax = Math.max(run.cleanMax, (dist - run.lastHit) / 1000); run.lastHit = dist;
+  run.why = run.why || {}; run.why[why] = (run.why[why] || 0) + 1;
   lives--; inv = S.recover;
   if (lives <= 0) { finish(why || 'Wrecked'); return true; }
   pop(P.x, P.y - 60, lives === 1 ? 'Last life!' : '-1 life', '#ff5d5d', lives === 1);
@@ -2027,6 +2087,7 @@ function collect(it) {
       else { shield++; pop(it.x, it.y, shield > 1 ? 'Shield x' + shield : 'Shield', '#5bc0ff'); }
       Aud.sfx('power'); break;
     case 'magnet': magnet = S.mag; pop(it.x, it.y, 'Magnet', '#b57bff'); Aud.sfx('power'); break;
+    case 'nos': nitro = NITRO_T; pop(it.x, it.y, 'NITRO!', '#37e4f0', true); Aud.sfx('nos'); shakeT = Math.max(shakeT, 0.25); vibe(40); break;
     case 'dbl': dbl = 9; pop(it.x, it.y, 'Double cash!', '#ffd23f', true); Aud.sfx('power'); break;
     case 'bag': g = cashGain(400); cash += g; pop(it.x, it.y, '+$' + g, '#ffd23f', true); Aud.sfx('buy'); break;
     case 'repair': if (lives < maxLives) { lives++; pop(it.x, it.y, '+1 life', '#ff8a8a', true); } else { g = cashGain(150); cash += g; pop(it.x, it.y, '+$' + g); } Aud.sfx('fuel'); break;
@@ -2034,12 +2095,571 @@ function collect(it) {
 }
 
 function move(d) {
-  if (state !== 'play') return;
+  if (state !== 'play' || (smug && smug.phase !== 'drive')) return;
   if (slip > 0.25) return;
   var nl = clamp(P.lane + d, 0, LANES - 1);
   if (nl !== P.lane) { P.lane = nl; Aud.sfx('click'); if (S.look.smoke && !lq()) for (var q = 0; q < 6; q++) parts.push({ x: P.x + (Math.random() - .5) * P.w, y: P.y + P.h / 2, vx: (Math.random() - .5) * 40, vy: 10 + Math.random() * 20, life: 0.9, max: 0.9, col: S.look.smoke, tint: S.look.smoke, r: 5 + Math.random() * 4, g: 0, kind: 'smoke' }); }
 }
 
+/* ================= police mode =================
+   Pick a wanted criminal from the board, chase them down the highway and ram them until they pull over.
+   chase.gap is how far ahead of you the suspect is, in pixels: it shrinks while you are faster than them.
+   Staying in their lane (drafting) closes it fastest; crashes and their tricks open it up again. */
+var WANTED = [
+  { name: 'Speeding Sedan',   short: 'Sedan',   stars: 1, kind: 'sedan',  color: '#c8202f', bounty: 2000,   hp: 3,  run: 0,  boost: 0,   dodge: 0.15, weave: false, drop: null,             brake: false, plow: false, time: 60,  info: 'Slow, and mostly stays in one lane.' },
+  { name: 'Stolen Taxi',      short: 'Taxi',    stars: 1, kind: 'taxi',   color: '#f2c230', bounty: 5000,   hp: 3,  run: 20, boost: 0,   dodge: 0.45, weave: false, drop: null,             brake: false, plow: false, time: 70,  info: 'Swerves out of the way when you get close.' },
+  { name: 'Street Racer',     short: 'Racer',   stars: 2, kind: 'sports', color: '#ff7a2f', bounty: 10000,  hp: 4,  run: 40, boost: 60,  dodge: 0.5,  weave: true,  drop: null,             brake: false, plow: false, time: 75,  info: 'Weaves between lanes and bursts ahead with speed boosts.' },
+  { name: 'Getaway Van',      short: 'Van',     stars: 2, kind: 'van',    color: '#5d2a86', bounty: 25000,  hp: 5,  run: 55, boost: 0,   dodge: 0.35, weave: false, drop: ['oil'],          brake: false, plow: false, time: 90,  info: 'Throws oil out of the back doors.' },
+  { name: 'Bank Robbers',     short: 'Robbers', stars: 3, kind: 'muscle', color: '#2d2f36', bounty: 50000,  hp: 6,  run: 60, boost: 70,  dodge: 0.5,  weave: true,  drop: ['bag', 'oil'],   brake: false, plow: false, time: 90,  info: 'Throws cash bags and oil out of the window. Grab the cash!' },
+  { name: 'Armoured Truck',   short: 'Truck',   stars: 3, kind: 'truck',  color: '#4a5a44', bounty: 75000,  hp: 8,  run: 60, boost: 0,   dodge: 0.2,  weave: false, drop: ['barrel'],       brake: true,  plow: true,  time: 100, info: 'Smashes through traffic, drops barrels and slams the brakes to ram you.' },
+  { name: 'Smuggler Semi',    short: 'Semi',    stars: 4, kind: 'semi',   color: '#1e4fa8', bounty: 150000, hp: 10, run: 68, boost: 0,   dodge: 0.15, weave: false, drop: ['rock', 'barrel'], brake: true, plow: true,  time: 110, info: 'Huge. Smashes everything, spills its cargo and brake-checks you.' },
+  { name: 'Kingpin Hypercar', short: 'Kingpin', stars: 5, kind: 'super',  color: '#15171c', bounty: 250000, hp: 7,  run: 95, boost: 110, dodge: 0.7,  weave: true,  drop: ['spike', 'oil'], brake: false, plow: false, time: 120, info: 'Very fast, boosts, dodges and drops spike strips. Bring a fast police car!' }
+];
+var STARS = '★★★★★';
+/* police cars: a separate garage, only usable on police bounties. `pace` is how quickly the car closes on suspects (0 to 1). */
+var POLICE_CARS = [
+  { id: 'p_cruiser', name: 'Patrol Cruiser',    body: 'sedan',  color: '#e9edf2', w: 31, h: 60, lives: 3, agility: 16, pace: 0,    price: 0,        info: 'The standard patrol car. Fine for small-time crooks.' },
+  { id: 'p_k9',      name: 'K-9 Unit',          body: 'suv',    color: '#24408f', w: 34, h: 64, lives: 4, agility: 14, pace: 0.18, price: 20000,    info: 'Tough SUV with an extra life.' },
+  { id: 'p_highway', name: 'Highway Patrol',    body: 'muscle', color: '#15171c', w: 34, h: 66, lives: 3, agility: 19, pace: 0.35, price: 120000,   info: 'Muscle-car interceptor for the open road.' },
+  { id: 'p_pursuit', name: 'Pursuit Special',   body: 'sports', color: '#e9edf2', w: 31, h: 60, lives: 3, agility: 24, pace: 0.55, price: 750000,   info: 'Sharp steering and plenty of speed.' },
+  { id: 'p_swat',    name: 'SWAT Armour',       body: 'van',    color: '#2d2f36', w: 36, h: 74, lives: 6, agility: 10, pace: 0.45, price: 2500000,  info: 'Six lives. Slow to steer, very hard to stop.' },
+  { id: 'p_hyper',   name: 'Hyper Interceptor', body: 'super',  color: '#15171c', w: 32, h: 62, lives: 3, agility: 30, pace: 0.8,  price: 15000000, info: 'Built to catch the Kingpin.' },
+  { id: 'p_apex',    name: 'Apex Pursuit',      body: 'super',  color: '#e9edf2', w: 32, h: 63, lives: 4, agility: 36, pace: 1,    price: 60000000, info: 'The fastest police car there is.' }
+];
+POLICE_CARS.forEach(function (pc, i) {
+  pc.art = 'gen'; pc.cls = 'Police'; pc.base = pc.color; pc.brand = 'Police'; pc.model = pc.name;
+  pc.spec = { t: pc.body, w: pc.w, h: pc.h, color: pc.color, bar: true, spoiler: pc.body === 'super' || pc.body === 'sports', seed: 900 + i };
+});
+function pcById(id) { for (var i = 0; i < POLICE_CARS.length; i++) if (POLICE_CARS[i].id === id) return POLICE_CARS[i]; return POLICE_CARS[0]; }
+// driving stats for a police car: the starter car's stats with no upgrades, then the police car's own body and handling
+function policeStats(pc) {
+  var s = statsFor('__police__');
+  s.car = pc; s.id = pc.id; s.w = pc.w; s.h = pc.h; s.lives = pc.lives; s.agility = pc.agility; s.drain = 0.85; s.pay = 1; s.pace = pc.pace;
+  s.startShield = false; s.ice = false; s.offroad = false;
+  s.look = { paint: null, finish: 'gloss' };
+  return s;
+}
+function chasePace() { return S.pace || 0; }
+// criminals unlock in order: catch one to open the next (true opens them all, for testing)
+var TEST_UNLOCK = false;
+function wantedOpen(i) { return TEST_UNLOCK || i === 0 || save.police.caught[i - 1] > 0; }
+function newChase() {
+  return { w: WANTED[chaseLvl], lvl: chaseLvl, pace: chasePace(), streak: 0, busts: 0, total: 0, sus: null, next: 0, pulled: null,
+           gap: 0, kv: 0, time: 0, max: 0, hits: 0, spikes: 1, bounty: 0, bumpCd: 0, slowT: 0, flat: 0, sirenT: 0.5, warnT: 0 };
+}
+function wantedSpec(w) {
+  var k = TK[w.kind];
+  return { t: k.t, w: k.w, h: w.kind === 'semi' ? 124 : k.h, color: w.color, sign: k.sign, spoiler: w.kind === 'super' || w.kind === 'sports', stripe: w.kind === 'sports' || w.kind === 'muscle',
+           box: w.kind === 'semi' ? '#d8d2c4' : '#3a4436', band: w.kind === 'semi' ? '#b83a2e' : null };
+}
+function newSuspect() {
+  var ch = chase, w = ch.w, k = TK[w.kind], lane = Math.floor(Math.random() * LANES);
+  var spec = wantedSpec(w);
+  var hp = w.hp + ch.streak;
+  ch.sus = { spec: spec, lane: lane, x: laneX(lane), y: -300, w: spec.w, h: spec.h, hp: hp, max: hp, turn: w.kind === 'semi' ? 1.6 : w.kind === 'truck' ? 2.2 : 4.5,
+             wt: 1, weaveT: 2.5, dropT: 3, boostT: 4, boostOn: 0, brakeT: 0, brakeCd: 4 };
+  ch.gap = 520 + Math.min(240, 40 * ch.streak); ch.kv = 0; ch.time = ch.max = w.time; ch.hits = 0; ch.spikes = 1; ch.slowT = 0; ch.flat = 0; ch.bumpCd = 0;
+  ch.bounty = Math.round(w.bounty * (1 + 0.1 * ch.streak) * M.cash / 50) * 50;
+}
+// a lane the suspect can swerve into: nothing coming at it for the next `look` pixels, and not into the side of your car
+function susLaneOk(s, l, look) {
+  if (l < 0 || l >= LANES) return false;
+  var lx = laneX(l), i, o;
+  for (i = 0; i < traffic.length; i++) { o = traffic[i]; if (Math.abs(o.x - lx) < (o.w + s.w) / 2 + 4 && o.y > s.y - look - o.h && o.y < s.y + (o.h + s.h) / 2 + 24) return false; }
+  for (i = 0; i < items.length; i++) { o = items[i]; if ((o.type === 'rock' || o.type === 'barrel') && Math.abs(o.x - lx) < 30 && o.y > s.y - look && o.y < s.y + s.h / 2 + 30) return false; }
+  return !((laneOf(P.x) === l || P.lane === l) && Math.abs(P.y - s.y) < (P.h + s.h) / 2 + 90);
+}
+function susSwerve(s, avoidPlayer, look) {
+  var opts = [s.lane - 1, s.lane + 1].filter(function (l) { return susLaneOk(s, l, look) && (!avoidPlayer || l !== P.lane); });
+  if (!opts.length) return false;
+  s.lane = pick(opts, Math.random()); return true;
+}
+function useSpikes() {
+  var ch = chase;
+  if (!ch || !ch.sus || state !== 'play') return;
+  if (ch.spikes <= 0) { Aud.sfx('deny'); return; }
+  var s = ch.sus; ch.spikes--; ch.slowT = 3.5; s.boostOn = 0;
+  // the strip is laid under the suspect; it can't hurt you
+  if (s.y > -20) { items.push({ type: 'spike', cop: true, used: true, lane: s.lane, x: s.x, y: s.y, w: 54, h: 16 }); burst(s.x, s.y + s.h / 2, 18, '#ffd98a', 160, 0.4, 2, 0); }
+  pop(clamp(s.x, 70, W - 70), Math.max(240, s.y - s.h / 2 - 20), 'Spiked! Slowed down', '#9be7ff', true);
+  Aud.sfx('crash'); vibe(40);
+}
+function damageSus(n, why, col) {
+  var s = chase.sus;
+  chase.why = chase.why || {}; chase.why[why] = (chase.why[why] || 0) + 1;
+  s.hp -= n;
+  if (s.hp <= 0) { busted(); return; }
+  pop(clamp(s.x, 70, W - 70), Math.max(240, s.y - s.h / 2 - 10), why + (s.hp === 1 ? ' 1 more!' : ''), col || '#ffd23f', s.hp === 1);
+}
+function busted() {
+  var ch = chase, s = ch.sus, b = ch.bounty, bonus = [];
+  if (!ch.hits) { b += ch.bounty * 0.25; bonus.push('Clean catch'); }
+  if (ch.time > ch.max / 2) { b += ch.bounty * 0.25; bonus.push('Fast catch'); }
+  b = Math.round(b / 10) * 10;
+  cash += b; ch.total += b; ch.busts++; ch.streak++;
+  save.police.caught[ch.lvl]++; save.police.busts++; persist();
+  pop(W / 2, H * 0.36, 'BUSTED! +' + fmt(b), '#3ddc97', true);
+  if (bonus.length) pop(W / 2, H * 0.36 + 30, bonus.join(' + ') + ' bonus!', '#ffd23f');
+  Aud.sfx('bust'); vibe([40, 40, 80]); confetti(40);
+  burst(s.x, s.y, 24, '#5bc0ff', 200, 0.6, 3, 0);
+  // the busted car rolls off onto the hard shoulder with its hazard lights on
+  ch.pulled = { spec: s.spec, x: s.x, y: s.y, tx: s.x < W / 2 ? ROAD_X - 22 : ROAD_X + ROAD_W + 22 };
+  ch.sus = null; ch.next = 2.6;
+  if (!TEST_UNLOCK && ch.lvl < WANTED.length - 1 && save.police.caught[ch.lvl] === 1) toast(WANTED[ch.lvl + 1].name + ' unlocked on the Wanted board!', 2600);
+}
+function escaped(why) {
+  var ch = chase, s = ch.sus;
+  // a little pay for the damage you did
+  var c = Math.round(ch.bounty * 0.1 * (1 - s.hp / s.max) / 10) * 10;
+  if (c > 0) cash += c;
+  finish(why);
+}
+function updateChase(dt, speed) {
+  var ch = chase, i, c, it;
+  if (ch.pulled) { var pu = ch.pulled; pu.y += speed * 0.8 * dt; pu.x += (pu.tx - pu.x) * Math.min(1, dt * 2.5); if (pu.y > H + 140) ch.pulled = null; }
+  ch.sirenT -= dt; if (ch.sirenT <= 0) { ch.sirenT = 2.6; Aud.sfx('siren'); }
+  if (!ch.sus) { ch.next -= dt; if (ch.next <= 0) { newSuspect(); pop(W / 2, H * 0.42, 'New suspect!', '#ff8a8a', true); } return; }
+  var s = ch.sus, w = ch.w;
+  ch.time -= dt; ch.bumpCd = Math.max(0, ch.bumpCd - dt); ch.slowT = Math.max(0, ch.slowT - dt); ch.flat = Math.max(0, ch.flat - dt);
+  s.wt -= dt;
+  // speed boosts
+  if (w.boost) {
+    if (s.boostOn > 0) s.boostOn -= dt;
+    else { s.boostT -= dt; if (s.boostT <= 0 && ch.slowT <= 0) { s.boostOn = 1.6; s.boostT = 5 + Math.random() * 3; } }
+  }
+  var sameLane = Math.abs(s.x - P.x) < LANE_W * 0.55;
+  // brake check: brake lights for a moment, then it slams on the brakes right in front of you
+  if (w.brake) {
+    s.brakeCd -= dt;
+    if (s.brakeT > 0) s.brakeT -= dt;
+    else if (s.brakeCd <= 0 && sameLane && ch.gap > 110 && ch.gap < 260) { s.brakeT = 0.95; s.brakeCd = 5 + Math.random() * 3; }
+  }
+  var slamming = s.brakeT > 0 && s.brakeT < 0.55;
+  // the gap closes while you are faster: your car's chase speed, plus drafting in their lane
+  var draft = sameLane && ch.gap < 700;
+  var close = 30 + 90 * ch.pace + (draft ? 40 : 0) - w.run - (s.boostOn > 0 ? w.boost : 0) + (ch.slowT > 0 ? 90 : 0) - (ch.flat > 0 ? 110 : 0) + (nitro > 0 ? 130 : 0);
+  ch.gap -= close * dt;
+  if (slamming) ch.gap -= 280 * dt;
+  // knocks (rams, crashes) push the gap smoothly instead of teleporting the car
+  ch.gap += ch.kv * dt; ch.kv *= Math.exp(-6 * dt);
+  ch.gap = Math.max(12, ch.gap);
+  s.y = P.y - ch.gap;
+  s.x += (laneX(s.lane) - s.x) * Math.min(1, dt * s.turn);
+  if (s.hp <= s.max / 2 && Math.random() < (lq() ? 0.1 : 0.35)) smoke(s.x, s.y + s.h / 2, 1);
+  if (s.boostOn > 0 && !lq() && s.y > -40) burst(s.x, s.y + s.h / 2 + 4, 2, '#37e4f0', 90, 0.25, 2.4, 0);
+  if (s.y > -160) {
+    // look ahead for traffic and hazards in its lane
+    var ahead = null, ad = 1e9;
+    for (i = 0; i < traffic.length; i++) {
+      c = traffic[i];
+      if (Math.abs(c.x - s.x) < (c.w + s.w) / 2 + 4 && c.y < s.y) { var gp = s.y - c.y - (c.h + s.h) / 2; if (gp < ad) { ad = gp; ahead = c; } }
+    }
+    for (i = 0; i < items.length; i++) {
+      it = items[i]; if (it.type !== 'rock' && it.type !== 'barrel') continue;
+      if (Math.abs(it.x - s.x) < (it.w + s.w) / 2 + 4 && it.y < s.y) { var gi = s.y - it.y - (it.h + s.h) / 2; if (gi < ad) { ad = gi; ahead = it; } }
+    }
+    // things come at it about as fast as the road moves, so it looks about a second ahead
+    var look = speed * 0.9 + 60, avoid = ahead && !(w.plow && ahead.spec);   // the armoured truck doesn't bother swerving for cars
+    if (avoid && ad < look && s.wt <= 0) s.wt = susSwerve(s, false, look) ? 0.5 : 0.2;
+    // boxed in: it has to slow down behind the car in front, and you catch up
+    if (avoid && ad < 6 && Math.abs(laneX(s.lane) - ahead.x) < LANE_W * 0.5) { s.y = ahead.y + (ahead.h + s.h) / 2 + 4; ch.gap = Math.max(12, P.y - s.y); ch.kv = Math.min(ch.kv, 0); s.stuck = true; }
+    else s.stuck = false;
+    // dodging you when you get close behind it
+    if (sameLane && ch.gap < 280 && s.wt <= 0 && !slamming && Math.random() < w.dodge * dt * 2) { if (susSwerve(s, true, look)) s.wt = 0.9; }
+    // street racers and the kingpin weave about
+    if (w.weave) { s.weaveT -= dt; if (s.weaveT <= 0 && s.wt <= 0) { susSwerve(s, false, look); s.weaveT = 2 + Math.random() * 2.5; s.wt = 0.6; } }
+    // crashes into traffic and hazards
+    for (i = traffic.length - 1; i >= 0; i--) {
+      c = traffic[i]; if (c.wreck || !hit(s, c, 4)) continue;
+      // it only gets hurt when it drives into something; cars clipping its side or back just get wrecked
+      var rearEnd = c.y < s.y - (c.h + s.h) * 0.3;
+      wreckCar(c, 0.9, true);
+      if (w.plow) pop(c.x, c.y - 20, 'SMASH!', '#ff8a3d');
+      else if (rearEnd) { ch.kv -= 360; damageSus(1, 'Suspect crashed!', '#ff8a3d'); if (!ch.sus) return; }
+    }
+    for (i = items.length - 1; i >= 0; i--) {
+      it = items[i]; if ((it.type !== 'rock' && it.type !== 'barrel') || !hit(s, it, 4)) continue;
+      items.splice(i, 1);
+      if (it.type === 'barrel') explode(it.x, it.y, 1, true); else burst(it.x, it.y, 14, '#8a7a6a', 150, 0.6, 3, 250);
+      if (!w.plow) { damageSus(1, 'Suspect crashed!', '#ff8a3d'); if (!ch.sus) return; }
+    }
+    // tricks thrown out of the back, only when you have room to react
+    if (w.drop && s.y > 40 && ch.gap > 220) {
+      s.dropT -= dt;
+      if (s.dropT <= 0) {
+        var ty = pick(w.drop, Math.random());
+        var sz = { oil: [38, 30], spike: [54, 16], bag: [30, 30] }[ty] || [32, 28];
+        items.push({ type: ty, lane: s.lane, x: s.x, y: s.y + s.h / 2 + 24, w: sz[0], h: sz[1], rot: Math.random() * TAU });
+        s.dropT = 2.6 + Math.random() * 2.4;
+      }
+    }
+  }
+  // ramming it
+  if (ch.bumpCd <= 0 && hit(P, s, 5)) {
+    ch.bumpCd = 0.6;
+    burst((P.x + s.x) / 2, s.y + s.h / 2, 16, '#ffd060', 180, 0.4, 2.5, 0); shakeT = Math.max(shakeT, 0.45);
+    ch.gap = Math.max(ch.gap, (P.h + s.h) / 2 + 4);
+    if (slamming) { s.brakeT = 0; ch.kv = 300; if (takeHit('Brake-checked by the truck')) return; }
+    else { Aud.sfx('crash'); vibe(50); ch.kv = 460; damageSus(1, 'BAM!'); if (!ch.sus) return; }
+  }
+  // getting away
+  if (ch.gap > 1000) { ch.warnT -= dt; if (ch.warnT <= 0) { ch.warnT = 1; Aud.sfx('warn'); } }
+  if (ch.gap > 1350) { escaped('They got away!'); return; }
+  if (ch.time <= 0) escaped('Out of time. They got away!');
+}
+
+/* ================= hot cargo (normal mode) =================
+   Every run you carry cargo to a company off a highway exit. Exits leave from the far LEFT or far RIGHT lane:
+   when one comes up, that lane becomes an EXIT lane that splits off. Be in it and you turn off.
+   Deliver enough contraband and you're WANTED: police cars chase you, and if they stay on your tail the BUSTED
+   meter fills. Taking any exit shakes them off for a while.
+   smug.phase: 'drive' on the highway, 'exit' on an off-ramp, 'depot' at the loading dock, 'streets' losing the cops. */
+var COMPANIES = ['Red Fox Logistics', 'Harbour Imports', 'Midnight Trading Co.', 'Silverline Freight', 'Big Mo’s Garage', 'Neon Pawn Shop', 'Blackwater Storage', 'Lucky Seven Warehouse', 'Gold Coast Movers', 'Shadow Valley Depot', 'Rusty Anchor Docks', 'Velvet Lounge'];
+var STREETS = ['Maple Street', 'Old Mill Road', 'Harbour Way', 'Station Road', 'Oak Avenue', 'Canal Street', 'Quarry Lane', 'Airport Road', 'King Street', 'Riverside Drive'];
+var EXIT_WARN = 160;   // metres before an exit when its lane markings and hints appear
+var WANTED_AT = 3;     // deliveries before the police start chasing
+function newSmuggle() {
+  return { n: 0, len: 0, company: '', pay: 0, total: 0, phase: 'drive', t: 0, fade: 0, target: null, exits: [], cur: null,
+           bust: 0, calm: 0, copT: 4, sirenT: 1, exitNo: 10 + Math.floor(Math.random() * 20), done: '', donePay: 0, lost: false };
+}
+function heat() { return smug.n < WANTED_AT ? 0 : Math.min(5, smug.n - WANTED_AT + 1); }
+function addExit(at, kind, name) {
+  var sm = smug;
+  sm.exits = sm.exits.filter(function (e) { return e.kind === 'deliver' || Math.abs(e.at - at) > 150; });
+  var e = { at: at, side: Math.random() < 0.5 ? -1 : 1, kind: kind, name: name, no: sm.exitNo++ };
+  sm.exits.push(e); return e;
+}
+function newDelivery() {
+  var sm = smug, last = sm.company;
+  do sm.company = pick(COMPANIES, Math.random()); while (sm.company === last);
+  sm.len = Math.min(1800, 450 + 200 * sm.n);
+  sm.pay = Math.round(1500 * (1 + 0.6 * sm.n) * S.pay * M.cash / 50) * 50;
+  sm.target = addExit(dist + sm.len, 'deliver', sm.company);
+}
+function smugRem() { return smug.target.at - dist; }   // metres to the delivery exit
+function smugLeft() { return Math.max(0, smugRem()); }
+function exitRem(e) { return e.at - dist; }
+function exitY(e) { return P.y - P.h / 2 - exitRem(e) * 40; }   // screen row where the exit lane splits off
+function exitLane(e) { return e.side > 0 ? LANES - 1 : 0; }
+// how far sideways the off-ramp has drifted, d pixels past the split
+function rampDx(d) { return d <= 0 ? 0 : Math.min(900, 0.00045 * d * d + 0.02 * d); }
+function nextExit() { var b = null; smug.exits.forEach(function (e) { if (!e.passed && exitRem(e) > 0 && (!b || exitRem(e) < exitRem(b))) b = e; }); return b; }
+function copCount() { var n = 0; for (var i = 0; i < traffic.length; i++) if (traffic[i].cop && !traffic[i].wreck) n++; return n; }
+function updateSmuggle(dt) {
+  var sm = smug, i, e;
+  if (sm.fade > 0) sm.fade = Math.max(0, sm.fade - dt);
+  if (sm.phase === 'drive') {
+    for (i = sm.exits.length - 1; i >= 0; i--) {
+      e = sm.exits[i];
+      if (e.passed) { if (exitRem(e) < -60) sm.exits.splice(i, 1); continue; }
+      if (exitRem(e) > 0) continue;
+      if (laneOf(P.x) === exitLane(e)) { sm.phase = 'exit'; sm.t = 0; sm.cur = e; pop(P.x, P.y - 70, 'Taking the exit!', '#3ddc97', true); Aud.sfx('click'); return; }
+      e.passed = true;
+      if (e.kind === 'deliver') {
+        // missed the drop-off: loop round to another exit for the same company
+        sm.target = addExit(dist + 350, 'deliver', sm.company);
+        pop(W / 2, H * 0.36, 'Missed the exit!', '#ff8a8a', true); Aud.sfx('deny');
+        toast('Next exit for ' + sm.company + ' in 0.35 km, ' + (sm.target.side > 0 ? 'RIGHT' : 'LEFT') + ' lane', 2800);
+      }
+    }
+    updateCops(dt);
+  } else if (sm.phase === 'exit') {
+    sm.t += dt; inv = Math.max(inv, 0.3);
+    P.tilt = sm.cur.side * Math.atan(0.0009 * Math.max(0, -exitRem(sm.cur) * 40 - P.h / 2) + 0.02);   // point the car along the ramp
+    if (sm.t > 1.6) {
+      sm.lost = copCount() > 0;
+      if (sm.cur.kind === 'deliver') startDepot(); else { sm.phase = 'streets'; sm.t = 0; }
+    }
+  }
+}
+function startDepot() {
+  var sm = smug, p = sm.pay;
+  cash += p; sm.total += p; sm.done = sm.company; sm.donePay = p; sm.n++; run.deliv = (run.deliv || 0) + 1;
+  fuel = Math.min(100, fuel + 25);
+  sm.phase = 'depot'; sm.t = 0;
+  Aud.engine(true, 0); Aud.sfx('bust'); vibe([40, 40, 80]);
+  sm.exits = []; newDelivery();
+}
+// off the highway (loading dock or side streets): time passes, then you merge back on
+function updateDepot(dt) {
+  var sm = smug; sm.t += dt;
+  if (sm.t > (sm.phase === 'depot' ? 4.6 : 2.6)) rejoin();
+}
+function rejoin() {
+  var sm = smug, from = sm.phase, lane = exitLane(sm.cur);
+  sm.phase = 'drive'; sm.fade = 0.6; sm.bust = 0;
+  traffic = []; items = []; warns = []; spawnT = 1.2;
+  sm.exits = sm.exits.filter(function (e) { return e.kind === 'deliver'; });
+  if (exitRem(sm.target) < 150) sm.target.at = dist + 300;
+  if (heat()) sm.calm = 25;
+  P.lane = lane; P.x = laneX(lane); P.tilt = 0; inv = 2;
+  if (from === 'depot' && sm.n === WANTED_AT) toast('You’re WANTED! Cops will chase you. Take any exit to lose them.', 3600);
+  else if (from === 'depot') toast('Next drop-off: ' + sm.company + ' (' + (sm.target.side > 0 ? 'right' : 'left') + ' exit)', 2600);
+  else toast(sm.lost ? 'You lost the cops! Back to ' + sm.company : 'Back on the highway', 2400);
+}
+/* ---------- police chasing you ---------- */
+function updateCops(dt) {
+  var sm = smug, h = heat(), cops = copCount(), i, c;
+  sm.calm = Math.max(0, sm.calm - dt);
+  if (cops) {
+    sm.sirenT -= dt; if (sm.sirenT <= 0) { sm.sirenT = 2.6; Aud.sfx('siren'); }
+    // there's always an escape exit coming up while they're on you
+    if (!sm.exits.some(function (e) { return !e.passed && e.kind === 'side' && exitRem(e) < 700; })) addExit(dist + 260 + Math.random() * 160, 'side', pick(STREETS, Math.random()));
+  }
+  if (h && sm.calm <= 0) { sm.copT -= dt; if (sm.copT <= 0) { if (cops < Math.min(4, h) && t > 3) spawnCop(); sm.copT = Math.max(3, 8 - h) + Math.random() * 2; } }
+  // BUSTED meter: fills while a cop sits right behind you (half as fast when it's in the next lane)
+  var press = 0;
+  for (i = 0; i < traffic.length; i++) {
+    c = traffic[i]; if (!c.cop || c.wreck) continue;
+    if (Math.abs(c.y - P.y) < (c.h + P.h) / 2 + 40) { var dl = Math.abs(c.lane - P.lane); press += dl === 0 ? 1 : dl === 1 ? 0.5 : 0; }
+  }
+  sm.bust = press ? Math.min(1, sm.bust + 0.16 * press * dt) : Math.max(0, sm.bust - 0.06 * dt);
+  if (sm.bust >= 1) finish('Busted by the cops!');
+}
+function spawnCop() {
+  var h = heat(), kind = h >= 4 ? 'super' : h >= 2 ? 'muscle' : 'sedan', k = TK[kind], lanes = [], l;
+  for (l = 0; l < LANES; l++) if (!traffic.some(function (c) { return c.lane === l && c.y > H - 90; })) lanes.push(l);
+  if (!lanes.length) return;
+  l = pick(lanes, Math.random());
+  traffic.push({ spec: { t: k.t, w: k.w, h: k.h, color: h >= 2 ? '#15171c' : '#e9edf2', bar: 1, spoiler: kind === 'super' }, kind: kind, big: false, turn: 4, lane: l, x: laneX(l), y: H + 90, w: k.w, h: k.h,
+                 f: 0, eff: 0, beh: 'cop', flip: false, wreck: false, wt: 0.8, reckless: false, brake: false, near: true, burn: 0, pend: null, sigT: 0, sig: 0, sigHold: 0,
+                 cop: true, st: 'chase', stT: 1.5, react: Math.max(0.4, 1.2 - h * 0.15), ramV: 360 + h * 40, off: Math.random() * 30 });
+}
+// a lane a cop can move into: no traffic coming down it soon, and not into the side of your car
+function copLaneOk(c, l) {
+  if (l < 0 || l >= LANES || bendNear(c.y)) return false;
+  var lx = laneX(l);
+  for (var i = 0; i < traffic.length; i++) { var o = traffic[i]; if (o !== c && Math.abs(o.x - lx) < (o.w + c.w) / 2 + 2 && o.y > c.y - 220 && o.y < c.y + (o.h + c.h) / 2 + 20) return false; }
+  return !(P.lane === l && Math.abs(P.y - c.y) < (P.h + c.h) / 2 + 20);
+}
+function copMove(c, dt) {
+  var ty = null, ahead = null, ad = 1e9, i, o;
+  for (i = 0; i < traffic.length; i++) {
+    o = traffic[i]; if (o === c || o.cop) continue;
+    if (Math.abs(o.x - c.x) < (o.w + c.w) / 2 + 2 && o.y < c.y) { var gp = c.y - o.y - (o.h + c.h) / 2; if (gp < ad) { ad = gp; ahead = o; } }
+  }
+  c.wt -= dt; c.stT -= dt;
+  if (ahead && ad < 160 && c.wt <= 0 && c.st !== 'ram') { var ol = [c.lane - 1, c.lane + 1].filter(function (l) { return copLaneOk(c, l); }); if (ol.length) { c.lane = pick(ol, Math.random()); c.wt = 0.4; } }
+  switch (c.st) {
+    case 'chase':   // line up behind you, one lane at a time
+      ty = P.y + 92 + c.off;
+      if (c.wt <= 0 && c.lane !== P.lane) { var nl = c.lane + (P.lane > c.lane ? 1 : -1); if (copLaneOk(c, nl)) c.lane = nl; c.wt = c.react; }
+      if (c.lane === P.lane && Math.abs(c.x - P.x) < 8 && c.stT <= 0 && Math.abs(c.y - ty) < 40) { c.st = 'warn'; c.stT = 0.7; }
+      break;
+    case 'warn': ty = c.y; if (c.stT <= 0) { c.st = 'ram'; c.stT = 0.9; Aud.sfx('horn'); } break;   // lights flashing: about to ram
+    case 'ram': c.y -= c.ramV * dt; if (c.stT <= 0 || c.y < P.y - 140) { c.st = 'back'; c.stT = 1.2; } break;
+    case 'back': ty = P.y + 175; if (c.stT <= 0) { c.st = 'chase'; c.stT = 1.5 + Math.random() * 1.5; } break;
+  }
+  if (ty != null) c.y += clamp(ty - c.y, -230 * dt, 230 * dt);
+  // boxed in behind slower traffic (except mid-ram)
+  if (ahead && c.st !== 'ram' && Math.abs(laneX(c.lane) - ahead.x) < LANE_W * 0.5) { var minY = ahead.y + (ahead.h + c.h) / 2 + 3; if (c.y < minY) c.y = minY; }
+  c.brake = c.st === 'warn';
+}
+// a police car wrecked by traffic or a hazard: bonus cash
+function copDown(c) {
+  if (!c.cop || c.byPlayer || !smug || state !== 'play') return;
+  var g = Math.round(cashGain(300) * Math.max(1, heat()) / 5) * 5; cash += g; run.cops = (run.cops || 0) + 1;
+  pop(c.x, c.y - 30, 'Cop wrecked +$' + g, '#9be7ff', true);
+}
+function fitText(g, txt, maxW, size, weight) {
+  for (var fs = size; fs > 9; fs--) { g.font = (weight || 800) + ' ' + fs + 'px ' + FONT; if (g.measureText(txt).width <= maxW) break; }
+}
+// painted on the straight road (so it bends with it): EXIT lane markings, then the off-ramp splitting away
+function drawExitRamp(g) {
+  if (!smug || state === 'menu' || smug.phase === 'depot' || smug.phase === 'streets') return;
+  smug.exits.forEach(function (e) { drawOneRamp(g, e); });
+}
+function drawOneRamp(g, e) {
+  var gy = exitY(e), sd = e.side, R = exitLane(e), lx = laneX(R), edge = sd > 0 ? ROAD_X + ROAD_W : ROAD_X, y, k;
+  if (gy - 1400 > H || gy + EXIT_WARN * 40 < -40) return;
+  var y0 = Math.max(-40, gy), y1 = Math.min(H + 40, gy + EXIT_WARN * 40), divX = sd > 0 ? ROAD_X + LANE_W * R : ROAD_X + LANE_W;
+  g.fillStyle = M.line;
+  for (y = y1 - ((y1 - gy) % 30); y > y0 - 30; y -= 30) g.fillRect(divX - 3, y, 6, 18);
+  for (k = gy + 260; k < y1; k += 420) {
+    if (k < -40 || k > H + 40) continue;
+    g.save(); g.translate(lx, k); g.fillStyle = 'rgba(255,255,255,0.85)';
+    g.save(); g.scale(sd, 1);
+    g.fillRect(-3, -6, 6, 26); g.beginPath(); g.moveTo(-3, -4); g.quadraticCurveTo(-2, -16, 10, -20); g.lineTo(9, -26); g.lineTo(20, -17); g.lineTo(9, -10); g.lineTo(10, -14); g.quadraticCurveTo(3, -12, 3, -4); g.closePath(); g.fill();
+    g.restore();
+    g.font = '800 13px ' + FONT; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('EXIT', 0, 36);
+    g.restore();
+  }
+  // the off-ramp peels away, with a striped gore between it and the highway
+  var step = 6;
+  for (y = Math.min(gy, H + 20); y > -60; y -= step) {
+    var d = gy - y, cx = lx + sd * rampDx(d), left = cx - LANE_W / 2, right = cx + LANE_W / 2;
+    if (left > W + 300 || right < -300) break;
+    var gap = sd > 0 ? left - edge : edge - right;
+    if (gap > 0 && gap < 70) {
+      var gx = sd > 0 ? edge : right;
+      g.fillStyle = shade(M.road, 0.08); g.fillRect(gx, y, gap, step + 0.5);
+      if (Math.floor((y - gy) / 18) % 2 === 0) { g.fillStyle = 'rgba(255,255,255,0.55)'; g.fillRect(gx + 3, y, Math.max(0, gap - 6), 3); }
+    }
+    g.fillStyle = M.road; g.fillRect(left, y, LANE_W, step + 0.5);
+    g.fillStyle = M.line; g.fillRect(left, y, 3, step + 0.5); g.fillRect(right - 3, y, 3, step + 0.5);
+  }
+}
+// green overhead signs before each exit
+function drawExitSign() {
+  if (!smug || smug.phase !== 'drive' || state === 'menu') return;
+  var g = ctx;
+  smug.exits.forEach(function (e) {
+    if (e.passed) return;
+    var rem = exitRem(e), lx = laneX(exitLane(e));
+    [EXIT_WARN * 0.8, 40].forEach(function (m) {
+      var y = P.y - P.h / 2 - (rem - m) * 40;
+      if (y < -60 || y > H + 20) return;
+      bendPush(W / 2, y);
+      var w = Math.min(ROAD_W * 0.78, 200), x1 = clamp(lx - w / 2, ROAD_X - 6, ROAD_X + ROAD_W + 6 - w), arrow = e.side > 0 ? '↗' : '↖';
+      g.fillStyle = '#5b6380'; g.fillRect(ROAD_X - 18, y - 4, ROAD_W + 36, 5);
+      g.fillStyle = '#1f7a4d'; rr(g, x1, y - 42, w, 38, 5); g.fill(); g.strokeStyle = '#f1ecd9'; g.lineWidth = 2; g.stroke();
+      g.fillStyle = '#ffd23f'; rr(g, x1 + 4, y - 38, 40, 13, 3); g.fill();
+      g.fillStyle = '#1a1a1a'; g.font = '800 10px ' + FONT; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('EXIT ' + e.no, x1 + 24, y - 31);
+      var label = e.kind === 'deliver' ? e.name : e.name;
+      g.fillStyle = '#fff'; fitText(g, label, w - 54, 13); g.textAlign = 'left'; g.fillText(label, x1 + 48, y - 31);
+      g.font = '800 12px ' + FONT; g.fillText((m > 50 ? Math.round(m) + ' m  ' : 'NOW  ') + arrow + (e.kind === 'deliver' ? '  drop-off' : ''), x1 + 8, y - 14);
+      g.restore();
+    });
+  });
+}
+function drawSmugHud() {
+  var sm = smug, g = ctx, L = 14, y = 116, rem = smugLeft(), fr = clamp(1 - rem / sm.len, 0, 1), blink = Math.floor(clock * 4) % 2 === 0, h = heat(), cops = copCount();
+  panel(L, y, 178, 84);
+  g.textAlign = 'left'; g.textBaseline = 'top';
+  g.font = '700 11px ' + FONT; g.fillStyle = '#c9c5b3'; g.fillText(sm.phase === 'depot' ? 'LOADING CARGO FOR' : 'HOT CARGO TO', L + 10, y + 9);
+  g.textAlign = 'right';
+  if (h) { g.font = '800 12px ' + FONT; g.fillStyle = cops ? (Math.floor(clock * 6) % 2 ? '#ff3b3b' : '#3d7bff') : '#ffc21a'; g.fillText(STARS.slice(0, h), L + 168, y + 8); }
+  else { g.fillStyle = '#ffc21a'; g.fillText('#' + (sm.n + 1), L + 168, y + 9); }
+  g.textAlign = 'left'; fitText(g, sm.company, 158, 15); g.fillStyle = '#f1ecd9'; g.fillText(sm.company, L + 10, y + 24);
+  g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, L + 10, y + 45, 158, 9, 4); g.fill();
+  g.fillStyle = '#ffc21a'; rr(g, L + 10, y + 45, Math.max(8, 158 * fr), 9, 4); g.fill();
+  g.font = '800 14px ' + FONT; g.fillStyle = '#3ddc97'; g.fillText(fmt(sm.pay), L + 10, y + 62);
+  g.textAlign = 'right'; g.font = '700 12px ' + FONT; g.fillStyle = '#c9c5b3';
+  g.fillText(sm.phase === 'depot' ? 'at the dock' : (sm.target.side > 0 ? 'right' : 'left') + ' exit · ' + Math.ceil(rem) + ' m', L + 168, y + 63);
+  // the BUSTED meter while the police are after you
+  if (h) {
+    var by = y + 90; panel(L, by, 178, 30);
+    g.textAlign = 'left'; g.textBaseline = 'middle'; g.font = '800 11px ' + FONT; g.fillStyle = cops ? '#ff8a8a' : '#c9c5b3'; g.fillText(cops ? 'BUSTED' : 'WANTED', L + 10, by + 15);
+    g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, L + 64, by + 10, 104, 10, 5); g.fill();
+    if (sm.bust > 0.01) { g.fillStyle = sm.bust > 0.7 && blink ? '#fff' : '#ff3b3b'; rr(g, L + 64, by + 10, Math.max(8, 104 * sm.bust), 10, 5); g.fill(); }
+    else if (!cops) { g.fillStyle = '#c9c5b3'; g.font = '700 10px ' + FONT; g.fillText(sm.calm > 0 ? 'lying low ' + Math.ceil(sm.calm) + 's' : 'cops on the way', L + 70, by + 15); }
+  }
+  // getting close to an exit you should take: say which lane
+  var e = nextExit();
+  if (sm.phase === 'drive' && e && exitRem(e) < EXIT_WARN && state === 'play' && (e.kind === 'deliver' || cops)) {
+    var inLane = laneOf(P.x) === exitLane(e), side = e.side > 0 ? 'RIGHT' : 'LEFT';
+    var txt = inLane ? 'You’re in the EXIT lane ' + (e.side > 0 ? '↗' : '↖') : (e.kind === 'deliver' ? 'DROP-OFF EXIT: get in the ' : 'ESCAPE EXIT: get in the ') + side + ' lane';
+    g.textAlign = 'center'; g.textBaseline = 'middle'; fitText(g, txt, W - 40, 17);
+    var tw = g.measureText(txt).width + 24, bny = H * 0.3, col = e.kind === 'deliver' ? '31,122,77' : '160,30,40';
+    g.fillStyle = 'rgba(' + col + ',' + (inLane || blink ? 0.94 : 0.75) + ')'; rr(g, W / 2 - tw / 2, bny - 16, tw, 32, 10); g.fill();
+    g.strokeStyle = '#f1ecd9'; g.lineWidth = 2; g.stroke(); g.fillStyle = '#fff'; g.fillText(txt, W / 2, bny + 1);
+  }
+}
+// the side streets: a short detour that loses the police
+function drawStreets() {
+  var g = ctx, sm = smug, t = sm.t, i, j, cx = W / 2;
+  g.fillStyle = '#2b2e35'; g.fillRect(0, 0, W, H);
+  var off = (t * 220) % 160;
+  for (i = -1; i < W / 160 + 1; i++) for (j = -1; j < H / 160 + 2; j++) {
+    var bx = i * 160 + 20, byy = j * 160 - 160 + off + 20;
+    if (Math.abs(bx + 60 - cx) < 90) continue;
+    g.fillStyle = ['#5a4a5e', '#4a5a6e', '#6e5a4a', '#4e6a5a'][(i * 7 + j * 3 + 40) % 4]; g.fillRect(bx, byy, 120, 120);
+    g.fillStyle = 'rgba(255,230,140,0.35)'; for (var w2 = 0; w2 < 4; w2++) g.fillRect(bx + 12 + w2 * 26, byy + 14, 12, 8);
+  }
+  g.fillStyle = 'rgba(241,236,217,0.6)'; for (j = -1; j < H / 40 + 1; j++) g.fillRect(cx - 2, j * 40 + (off % 40), 4, 20);
+  g.save(); g.translate(cx + Math.sin(t * 3) * 30, H * 0.62); g.rotate(Math.cos(t * 3) * 0.25); var lk = lookOpts(S.look); lk.clock = clock; drawCarFull(g, S.car, 0, 0, lk); g.restore();
+  g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = '800 26px ' + FONT; g.lineWidth = 5; g.strokeStyle = '#070912';
+  var tx = sm.lost ? 'You lost the cops!' : 'Taking a detour…'; g.strokeText(tx, cx, H * 0.3); g.fillStyle = sm.lost ? '#3ddc97' : '#f1ecd9'; g.fillText(tx, cx, H * 0.3);
+  g.font = '700 15px ' + FONT; g.lineWidth = 4; var t2 = 'Exit ' + sm.cur.no + ' · ' + sm.cur.name; g.strokeText(t2, cx, H * 0.3 + 30); g.fillStyle = '#ffd23f'; g.fillText(t2, cx, H * 0.3 + 30);
+  var f = t < 0.4 ? 1 - t / 0.4 : t > 2.1 ? (t - 2.1) / 0.5 : 0;
+  if (f > 0) { g.fillStyle = 'rgba(7,9,18,' + clamp(f, 0, 1) + ')'; g.fillRect(0, 0, W, H); }
+}// the loading dock: you pull in, the old cargo is unloaded, new cargo is loaded, then back to the highway
+function drawDepot() {
+  var g = ctx, sm = smug, t = sm.t, i, cx = W / 2;
+  g.fillStyle = '#3a3d44'; g.fillRect(0, 0, W, H);
+  g.fillStyle = 'rgba(255,255,255,0.05)'; for (i = 0; i < 12; i++) g.fillRect((i * 97) % W, (i * 61) % H, 40, 6);
+  // parking bays
+  g.fillStyle = 'rgba(241,236,217,0.7)'; for (i = -3; i <= 4; i++) g.fillRect(cx + i * 70 - 37, by + 170, 4, 150);
+  // warehouse
+  var by = 70, bw = Math.min(W - 30, 520);
+  g.fillStyle = '#6b6f7a'; g.fillRect(cx - bw / 2, by - 40, bw, 170);
+  g.fillStyle = '#585c66'; for (i = 0; i < 10; i++) g.fillRect(cx - bw / 2, by - 40 + i * 17, bw, 2);
+  g.fillStyle = '#2b2f38'; g.fillRect(cx - bw / 2, by + 130, bw, 10);
+  [-1, 0, 1].forEach(function (k) { var dx = cx + k * 110 - 40; g.fillStyle = k === 0 ? '#15171c' : '#9aa0ab'; g.fillRect(dx, by + 60, 80, 70); if (k) { g.fillStyle = '#7d828c'; for (var j = 0; j < 6; j++) g.fillRect(dx, by + 64 + j * 11, 80, 2); } g.fillStyle = '#ffd23f'; g.fillRect(dx, by + 140, 80, 6); });
+  // company sign
+  fitText(g, sm.done.toUpperCase(), bw - 60, 22); var sw = g.measureText(sm.done.toUpperCase()).width + 30;
+  g.fillStyle = '#ffc21a'; rr(g, cx - sw / 2, by - 22, sw, 40, 8); g.fill(); g.strokeStyle = '#070912'; g.lineWidth = 3; g.stroke();
+  g.fillStyle = '#2a1100'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(sm.done.toUpperCase(), cx, by - 1);
+  // your car rolls in and stops at the dock
+  var e = Math.min(1, t / 1.1), carY = lerp(H + 90, by + 210 + S.h / 2, 1 - Math.pow(1 - e, 3));
+  g.save(); g.translate(cx, carY); var lk = lookOpts(S.look); lk.clock = clock; lk.brake = t > 0.7 && t < 1.3; drawCarFull(g, S.car, 0, 0, lk); g.restore();
+  // boxes: old cargo out (1.2s to 2.4s), new cargo in (2.6s to 3.8s)
+  function box(x, y, col) { g.fillStyle = col; rr(g, x - 11, y - 11, 22, 22, 3); g.fill(); g.strokeStyle = '#5a3a1e'; g.lineWidth = 1.5; g.stroke(); g.fillStyle = 'rgba(255,255,255,0.5)'; g.fillRect(x - 2, y - 11, 4, 22); }
+  var dockY = by + 100, carTop = carY - S.h / 2 + 10;
+  for (i = 0; i < 3; i++) {
+    var a = (t - 1.2 - i * 0.25) / 0.6, b = (t - 2.6 - i * 0.25) / 0.6;
+    if (a > 0 && a < 1) box(cx + (i - 1) * 8, lerp(carTop, dockY, a) - Math.sin(a * Math.PI) * 26, '#c98f4f');
+    if (b > 0 && b < 1) box(cx + (i - 1) * 8, lerp(dockY, carTop, b) - Math.sin(b * Math.PI) * 26, '#3ddc97');
+  }
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  if (t > 1.2) { g.font = '800 26px ' + FONT; g.lineWidth = 5; g.strokeStyle = '#070912'; var dt1 = 'DELIVERED! +' + fmt(sm.donePay); g.strokeText(dt1, cx, H * 0.72); g.fillStyle = '#3ddc97'; g.fillText(dt1, cx, H * 0.72); }
+  if (t > 2.6) { fitText(g, 'New cargo for ' + sm.company, W - 40, 18); g.lineWidth = 4; var dt2 = 'New cargo for ' + sm.company; g.strokeText(dt2, cx, H * 0.72 + 34); g.fillStyle = '#ffd23f'; g.fillText(dt2, cx, H * 0.72 + 34); }
+  if (t > 1.2) { g.font = '700 14px ' + FONT; g.fillStyle = '#9be7ff'; g.fillText('+25 fuel', cx, H * 0.72 + 62); }
+  // fade in from the off-ramp, fade out back to the highway
+  var f = t < 0.4 ? 1 - t / 0.4 : t > 4.1 ? (t - 4.1) / 0.5 : 0;
+  if (f > 0) { g.fillStyle = 'rgba(7,9,18,' + clamp(f, 0, 1) + ')'; g.fillRect(0, 0, W, H); }
+}
+
+/* ================= bends =================
+   Roads run straight, then now and then bend left or right and run straight again. Everything is still simulated
+   on a straight road; only the drawing bends. The camera turns with your car, so the road under you always points
+   up and a bend shows up ahead of you: each screen row is shifted sideways by how far the road has turned between
+   you and that row, and cars turn to follow it. M.curve sets how sharp and how frequent the bends are. */
+var BEND_PAD = 260, bendCv = document.createElement('canvas'), bctx = bendCv.getContext('2d');
+var BT_STEP = 4, BT_TOP = -240, bendTab = new Float32Array(400), angTab = new Float32Array(400), bendHP = 0;
+// is the road bending around row y? (nobody changes lanes there)
+function bendNear(y) { var u = scroll - y; return Math.abs(headingAt(u + 380) - headingAt(u - 260)) > 0.015; }
+function bendSeg() { return (M.curve || 1) > 1.5 ? 1500 : 2600; }   // road length per straight-then-bend section
+function bendTurn() { return (M.curve || 1) > 1.5 ? 650 : 800; }    // how long each bend takes
+// the heading each section settles on, as sideways pixels per pixel forward (0 = straight up the screen)
+function segHead(k) {
+  if (k <= 0) return 0;
+  var amp = 0.32 * Math.min(1.8, M.curve || 1);
+  return Math.round((hsh(k, 7) - 0.5) * 4) / 2 * amp;
+}
+function headingAt(u) {
+  var L = bendSeg(), T = bendTurn(), k = Math.floor(u / L), f = (u - k * L - (L - T)) / T, a = segHead(k), b = segHead(k + 1);
+  if (f <= 0) return a; if (f >= 1) return b;
+  return a + (b - a) * f * f * (3 - 2 * f);
+}
+// once a frame: how far each screen row is shifted, and how much it is turned, relative to your car
+function bendFrame() {
+  var uP = scroll - P.y, hP = headingAt(uP), n = Math.floor((H + 240 - BT_TOP) / BT_STEP), i, s, py = Math.round((P.y - BT_TOP) / BT_STEP);
+  if (bendTab.length < n + 1) { bendTab = new Float32Array(n + 1); angTab = new Float32Array(n + 1); }
+  bendHP = Math.atan(hP);
+  bendTab[py] = 0; angTab[py] = 0;
+  for (s = 0, i = py - 1; i >= 0; i--) { var h = headingAt(scroll - (BT_TOP + i * BT_STEP)); s += (h - hP) * BT_STEP; bendTab[i] = s; angTab[i] = Math.atan(h) - bendHP; }
+  for (s = 0, i = py + 1; i <= n; i++) { h = headingAt(scroll - (BT_TOP + i * BT_STEP)); s -= (h - hP) * BT_STEP; bendTab[i] = s; angTab[i] = Math.atan(h) - bendHP; }
+  bendTab.n = n;
+}
+function bendIdx(y) { return clamp(Math.round((y - BT_TOP) / BT_STEP), 0, bendTab.n || 0); }
+// sideways shift of the road at screen row y, relative to the road under your car
+function bendAt(y) { return clamp(bendTab[bendIdx(y)] || 0, 10 - BEND_PAD, BEND_PAD - 10); }
+// how much the road at row y is turned compared with the road under your car
+function bendAng(y) { return angTab[bendIdx(y)] || 0; }
+// draw something that sits on the road at (x, y): shift it with the bend and turn it with the road (pair with ctx.restore())
+function bendPush(x, y) { var g = ctx; g.save(); g.translate(x + bendAt(y), y); g.rotate(bendAng(y)); g.translate(-x, -y); }
+function drawRoadBent() {
+  var g = ctx, bw = W + BEND_PAD * 2, cw = Math.ceil(bw * SCALE), ch = Math.ceil(H * SCALE), step = lq() ? 8 : 4;
+  if (bendCv.width !== cw || bendCv.height !== ch) { bendCv.width = cw; bendCv.height = ch; }
+  bctx.setTransform(SCALE, 0, 0, SCALE, 0, 0);
+  bctx.fillStyle = M.verge; bctx.fillRect(0, 0, bw, H);
+  bctx.translate(BEND_PAD, 0);
+  var old = ctx; ctx = bctx;
+  try { drawRoad(); } finally { ctx = old; }
+  // copy the straight road back in thin strips, each slid sideways by the bend
+  for (var y = 0; y < H; y += step) g.drawImage(bendCv, 0, y * SCALE, cw, step * SCALE, bendAt(y + step / 2) - BEND_PAD, y, bw, step + 0.6);
+}
 /* ================= jobs tracking ================= */
 function cleanNow() { return Math.max(run.cleanMax, (dist - run.lastHit) / 1000); }
 function jobVal(j) {
@@ -2098,14 +2718,18 @@ function update(dt) {
     return;
   }
 
+  if (smug && (smug.phase === 'depot' || smug.phase === 'streets')) { updateDepot(dt); return; }
   t += dt; dist += speed * dt / 40;
   var steer = S.agility * (S.ice ? 1 : lerp(M.steer, 1, S.grip));
   if (slip > 0) { slip -= dt; steer *= 0.25; }
   var tx = laneX(P.lane), ox = P.x;
-  P.x += (tx - P.x) * Math.min(1, dt * steer);
+  // on the off-ramp your car follows the ramp off to the right
+  if (smug && smug.phase === 'exit') P.x = laneX(exitLane(smug.cur)) + smug.cur.side * rampDx(-exitRem(smug.cur) * 40 - P.h / 2);
+  else P.x += (tx - P.x) * Math.min(1, dt * steer);
   P.tilt = lerp(P.tilt, clamp((P.x - ox) / Math.max(dt, 0.001) / 900, -0.22, 0.22), Math.min(1, dt * 12));
   inv = Math.max(0, inv - dt); shakeT = Math.max(0, shakeT - dt * 2.6); flash = Math.max(0, flash - dt * 2);
-  magnet = Math.max(0, magnet - dt); dbl = Math.max(0, dbl - dt);
+  magnet = Math.max(0, magnet - dt); dbl = Math.max(0, dbl - dt); nitro = Math.max(0, nitro - dt);
+  if (nitro > 0 && !lq()) { burst(P.x - P.w * .2, P.y + P.h / 2 + 4, 1, '#37e4f0', 140, 0.3, 3, 0); burst(P.x + P.w * .2, P.y + P.h / 2 + 4, 1, '#ffb020', 140, 0.25, 2.6, 0); }
   // exhaust flames mod: little embers trail off the exhaust
   if (S.look.flames && !lq() && Math.random() < 0.35) burst(P.x + (Math.random() < .5 ? -1 : 1) * P.w * .22, P.y + P.h / 2 + 3, 1, S.look.flames, 50, 0.25, 2.2, 0);
   if (S.look.sparks && Math.random() < 0.5) burst(P.x + (Math.random() - .5) * P.w * .6, P.y + P.h / 2, 1, '#ffd98a', 120, 0.25, 1.4, 300);
@@ -2130,6 +2754,7 @@ function update(dt) {
     c = traffic[i];
     if (c.wreck) { c.eff = 1; c.sig = 0; continue; }
     if (c.beh === 'stall') { c.eff = 1; c.brake = false; c.sig = 2; continue; }
+    if (c.cop) { c.eff = 0; continue; }   // police cars have their own brain, see copMove()
     var f = c.f; c.brake = false; c.wt -= dt;
     if (!c.flip && c.f > 0 && !c.reckless) {
       var block = null, bd = 1e9;
@@ -2168,24 +2793,25 @@ function update(dt) {
     }
     if (c.pend != null) {
       c.sigT -= dt;
-      if (c.sigT <= 0) {
+      // nobody changes lanes in the middle of a bend: they keep signalling and wait for the road to straighten
+      if (c.sigT <= 0 && !bendNear(c.y)) {
         if (c.reckless || laneClear(c, c.pend)) { c.lane = c.pend; c.pend = null; c.sigHold = c.big ? 1.2 : 0.7; c.wt = 1.5 + Math.random() * 2; }
         else if (c.sigT < -1.6) { c.pend = null; c.sig = 0; c.wt = 0.8; }
       }
     } else if (c.sigHold > 0) c.sigHold -= dt; else c.sig = 0;
     c.eff = f;
   }
-  // air horn: slow cars in your lane try to move over
-  if (S.horn) {
+  // the police siren: slow cars in your lane try to move over
+  if (chase) {
     hornT -= dt;
     if (hornT <= 0) {
       hornT = 0.45;
       for (i = 0; i < traffic.length; i++) {
         c = traffic[i];
-        if (c.wreck || c.beh === 'stall' || c.flip || c.pend != null) continue;
+        if (c.wreck || c.beh === 'stall' || c.flip || c.cop || c.pend != null || bendNear(c.y)) continue;
         if (Math.abs(c.x - P.x) < LANE_W * .6 && c.y < P.y && P.y - c.y < 320 && Math.random() < 0.7) {
           var ho = [c.lane - 1, c.lane + 1].filter(function (l) { return l >= 0 && l < LANES && laneClear(c, l); });
-          if (ho.length) { wantLane(c, pick(ho, Math.random()), 0.3); Aud.sfx('horn'); }
+          if (ho.length) wantLane(c, pick(ho, Math.random()), 0.3, true);
         }
       }
     }
@@ -2194,7 +2820,7 @@ function update(dt) {
   for (i = traffic.length - 1; i >= 0; i--) {
     c = traffic[i];
     var py = c.y;
-    c.y += speed * c.eff * dt;
+    if (c.cop && !c.wreck) copMove(c, dt); else c.y += speed * c.eff * dt;
     var lx = laneX(c.lane);
     c.x += (lx - c.x) * Math.min(1, dt * (c.wreck ? 0 : (c.beh === 'over' ? 5 : c.turn)));
     if (c.wreck) { c.burn -= dt; if (Math.random() < (lq() ? 0.15 : 0.45)) smoke(c.x, c.y - 4, 1); }
@@ -2218,8 +2844,8 @@ function update(dt) {
       if (!hit(c, d, 3)) continue;
       if (c.y < -40 || d.y < -40) { if (!c.wreck && !d.wreck) { traffic.splice(c.y < d.y ? i : j, 1); j = traffic.length; } continue; }
       var both = !c.wreck && !d.wreck, mx = (c.x + d.x) / 2, my = (c.y + d.y) / 2;
-      if (!c.wreck) { c.wreck = true; c.f = c.eff = 1; c.burn = 7; }
-      if (!d.wreck) { d.wreck = true; d.f = d.eff = 1; d.burn = 7; }
+      if (!c.wreck) { c.wreck = true; c.f = c.eff = 1; c.burn = 7; copDown(c); }
+      if (!d.wreck) { d.wreck = true; d.f = d.eff = 1; d.burn = 7; copDown(d); }
       explode(mx, my, both ? 1.15 : 0.8);
       pop(mx, my - 30, 'CRASH!', '#ff8a3d', true);
       if (S.hook && state === 'play') items.push({ type: 'crate', lane: c.lane, x: mx, y: my - 50, w: 30, h: 30 });
@@ -2248,11 +2874,12 @@ function update(dt) {
     if (!scooped && !hit(P, it, it.type === 'oil' || it.type === 'pothole' ? 8 : 4)) continue;
     if (it.type === 'rock') {
       if (S.offroad || S.plating) { items.splice(i, 1); burst(it.x, it.y, 14, '#8a7a6a', 150, 0.6, 3, 250); shakeT = Math.max(shakeT, 0.3); var rg = cashGain(20 * S.salv); cash += rg; pop(it.x, it.y, 'Crunch +$' + rg, '#d8c8a8'); }
+      else if (nitro > 0) { items.splice(i, 1); burst(it.x, it.y, 14, '#8a7a6a', 150, 0.6, 3, 250); shakeT = Math.max(shakeT, 0.3); pop(it.x, it.y, 'Smash!', '#37e4f0'); }
       else if (inv <= 0) { items.splice(i, 1); burst(it.x, it.y, 14, '#8a7a6a', 150, 0.6, 3, 250); if (takeHit('Hit a rock')) return; }
     } else if (it.type === 'barrel') {
       items.splice(i, 1);
       explode(it.x, it.y, 1.1, true);
-      if (S.plating) pop(P.x, P.y - 50, 'Plating held!', '#c9ccd4'); else if (takeHit('Hit a barrel')) return;
+      if (S.plating) pop(P.x, P.y - 50, 'Plating held!', '#c9ccd4'); else if (nitro <= 0 && takeHit('Hit a barrel')) return;
     } else if (it.type === 'oil') {
       if (!it.used && !S.offroad) {
         it.used = true;
@@ -2260,19 +2887,31 @@ function update(dt) {
       }
     } else if (it.type === 'pothole') {
       if (!it.used) { it.used = true; if (!S.offroad && !S.plating) { shakeT = Math.max(shakeT, 0.45); fuel = Math.max(1, fuel - 5); pop(P.x, P.y - 50, 'Pothole -5 fuel', '#c8b8a8'); vibe(30); } }
+    } else if (it.type === 'spike') {
+      // the suspect's spike strips give you a flat tyre for a moment; your own strips can't hurt you
+      if (!it.used && !it.cop) { it.used = true; if (chase) chase.flat = 2.2; shakeT = Math.max(shakeT, 0.5); pop(P.x, P.y - 50, 'Spikes! Flat tyre', '#ff8a8a'); Aud.sfx('crash'); vibe(40); }
     } else { collect(it); items.splice(i, 1); }
   }
   // player vs traffic
   for (i = traffic.length - 1; i >= 0; i--) {
     c = traffic[i];
     if (!hit(P, c)) continue;
+    // on nitro you plough straight through traffic
+    if (nitro > 0) {
+      if (c.wreck) { traffic.splice(i, 1); burst(c.x, c.y, 20, '#ff8a3d', 200, 0.5, 3, 0); continue; }
+      c.byPlayer = true; wreckCar(c, 0.8, true); var sg = cashGain(60); cash += sg; pop(c.x, c.y - 30, 'NITRO SMASH +$' + sg, '#37e4f0'); shakeT = Math.max(shakeT, 0.4);
+      continue;
+    }
     if (inv <= 0) {
       if (c.wreck) { traffic.splice(i, 1); burst(c.x, c.y, 20, '#ff8a3d', 200, 0.5, 3, 0); }
-      else { wreckCar(c, 0.7, true); }
-      if (takeHit(c.flip ? 'Head-on crash' : 'Crashed')) return;
+      else { c.byPlayer = true; wreckCar(c, 0.7, true); }
+      if (c.cop && smug) smug.bust = Math.min(1, smug.bust + 0.25);
+      if (takeHit(c.cop ? 'Rammed by the cops' : c.flip ? 'Head-on crash' : 'Crashed')) return;
       break;
     }
   }
+  if (chase) { updateChase(dt, speed); if (state !== 'play') return; }
+  if (smug) updateSmuggle(dt);
   jobTick -= dt; if (jobTick <= 0) { jobTick = 0.4; checkJobs(); }
   for (i = pops.length - 1; i >= 0; i--) { pops[i].life -= dt; pops[i].y -= 42 * dt; if (pops[i].life <= 0) pops.splice(i, 1); }
 }
@@ -2303,17 +2942,19 @@ function drawRoad() {
     for (var l = 0; l < LANES; l++) { g.fillStyle = 'rgba(0,0,0,0.06)'; g.fillRect(laneX(l) - 12, 0, 6, H); g.fillRect(laneX(l) + 6, 0, 6, H); }
   }
   if (M.weather === 'rain') { g.fillStyle = 'rgba(160,190,230,0.07)'; g.fillRect(ROAD_X, 0, ROAD_W, H); }
-  // rumble strips
-  var ro = scroll % 40;
-  for (var y = -40 + ro; y < H; y += 40) {
-    g.fillStyle = '#d23a3a'; g.fillRect(ROAD_X - 6, y, 6, 20); g.fillRect(ROAD_X + ROAD_W, y, 6, 20);
-    g.fillStyle = '#eeeeee'; g.fillRect(ROAD_X - 6, y + 20, 6, 20); g.fillRect(ROAD_X + ROAD_W, y + 20, 6, 20);
-  }
+  // paved shoulders, then steel guardrails on posts
+  g.fillStyle = shade(M.road, -.1); g.fillRect(ROAD_X - 14, 0, 14, H); g.fillRect(ROAD_X + ROAD_W, 0, 14, H);
+  var ro = scroll % 40, y;
+  if (!lq()) { g.fillStyle = 'rgba(0,0,0,0.12)'; for (y = -40 + ro; y < H; y += 40) { g.fillRect(ROAD_X - 12, y, 8, 2); g.fillRect(ROAD_X + ROAD_W + 4, y, 8, 2); } }
+  g.fillStyle = '#4b505a'; for (y = -40 + ro; y < H; y += 40) { g.fillRect(ROAD_X - 20, y, 4, 6); g.fillRect(ROAD_X + ROAD_W + 16, y, 4, 6); }
+  g.fillStyle = '#c3c8d1'; g.fillRect(ROAD_X - 19, 0, 3, H); g.fillRect(ROAD_X + ROAD_W + 16, 0, 3, H);
+  g.fillStyle = 'rgba(255,255,255,0.55)'; g.fillRect(ROAD_X - 19, 0, 1, H); g.fillRect(ROAD_X + ROAD_W + 16, 0, 1, H);
   g.fillStyle = M.line;
   g.fillRect(ROAD_X + 3, 0, 3, H); g.fillRect(ROAD_X + ROAD_W - 6, 0, 3, H);
   var off = scroll % 80;
-  for (var ln = 1; ln < LANES; ln++) for (y = -80 + off; y < H; y += 80) g.fillRect(ROAD_X + LANE_W * ln - 2, y, 4, 40);
+  for (var ln = 1; ln < LANES; ln++) for (y = -80 + off; y < H; y += 80) g.fillRect(ROAD_X + LANE_W * ln - 2, y, 4, 34);
   drawDecor(g);
+  drawExitRamp(g);
 }
 
 function drawItem(it) {
@@ -2348,6 +2989,13 @@ function drawItem(it) {
     case 'oil':
       g.fillStyle = 'rgba(10,10,14,0.8)'; g.beginPath(); g.ellipse ? g.ellipse(0, 0, 20, 14, it.rot || 0, 0, TAU) : g.arc(0, 0, 16, 0, TAU); g.fill();
       if (!lq()) { var og = g.createLinearGradient(-14, -10, 14, 10); og.addColorStop(0, 'rgba(120,60,200,0.35)'); og.addColorStop(.5, 'rgba(40,200,180,0.25)'); og.addColorStop(1, 'rgba(220,180,40,0.3)'); g.fillStyle = og; g.beginPath(); g.ellipse ? g.ellipse(-3, -2, 11, 6, it.rot || 0, 0, TAU) : g.arc(0, 0, 8, 0, TAU); g.fill(); }
+      break;
+    case 'spike':
+      g.fillStyle = 'rgba(0,0,0,0.3)'; g.fillRect(-26, -2, 56, 9);
+      g.fillStyle = '#2b2f38'; g.fillRect(-27, -4, 54, 8);
+      g.fillStyle = '#d8dce4';
+      for (var sk = 0; sk < 6; sk++) { g.beginPath(); g.moveTo(-23 + sk * 8.4, 1); g.lineTo(-19 + sk * 8.4, -9); g.lineTo(-15 + sk * 8.4, 1); g.closePath(); g.fill(); }
+      g.fillStyle = '#ffd23f'; g.fillRect(-27, -4, 4, 8); g.fillRect(23, -4, 4, 8);
       break;
     case 'pothole':
       g.fillStyle = shade(M.road, -.45); g.beginPath(); g.ellipse ? g.ellipse(0, 0, 15, 11, 0, 0, TAU) : g.arc(0, 0, 13, 0, TAU); g.fill();
@@ -2387,9 +3035,13 @@ function drawPlayer() {
     hg.addColorStop(0, 'rgba(255,240,200,0.16)'); hg.addColorStop(1, 'rgba(255,240,200,0)');
     g.fillStyle = hg; g.beginPath(); g.moveTo(x - 12, top); g.lineTo(x + 12, top); g.lineTo(x + 70, top - 260); g.lineTo(x - 70, top - 260); g.closePath(); g.fill();
   }
-  g.save(); g.translate(x, y); g.rotate(P.tilt);
+  g.save(); g.translate(x, y); g.rotate(P.tilt + bendAng(P.y));
   var lk = lookOpts(S.look);
-  lk.clock = clock; lk.brake = slip > 0; lk.sig = Math.abs(P.x - laneX(P.lane)) > 4 ? (laneX(P.lane) > P.x ? 1 : -1) : 0; lk.lq = lq();
+  lk.clock = clock; lk.brake = slip > 0 || (chase && chase.flat > 0);
+  var ne = smug && smug.phase === 'drive' ? nextExit() : null; lk.sig = Math.abs(P.x - laneX(P.lane)) > 4 ? (laneX(P.lane) > P.x ? 1 : -1) : 0; lk.lq = lq();
+  // your own blinker: on the ramp, and when you're lined up for an exit that's coming up
+  if (smug && smug.phase === 'exit') lk.sig = smug.cur.side;
+  else if (ne && exitRem(ne) < 90 && laneOf(P.x) === exitLane(ne)) lk.sig = ne.side;
   drawCarFull(g, S.car, 0, 0, lk);
   g.restore();
   if (magnet > 0) { g.save(); g.strokeStyle = 'rgba(181,123,255,0.5)'; g.lineWidth = 2; g.setLineDash([6, 8]); g.lineDashOffset = -clock * 30; g.beginPath(); g.arc(x, y - 60, 100 * S.magRange / 280, 0, TAU); g.stroke(); g.restore(); }
@@ -2404,11 +3056,11 @@ function drawPlayer() {
 function drawParts() {
   var g = ctx;
   for (var i = 0; i < parts.length; i++) {
-    var p = parts[i], a = clamp(p.life / p.max, 0, 1);
-    if (p.kind === 'ring') { g.strokeStyle = 'rgba(255,240,190,' + a * 0.8 + ')'; g.lineWidth = 4 * a + 1; g.beginPath(); g.arc(p.x, p.y, p.r * (1 - a) + 8, 0, TAU); g.stroke(); }
-    else if (p.kind === 'flash') { var fg = g.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r); fg.addColorStop(0, 'rgba(255,255,230,' + a + ')'); fg.addColorStop(1, 'rgba(255,200,80,0)'); g.fillStyle = fg; g.beginPath(); g.arc(p.x, p.y, p.r, 0, TAU); g.fill(); }
-    else if (p.kind === 'smoke') { if (p.tint) { g.globalAlpha = a * 0.5; g.fillStyle = p.tint; } else g.fillStyle = 'rgba(60,60,64,' + a * 0.45 + ')'; g.beginPath(); g.arc(p.x, p.y, p.r * (1.8 - a), 0, TAU); g.fill(); g.globalAlpha = 1; }
-    else { g.globalAlpha = a; g.fillStyle = p.col; g.beginPath(); g.arc(p.x, p.y, p.r * (0.4 + a * 0.6), 0, TAU); g.fill(); g.globalAlpha = 1; }
+    var p = parts[i], a = clamp(p.life / p.max, 0, 1), px = p.x + bendAt(p.y);
+    if (p.kind === 'ring') { g.strokeStyle = 'rgba(255,240,190,' + a * 0.8 + ')'; g.lineWidth = 4 * a + 1; g.beginPath(); g.arc(px, p.y, p.r * (1 - a) + 8, 0, TAU); g.stroke(); }
+    else if (p.kind === 'flash') { var fg = g.createRadialGradient(px, p.y, 0, px, p.y, p.r); fg.addColorStop(0, 'rgba(255,255,230,' + a + ')'); fg.addColorStop(1, 'rgba(255,200,80,0)'); g.fillStyle = fg; g.beginPath(); g.arc(px, p.y, p.r, 0, TAU); g.fill(); }
+    else if (p.kind === 'smoke') { if (p.tint) { g.globalAlpha = a * 0.5; g.fillStyle = p.tint; } else g.fillStyle = 'rgba(60,60,64,' + a * 0.45 + ')'; g.beginPath(); g.arc(px, p.y, p.r * (1.8 - a), 0, TAU); g.fill(); g.globalAlpha = 1; }
+    else { g.globalAlpha = a; g.fillStyle = p.col; g.beginPath(); g.arc(px, p.y, p.r * (0.4 + a * 0.6), 0, TAU); g.fill(); g.globalAlpha = 1; }
   }
 }
 
@@ -2441,7 +3093,7 @@ function drawLights() {
   g.fillStyle = 'rgba(4,6,20,' + a + ')'; g.fillRect(0, 0, lightCv.width, lightCv.height);
   g.globalCompositeOperation = 'destination-out';
   g.setTransform(s, 0, 0, s, 0, 0);
-  function glow(x, y, r, st) { var gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, 'rgba(0,0,0,' + st + ')'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill(); }
+  function glow(x, y, r, st) { x += bendAt(y); var gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, 'rgba(0,0,0,' + st + ')'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill(); }
   if (state !== 'menu') {
     var top = P.y - P.h / 2, cg = g.createLinearGradient(0, top, 0, top - 330);
     cg.addColorStop(0, 'rgba(0,0,0,1)'); cg.addColorStop(1, 'rgba(0,0,0,0)');
@@ -2455,7 +3107,10 @@ function drawLights() {
     else { glow(c.x, c.y + c.h / 2, c.brake ? 34 : 22, 0.75); glow(c.x, c.y - c.h / 2 - 30, 40, 0.5); }
   }
   for (i = 0; i < parts.length; i++) { var p = parts[i]; if (p.kind === 'flash' || (p.kind === 'dot' && p.col === '#ffd060' && i % 4 === 0)) glow(p.x, p.y, p.kind === 'flash' ? p.r * 1.6 : 20, 0.9); }
-  for (i = 0; i < items.length; i++) { var it = items[i]; if (it.type !== 'rock' && it.type !== 'oil' && it.type !== 'pothole') glow(it.x, it.y, 30, 0.7); }
+  for (i = 0; i < items.length; i++) { var it = items[i]; if (it.type !== 'rock' && it.type !== 'oil' && it.type !== 'pothole' && it.type !== 'spike') glow(it.x, it.y, 30, 0.7); }
+  if (chase && chase.sus) { var su = chase.sus; glow(su.x, su.y + su.h / 2, su.brakeT > 0 ? 40 : 26, 0.8); glow(su.x, su.y - su.h / 2 - 30, 44, 0.55); }
+  if (chase && chase.pulled) glow(chase.pulled.x, chase.pulled.y, 40, 0.7);
+  if (chase) glow(P.x, P.y - P.h * 0.15, 60, 0.6);
   if (M.decor === 'lamps' || M.decor === 'airport' || M.decor === 'city') rows(160, function (yy) { glow(ROAD_X * .5, yy, 60, 0.6); glow(W - ROAD_X * .5, yy, 60, 0.6); });
   g.globalCompositeOperation = 'source-over';
   ctx.drawImage(lightCv, 0, 0, W, H);
@@ -2465,6 +3120,7 @@ function drawWarns() {
   var g = ctx;
   for (var i = 0; i < warns.length; i++) {
     var w = warns[i], x = laneX(w.lane), on = Math.floor(clock * 8) % 2 === 0, y = w.side === 'bottom' ? H - 44 : 118;
+    x += bendAt(y);
     if (w.side === 'stall') { ctx.save(); ctx.translate(x, y); ctx.fillStyle = on ? '#ffab1a' : '#ffd98a'; ctx.beginPath(); ctx.moveTo(0, -14); ctx.lineTo(15, 11); ctx.lineTo(-15, 11); ctx.closePath(); ctx.fill(); ctx.fillStyle = '#2a1a00'; ctx.font = '800 14px ' + FONT; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('!', 0, 3); ctx.font = '800 11px ' + FONT; ctx.fillStyle = '#ffd98a'; ctx.fillText('STOPPED', 0, 22); ctx.restore(); continue; }
     if (w.side === 'bottom' && Math.abs(x - P.x) < LANE_W) y = P.y - P.h / 2 - 30;
     g.save(); g.translate(x, y);
@@ -2487,6 +3143,70 @@ function chip(idx, col, letter, frac) {
 }
 function panel(x, y, w, h) { var g = ctx; g.fillStyle = 'rgba(7,9,18,0.9)'; rr(g, x, y + 3, w, h, 14); g.fill(); g.fillStyle = 'rgba(26,31,54,0.92)'; rr(g, x, y, w, h, 14); g.fill(); g.strokeStyle = '#070912'; g.lineWidth = 2.5; g.stroke(); }
 
+/* ---------- police mode drawing ---------- */
+function drawChase() {
+  var ch = chase, g = ctx, s = ch.sus;
+  if (ch.pulled) { var pu = ch.pulled; bendPush(pu.x, pu.y); drawSpec(g, pu.spec, pu.x, pu.y, { clock: clock, lq: lq(), sig: 2 }); g.restore(); }
+  if (!s || s.y < -s.h) return;
+  bendPush(s.x, s.y);
+  // pulsing red target ring
+  g.save(); g.globalAlpha = 0.45 + 0.25 * Math.sin(clock * 7); g.strokeStyle = '#ff3b3b'; g.lineWidth = 3;
+  g.beginPath(); if (g.ellipse) g.ellipse(s.x, s.y, s.w * 0.95, s.h * 0.66, 0, 0, TAU); else g.arc(s.x, s.y, s.h * 0.66, 0, TAU); g.stroke();
+  g.restore();
+  drawSpec(g, s.spec, s.x, s.y, { brake: s.brakeT > 0 || ch.slowT > 0, clock: clock, lq: lq(), sig: 0 });
+  // bobbing marker above it
+  var my = s.y - s.h / 2 - 12 + Math.sin(clock * 6) * 3;
+  g.fillStyle = '#ff3b3b'; g.strokeStyle = '#070912'; g.lineWidth = 2.5;
+  g.beginPath(); g.moveTo(s.x - 10, my - 11); g.lineTo(s.x + 10, my - 11); g.lineTo(s.x, my); g.closePath(); g.stroke(); g.fill();
+  g.restore();
+}
+function spikeBtn() { return { x: W / 2, y: H - 58, r: 30 }; }
+function drawChaseHud() {
+  var ch = chase, g = ctx, L = 14, y = 116, w = ch.w, s = ch.sus, blink = Math.floor(clock * 4) % 2 === 0, i;
+  panel(L, y, 178, 84);
+  g.textAlign = 'left'; g.textBaseline = 'top';
+  var st = STARS.slice(0, w.stars);
+  g.font = '800 14px ' + FONT; g.fillStyle = '#ffc21a'; g.fillText(st, L + 10, y + 8);
+  g.fillStyle = '#f1ecd9'; g.fillText(w.short + (ch.streak ? '  #' + (ch.streak + 1) : ''), L + 16 + g.measureText(st).width, y + 8);
+  if (!s) {
+    g.fillStyle = '#3ddc97'; g.font = '800 17px ' + FONT; g.fillText(ch.busts + ' busted · ' + fmt(ch.total), L + 10, y + 32);
+    g.font = '700 13px ' + FONT; g.fillStyle = '#c9c5b3'; g.fillText('Next suspect coming…', L + 10, y + 58);
+    return;
+  }
+  g.font = '800 17px ' + FONT; g.fillStyle = '#3ddc97'; g.fillText(fmt(ch.bounty), L + 10, y + 27);
+  var tl = Math.max(0, Math.ceil(ch.time));
+  g.textAlign = 'right'; g.fillStyle = tl <= 10 && blink ? '#ff5d5d' : '#f1ecd9';
+  g.fillText(Math.floor(tl / 60) + ':' + (tl % 60 < 10 ? '0' : '') + (tl % 60), L + 168, y + 27);
+  g.textAlign = 'left'; g.font = '700 11px ' + FONT; g.fillStyle = '#c9c5b3';
+  g.fillText('DAMAGE', L + 10, y + 50); g.fillText('GAP', L + 10, y + 66);
+  var n = s.max, pw = Math.min(12, 104 / n - 2);
+  for (i = 0; i < n; i++) { g.fillStyle = i < n - s.hp ? '#ff5d5d' : 'rgba(255,255,255,0.18)'; rr(g, L + 62 + i * (pw + 2), y + 50, pw, 10, 3); g.fill(); }
+  var fr = clamp(1 - (ch.gap - 60) / 1290, 0, 1), col = ch.gap < 400 ? '#3ddc97' : ch.gap < 900 ? '#ffb020' : '#ff5d5d';
+  g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, L + 62, y + 67, 106, 9, 4); g.fill();
+  g.fillStyle = ch.gap > 1000 && blink ? '#fff' : col; rr(g, L + 62, y + 67, Math.max(8, 106 * fr), 9, 4); g.fill();
+  g.textAlign = 'center'; g.textBaseline = 'middle';
+  // an arrow showing where it is while it's off the top of the screen
+  if (s.y < -s.h / 3) {
+    var ax = clamp(s.x, ROAD_X + 20, ROAD_X + ROAD_W - 20), ay = 226 + Math.sin(clock * 6) * 3;
+    g.fillStyle = '#ff3b3b'; g.strokeStyle = '#070912'; g.lineWidth = 3;
+    g.beginPath(); g.moveTo(ax, ay - 14); g.lineTo(ax + 13, ay + 6); g.lineTo(ax - 13, ay + 6); g.closePath(); g.stroke(); g.fill();
+    g.font = '800 13px ' + FONT; g.strokeText(Math.round(ch.gap / 4) + ' m', ax, ay + 20); g.fillStyle = '#fff'; g.fillText(Math.round(ch.gap / 4) + ' m', ax, ay + 20);
+  }
+  if (ch.gap > 1000 && blink) { g.font = '800 26px ' + FONT; g.lineWidth = 5; g.strokeStyle = '#070912'; g.strokeText('GETTING AWAY!', W / 2, H * 0.3); g.fillStyle = '#ff5d5d'; g.fillText('GETTING AWAY!', W / 2, H * 0.3); }
+  // spike strip button
+  var b = spikeBtn(), ok = ch.spikes > 0;
+  g.globalAlpha = ok ? 1 : 0.4;
+  g.fillStyle = 'rgba(8,10,16,0.72)'; g.beginPath(); g.arc(b.x, b.y, b.r, 0, TAU); g.fill();
+  g.strokeStyle = ok ? '#5bc0ff' : 'rgba(255,255,255,0.2)'; g.lineWidth = 3; g.stroke();
+  g.fillStyle = '#2b2f38'; g.fillRect(b.x - 17, b.y + 1, 34, 6);
+  g.fillStyle = '#d8dce4';
+  for (i = 0; i < 4; i++) { g.beginPath(); g.moveTo(b.x - 15 + i * 8.5, b.y + 2); g.lineTo(b.x - 11 + i * 8.5, b.y - 10); g.lineTo(b.x - 7 + i * 8.5, b.y + 2); g.closePath(); g.fill(); }
+  g.font = '800 11px ' + FONT; g.lineWidth = 3; g.strokeStyle = '#070912';
+  var lb = ok ? 'SPIKES' + (HAS_MOUSE ? ' (Space)' : '') : 'USED';
+  g.strokeText(lb, b.x, b.y + b.r + 9); g.fillStyle = '#9be7ff'; g.fillText(lb, b.x, b.y + b.r + 9);
+  g.globalAlpha = 1;
+}
+
 function drawHud() {
   var g = ctx, i, L = 14, T = 12;
   panel(L, T, 178, 98);
@@ -2498,7 +3218,7 @@ function drawHud() {
   var m = multNow();
   if (m > 1) { g.fillStyle = '#3ddc97'; g.font = '800 19px ' + FONT; g.fillText('x' + m, L + 18 + cw, T + 15); }
   g.font = '700 14px ' + FONT; g.fillStyle = '#c9c5b3';
-  g.fillText((dist / 1000).toFixed(1) + ' km' + (dbl > 0 ? '  ·  x2 ' + Math.ceil(dbl) + 's' : ''), L + 12, T + 42);
+  g.fillText((dist / 1000).toFixed(1) + ' km · ' + Math.round(speedNow() * 0.26) + ' km/h' + (dbl > 0 ? '  ·  x2 ' + Math.ceil(dbl) + 's' : ''), L + 12, T + 42);
   // fuel
   var low = fuel < 25, blink = low && Math.floor(clock * 4) % 2 === 0, fcol = fuel > 50 ? '#3ddc97' : (fuel > 25 ? '#ffb020' : '#ff5d5d');
   g.fillStyle = blink ? '#fff' : fcol;
@@ -2515,6 +3235,7 @@ function drawHud() {
   if (magnet > 0) chip(idx++, '#b57bff', 'M', magnet / S.mag);
   if (dbl > 0) chip(idx++, '#ffd23f', '2', dbl / 9);
   if (slip > 0) chip(idx++, '#b8b8c8', '~', slip);
+  if (nitro > 0) chip(idx++, '#37e4f0', 'N', nitro / NITRO_T);
   if (SET().ctrl === 'buttons') arrowBtns().forEach(function (b) {
     g.fillStyle = 'rgba(8,10,16,0.6)'; g.beginPath(); g.arc(b.x, b.y, b.r, 0, TAU); g.fill(); g.strokeStyle = 'rgba(255,255,255,0.18)'; g.lineWidth = 2; g.stroke();
     g.fillStyle = '#f1ecd9'; g.beginPath(); g.moveTo(b.x + b.d * 12, b.y); g.lineTo(b.x - b.d * 8, b.y - 13); g.lineTo(b.x - b.d * 8, b.y + 13); g.closePath(); g.fill();
@@ -2524,11 +3245,14 @@ function drawHud() {
     // on a PC with a mouse, show keyboard hints instead of tap hints
     var kb = SET().ctrl === 'tap' && HAS_MOUSE;
     var tip = kb ? 'Press ← → or A / D to change lane' : SET().ctrl === 'swipe' ? 'Swipe left or right to change lane' : (SET().ctrl === 'buttons' ? 'Use the arrow buttons to change lane' : 'Tap left or right to change lane');
-    g.fillText(tip, W / 2, H * 0.42); g.fillText('Grab green crates, dodge everything else', W / 2, H * 0.42 + 22);
+    if (chase) { tip = 'Stay in the red car’s lane to catch up'; g.fillText(tip, W / 2, H * 0.42); g.fillText('then ram it until it pulls over!', W / 2, H * 0.42 + 22); }
+    else { g.fillText('Deliver the hot cargo: take the EXIT', W / 2, H * 0.42); g.fillText('Grab green crates, dodge everything else', W / 2, H * 0.42 + 22); g.fillText(tip, W / 2, H * 0.42 + 44); }
   }
+  if (chase) drawChaseHud();
+  if (smug) drawSmugHud();
   var aj = activeJobs();
-  if (aj.length && state !== 'count') {
-    var jy = T + 104; panel(L, jy, 178, 10 + aj.length * 26);
+  if (aj.length && state !== 'count' && !chase) {
+    var jy = T + 104 + (smug ? (heat() ? 128 : 92) : 0); panel(L, jy, 178, 10 + aj.length * 26);
     aj.forEach(function (j, ji) {
       var v = jobVal(j), fr = clamp(v / j.n, 0, 1), yy = jy + 8 + ji * 26, off = (j.k === 'mapearn' && save.map !== j.map) || (j.k === 'classkm' && S.car.cls !== j.cls);
       g.textAlign = 'left'; g.textBaseline = 'top'; g.font = '700 12px ' + FONT; g.fillStyle = off ? '#7d7a6c' : '#e8e4d2';
@@ -2555,20 +3279,32 @@ function draw() {
   g.setTransform(SCALE, 0, 0, SCALE, 0, 0);
   g.save();
   if (shakeT > 0 && SET().shake && !reduceMotion) g.translate((Math.random() - 0.5) * 12 * shakeT, (Math.random() - 0.5) * 12 * shakeT);
-  drawRoad();
-  var i;
-  for (i = 0; i < items.length; i++) if (items[i].type === 'oil' || items[i].type === 'pothole') drawItem(items[i]);
-  for (i = 0; i < items.length; i++) if (items[i].type !== 'oil' && items[i].type !== 'pothole') drawItem(items[i]);
-  for (i = 0; i < traffic.length; i++) if (traffic[i].wreck) drawTraffic(traffic[i]);
-  for (i = 0; i < traffic.length; i++) if (!traffic[i].wreck) drawTraffic(traffic[i]);
+  if (smug && (smug.phase === 'depot' || smug.phase === 'streets')) { if (smug.phase === 'depot') drawDepot(); else drawStreets(); g.restore(); drawHud(); return; }
+  bendFrame();
+  drawRoadBent();
+  var i, o;
+  // everything on the road is drawn shifted and turned with the bend at its row
+  for (i = 0; i < items.length; i++) { o = items[i]; if (o.type === 'oil' || o.type === 'pothole') { bendPush(o.x, o.y); drawItem(o); g.restore(); } }
+  for (i = 0; i < items.length; i++) { o = items[i]; if (o.type !== 'oil' && o.type !== 'pothole') { bendPush(o.x, o.y); drawItem(o); g.restore(); } }
+  for (i = 0; i < traffic.length; i++) { o = traffic[i]; if (o.wreck) { bendPush(o.x, o.y); drawTraffic(o); g.restore(); } }
+  for (i = 0; i < traffic.length; i++) { o = traffic[i]; if (!o.wreck) { bendPush(o.x, o.y); drawTraffic(o); g.restore(); } }
+  if (chase) drawChase();
   drawPlayer();
+  if (smug) drawExitSign();
   drawParts();
+  // nitro: speed streaks rushing past
+  if (nitro > 0 && state === 'play' && !reduceMotion) {
+    g.strokeStyle = 'rgba(190,245,255,' + (0.25 + 0.2 * Math.min(1, nitro)) + ')'; g.lineWidth = 2; g.beginPath();
+    for (i = 0; i < 16; i++) { var sx = hsh(i, Math.floor(clock * 20)) * W, sy = hsh(i + 40, Math.floor(clock * 20)) * H; g.moveTo(sx, sy); g.lineTo(sx, sy + 60 + hsh(i, 3) * 60); }
+    g.stroke();
+  }
   g.textAlign = 'center'; g.textBaseline = 'middle';
   for (i = 0; i < pops.length; i++) {
     var p = pops[i]; g.globalAlpha = clamp(p.life * 1.6, 0, 1);
     g.font = '800 ' + (p.big ? 24 : 17) + 'px ' + FONT;
-    g.fillStyle = 'rgba(0,0,0,0.45)'; g.fillText(p.text, p.x + 1.5, p.y + 2);
-    g.fillStyle = p.color; g.fillText(p.text, p.x, p.y);
+    var pbx = p.x + bendAt(p.y);
+    g.fillStyle = 'rgba(0,0,0,0.45)'; g.fillText(p.text, pbx + 1.5, p.y + 2);
+    g.fillStyle = p.color; g.fillText(p.text, pbx, p.y);
   }
   g.globalAlpha = 1;
   drawWeather();
@@ -2576,6 +3312,8 @@ function draw() {
   if (M.tint) { g.fillStyle = M.tint[0]; g.globalAlpha = M.tint[1]; g.fillRect(0, 0, W, H); g.globalAlpha = 1; }
   if (!lq()) { var vg = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.45, W / 2, H / 2, Math.max(W, H) * 0.75); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.35)'); g.fillStyle = vg; g.fillRect(0, 0, W, H); }
   if (flash > 0) { g.fillStyle = 'rgba(255,255,255,' + Math.min(0.7, flash) + ')'; g.fillRect(0, 0, W, H); }
+  // fade to black going down the off-ramp, and back in when you rejoin the highway
+  if (smug) { var fa = smug.phase === 'exit' ? (smug.t - 1.2) / 0.4 : smug.fade / 0.6; if (fa > 0) { g.fillStyle = 'rgba(7,9,18,' + clamp(fa, 0, 1) + ')'; g.fillRect(-20, -20, W + 40, H + 40); } }
   g.restore();
   if (state === 'play' || state === 'count' || state === 'paused') { drawWarns(); drawHud(); }
   if (state === 'count') drawCount();
@@ -2593,6 +3331,7 @@ appEl.addEventListener('pointerdown', function (e) {
   if (state !== 'play') return;
   e.preventDefault();
   var p = toLogical(e), ctrl = SET().ctrl;
+  if (chase && chase.sus) { var sb = spikeBtn(); if (Math.hypot(p.x - sb.x, p.y - sb.y) < sb.r + 12) { useSpikes(); return; } }
   if (ctrl === 'buttons') { arrowBtns().forEach(function (b) { if (Math.hypot(p.x - b.x, p.y - b.y) < b.r + 16) move(b.d); }); return; }
   if (ctrl === 'swipe') { swipeStart = { x: p.x, y: p.y, id: e.pointerId }; return; }
   move(p.x < W / 2 ? -1 : 1);
@@ -2611,7 +3350,7 @@ window.addEventListener('keydown', function (e) {
   if (state !== 'play') return;
   if (k === 'ArrowLeft' || k === 'a' || k === 'A') { move(-1); e.preventDefault(); }
   else if (k === 'ArrowRight' || k === 'd' || k === 'D') { move(1); e.preventDefault(); }
-  else if (k === ' ') e.preventDefault(); // stop Space scrolling the page
+  else if (k === ' ' || k === 'ArrowUp' || k === 'w' || k === 'W') { e.preventDefault(); if (chase) useSpikes(); } // Space also stops the page scrolling
 });
 document.addEventListener('visibilitychange', function () { if (document.hidden) pauseGame(); else checkForUpdate(); });
 window.addEventListener('blur', function () { pauseGame(); });
@@ -2624,7 +3363,8 @@ function pollPad() {
   if (!gp) return;
   function btn(i) { return gp.buttons[i] && gp.buttons[i].pressed; }
   var ax = gp.axes[0] || 0;
-  var now = { l: btn(14) || btn(4) || ax < -0.5, r: btn(15) || btn(5) || ax > 0.5, s: btn(9) };
+  var now = { l: btn(14) || btn(4) || ax < -0.5, r: btn(15) || btn(5) || ax > 0.5, s: btn(9), a: btn(0) };
+  if (now.a && !padPrev.a && chase) useSpikes();
   if (now.l && !padPrev.l) move(-1);
   if (now.r && !padPrev.r) move(1);
   if (now.s && !padPrev.s) { if (state === 'paused') resumeGame(); else pauseGame(); }
@@ -2645,7 +3385,7 @@ function frame(ts) {
 
 /* ================= UI ================= */
 var OV = {};
-['name', 'menu', 'garage', 'maps', 'jobs', 'codes', 'board', 'settings', 'pause', 'over', 'help'].forEach(function (n) {
+['name', 'menu', 'garage', 'maps', 'jobs', 'codes', 'board', 'police', 'settings', 'pause', 'over', 'help'].forEach(function (n) {
   var d = document.createElement('div'); d.className = 'ov'; d.id = 'sc-' + n; d.hidden = true; appEl.appendChild(d); OV[n] = d;
 });
 var pauseBtn = document.getElementById('pauseBtn'), toastEl = document.getElementById('toast');
@@ -2654,16 +3394,17 @@ var cur = null, gView = save.car, gTab = 'upg', gClass = 'All', mGroup = 'Classi
 // chunky outlined icons to match the cartoon look
 var OL = ' stroke="#070912" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"';
 var ICON = {
-  garage: '<svg viewBox="0 0 24 24"><g' + OL + '><path d="M3.5 12.5l2.2-5.2A2 2 0 0 1 7.5 6h9a2 2 0 0 1 1.8 1.3l2.2 5.2V18a1 1 0 0 1-1 1h-1.8a1 1 0 0 1-1-1v-1H7.3v1a1 1 0 0 1-1 1H4.5a1 1 0 0 1-1-1z" fill="#fff"/><path d="M6.6 11.5l1.3-3.2h8.2l1.3 3.2z" fill="#9cc2ff"/><circle cx="7" cy="14.3" r="1.4" fill="#ffd23f"/><circle cx="17" cy="14.3" r="1.4" fill="#ffd23f"/></g></svg>',
+  garage: '<svg viewBox="0 0 24 24"><g' + OL + '><path d="M2.5 15.8v-2.4c0-.9.6-1.6 1.4-1.8l3.2-.8 2.7-3.1a2 2 0 0 1 1.5-.7h4.2a2 2 0 0 1 1.6.8l2.3 3 1.5.4c.9.2 1.5 1 1.5 1.9v2.7a1 1 0 0 1-1 1H3.5a1 1 0 0 1-1-1z" fill="#ff5d5d"/><path d="M9.4 11l2.1-2.5h3.5l1.9 2.5z" fill="#9cc2ff"/><circle cx="7" cy="16.8" r="2.3" fill="#2b2f38"/><circle cx="17" cy="16.8" r="2.3" fill="#2b2f38"/></g><circle cx="7" cy="16.8" r=".9" fill="#c3c8d1"/><circle cx="17" cy="16.8" r=".9" fill="#c3c8d1"/><path d="M19.8 13.2h1.4" stroke="#ffd23f" stroke-width="1.7" stroke-linecap="round"/><path d="M4.5 13.4h2" stroke="#fff" stroke-width="1.2" stroke-linecap="round" opacity=".7"/></svg>',
   maps: '<svg viewBox="0 0 24 24"><g' + OL + '><path d="M2.5 7l6-2.2 7 2.2 6-2.2v12.7l-6 2.2-7-2.2-6 2.2z" fill="#fff"/><path d="M8.5 4.8v12.7M15.5 7v12.7" fill="none"/><path d="M12 2.6a3.7 3.7 0 0 1 3.7 3.7c0 2.8-3.7 6.6-3.7 6.6S8.3 9.1 8.3 6.3A3.7 3.7 0 0 1 12 2.6z" fill="#ff5d5d"/><circle cx="12" cy="6.3" r="1.2" fill="#fff"/></g></svg>',
-  jobs: '<svg viewBox="0 0 24 24"><g' + OL + '><path d="M12 2.8L20.5 7 12 11.3 3.5 7z" fill="#fff"/><path d="M3.5 7L12 11.3v9.9l-8.5-4.4z" fill="#ffe1c7"/><path d="M20.5 7v9.8L12 21.2v-9.9z" fill="#ffc98f"/></g><path d="M7.8 4.9l8.4 4.2" stroke="#ff7a2f" stroke-width="2" stroke-linecap="round"/></svg>',
+  jobs: '<svg viewBox="0 0 24 24"><g' + OL + '><path d="M3.5 8.5L12 4.5l8.5 4v9.8L12 22l-8.5-3.7z" fill="#d9a066"/><path d="M3.5 8.5L12 12.5l8.5-4" fill="none"/><path d="M12 12.5V22" fill="none"/></g><path d="M7.7 6.5l8.5 4" stroke="#fff3d6" stroke-width="2.4"/><path d="M14.5 15.5l3-1.4M14.5 17.7l3-1.4" stroke="#7a4e26" stroke-width="1.1" stroke-linecap="round"/><circle cx="7.6" cy="15.2" r="2.1" fill="#3ddc97" stroke="#070912" stroke-width="1"/><path d="M7.6 14v2.4" stroke="#0d3b2a" stroke-width="1.1"/></svg>',
   board: '<svg viewBox="0 0 24 24"><g' + OL + '><path d="M7 3.5h10v4.8a5 5 0 0 1-10 0z" fill="#ffd23f"/><path d="M7 5.2H4.2v1.6A3.2 3.2 0 0 0 7.4 10M17 5.2h2.8v1.6A3.2 3.2 0 0 1 16.6 10" fill="none"/><path d="M10.6 13h2.8v3.6h-2.8z" fill="#ffd23f"/><rect x="7.5" y="16.6" width="9" height="3.6" rx="1" fill="#fff"/></g><path d="M12 5.3l.8 1.6 1.8.3-1.3 1.2.3 1.8-1.6-.9-1.6.9.3-1.8-1.3-1.2 1.8-.3z" fill="#fff"/></svg>',
   codes: '<svg viewBox="0 0 24 24"><g' + OL + '><path d="M3 7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2.6a2.4 2.4 0 0 0 0 4.8V17a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2.6a2.4 2.4 0 0 0 0-4.8z" fill="#fff"/><path d="M9 8.4l1 2.1 2.3.3-1.7 1.6.4 2.3L9 13.6l-2 1.1.4-2.3-1.7-1.6 2.3-.3z" fill="#ffd23f"/></g><path d="M15.5 7.5v9" stroke="#070912" stroke-width="1.4" stroke-dasharray="1.5 1.5"/></svg>',
-  settings: '<svg viewBox="0 0 24 24"><g' + OL + '><path fill="#fff" d="M10.3 2h3.4l.5 2.6 2 .9 2.2-1.5 2.4 2.4-1.5 2.2.9 2 2.6.5v3.4l-2.6.5-.9 2 1.5 2.2-2.4 2.4-2.2-1.5-2 .9-.5 2.6h-3.4l-.5-2.6-2-.9-2.2 1.5-2.4-2.4 1.5-2.2-.9-2L2 13.7v-3.4l2.6-.5.9-2L4 5.6 6.4 3.2l2.2 1.5 2-.9z"/><circle cx="12" cy="12" r="3.3" fill="#9aa3c7"/></g></svg>',
+  settings: '<svg viewBox="0 0 24 24"><g' + OL + '><path fill="#e6e9f0" d="M10.3 2h3.4l.5 2.6 2 .9 2.2-1.5 2.4 2.4-1.5 2.2.9 2 2.6.5v3.4l-2.6.5-.9 2 1.5 2.2-2.4 2.4-2.2-1.5-2 .9-.5 2.6h-3.4l-.5-2.6-2-.9-2.2 1.5-2.4-2.4 1.5-2.2-.9-2L2 13.7v-3.4l2.6-.5.9-2L4 5.6 6.4 3.2l2.2 1.5 2-.9z"/><circle cx="12" cy="12" r="3.6" fill="#3d7bff"/></g><circle cx="12" cy="12" r="1.3" fill="#fff"/></svg>',
   help: '<svg viewBox="0 0 24 24"><g' + OL + '><path d="M4 3.5h16A1.5 1.5 0 0 1 21.5 5v10.5A1.5 1.5 0 0 1 20 17h-8l-4.5 3.8V17H4a1.5 1.5 0 0 1-1.5-1.5V5A1.5 1.5 0 0 1 4 3.5z" fill="#fff"/></g><path d="M9.7 8.4a2.4 2.4 0 1 1 3.4 2.2c-.7.4-1.1.8-1.1 1.6" stroke="#ff4f9a" stroke-width="2.1" fill="none" stroke-linecap="round"/><circle cx="12" cy="14.4" r="1.15" fill="#ff4f9a"/></svg>',
   play: '<svg viewBox="0 0 24 24"><path d="M7 4.5v15a1 1 0 0 0 1.5.9l12-7.5a1 1 0 0 0 0-1.8l-12-7.5A1 1 0 0 0 7 4.5z" fill="#fff" stroke="#070912" stroke-width="2" stroke-linejoin="round"/></svg>',
   restart: '<svg viewBox="0 0 24 24"><g fill="none" stroke-linecap="round"><path d="M19 12a7 7 0 1 1-2.1-5" stroke="#070912" stroke-width="5"/><path d="M19 12a7 7 0 1 1-2.1-5" stroke="#fff" stroke-width="2.6"/></g><path d="M20 2.5V9h-6.5z" fill="#fff" stroke="#070912" stroke-width="1.5" stroke-linejoin="round"/></svg>',
   home: '<svg viewBox="0 0 24 24"><g' + OL + '><path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" fill="#fff"/></g></svg>',
+  police: '<svg viewBox="0 0 24 24"><g' + OL + '><path d="M12 2.2l7.8 3.1v5.8c0 4.8-3.3 8.9-7.8 10.7-4.5-1.8-7.8-5.9-7.8-10.7V5.3z" fill="#3d7bff"/><path d="M12 4.6l5.5 2.2v4.4c0 3.6-2.3 6.6-5.5 8-3.2-1.4-5.5-4.4-5.5-8V6.8z" fill="#ffd23f"/><path d="M12 7.7l1.3 2.6 2.8.4-2 2 .5 2.8L12 14.2l-2.6 1.3.5-2.8-2-2 2.8-.4z" fill="#fff"/></g></svg>',
   upg: '<svg viewBox="0 0 24 24"><path d="M5 13l7-7 7 7M5 19l7-7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   perf: '<svg viewBox="0 0 24 24"><path d="M14.5 3a5.2 5.2 0 0 0-4.9 6.9L3.4 16.1a2.1 2.1 0 0 0 3 3l6.2-6.2a5.2 5.2 0 0 0 6.9-4.9l-3 3-2.8-.7-.7-2.8z" fill="currentColor"/></svg>',
   style: '<svg viewBox="0 0 24 24"><path d="M11 2l2.2 6.8L20 11l-6.8 2.2L11 20l-2.2-6.8L2 11l6.8-2.2zM19 15l1 2.2 2.2.8-2.2.9L19 21l-.9-2.1L16 18l2.1-.8z" fill="currentColor"/></svg>',
@@ -2686,14 +3427,14 @@ function show(n) {
   cur = n;
   for (var k in OV) OV[k].hidden = k !== n;
   pauseBtn.hidden = true;
-  if (n === 'menu' || n === 'garage' || n === 'maps' || n === 'jobs' || n === 'codes' || n === 'board' || n === 'name' || n === 'help') { if (state !== 'menu') { state = 'menu'; Aud.engine(false, 0); } prepare(); }
+  if (n === 'menu' || n === 'garage' || n === 'maps' || n === 'jobs' || n === 'codes' || n === 'board' || n === 'police' || n === 'name' || n === 'help') { if (state !== 'menu') { state = 'menu'; Aud.engine(false, 0); } prepare(); }
   render(n);
   var f = OV[n].querySelector('[autofocus]'); if (f && window.matchMedia('(pointer:fine)').matches) f.focus();
 }
 function hideAll() { cur = null; for (var k in OV) OV[k].hidden = true; }
 function render(n) {
   if (n === 'name') rName(); else if (n === 'menu') rMenu(); else if (n === 'garage') rGarage(); else if (n === 'maps') rMaps();
-  else if (n === 'codes') rCodes(); else if (n === 'board') rBoard(); else if (n === 'jobs') rJobs(); else if (n === 'settings') rSettings(); else if (n === 'pause') rPause(); else if (n === 'help') rHelp();
+  else if (n === 'codes') rCodes(); else if (n === 'board') rBoard(); else if (n === 'police') rPolice(); else if (n === 'jobs') rJobs(); else if (n === 'settings') rSettings(); else if (n === 'pause') rPause(); else if (n === 'help') rHelp();
 }
 function head(title, back) {
   return '<div class="hd"><button class="btn ghost sm" data-act="go" data-to="' + (back || 'menu') + '" aria-label="Back">‹ Back</button><h2>' + title + '</h2><div class="wal">' + fmt(save.wallet) + '</div></div>';
@@ -2756,11 +3497,12 @@ function rMenu() {
       giftHtml() +
       '<button class="btn big ibtn" data-act="play">' + ICON.play + 'PLAY</button>' +
       '<div class="grid2">' +
+        '<button class="btn c-navy mbtn" data-act="go" data-to="police">' + ICON.police + 'Police<span class="badge">NEW</span></button>' +
         '<button class="btn c-blue mbtn" data-act="go" data-to="garage">' + ICON.garage + 'Garage</button>' +
         '<button class="btn c-green mbtn" data-act="go" data-to="maps">' + ICON.maps + 'Maps</button>' +
         '<button class="btn c-orange mbtn" data-act="go" data-to="jobs">' + ICON.jobs + 'Jobs<span class="badge">' + save.jobs.active.length + '/3</span></button>' +
         '<button class="btn c-purple mbtn" data-act="go" data-to="codes">' + ICON.codes + 'Codes</button>' +
-        '<button class="btn c-teal mbtn" data-act="go" data-to="board">' + ICON.board + 'Top runs</button>' +
+        '<button class="btn c-teal mbtn" data-act="go" data-to="board">' + ICON.board + 'Leaderboard</button>' +
         '<button class="btn c-grey mbtn" data-act="settings" data-back="menu">' + ICON.settings + 'Settings</button>' +
         '<button class="btn c-pink mbtn" data-act="go" data-to="help">' + ICON.help + 'How to play</button>' +
       '</div>' +
@@ -2916,7 +3658,7 @@ function mapEmblem(m, big) {
 }
 function mapSkyThing(m) {
   var k = m.vk;
-  if (k === 'day' || k === 'rush' || k === 'works' || k === 'dunes') return '<g stroke="#ffd23f" stroke-width="1.6" stroke-linecap="round"><path d="M47 5v-2.5M47 19v2.5M40 12h-2.5M54 12h2.5M42 7l-1.8-1.8M52 17l1.8 1.8M52 7l1.8-1.8M42 17l-1.8 1.8"/></g><circle cx="47" cy="12" r="5" fill="#ffe066" stroke="#e8a200" stroke-width="1"/>';
+  if (k === 'day' || k === 'rush' || k === 'works' || k === 'dunes' || k === 'pass') return '<g stroke="#ffd23f" stroke-width="1.6" stroke-linecap="round"><path d="M47 5v-2.5M47 19v2.5M40 12h-2.5M54 12h2.5M42 7l-1.8-1.8M52 17l1.8 1.8M52 7l1.8-1.8M42 17l-1.8 1.8"/></g><circle cx="47" cy="12" r="5" fill="#ffe066" stroke="#e8a200" stroke-width="1"/>';
   if (k === 'dawn') return '<circle cx="46" cy="24" r="7" fill="#ffd08a"/><circle cx="46" cy="24" r="4.5" fill="#fff2c8"/>';
   if (k === 'dusk') return '<circle cx="46" cy="23" r="7.5" fill="#ff7a2f"/><circle cx="46" cy="23" r="5" fill="#ffb35c"/>';
   if (k === 'night' || k === 'neon') return '<circle cx="47" cy="11" r="6" fill="#f4f1d8"/><circle cx="50" cy="9" r="5.2" fill="' + SKY[k] + '"/><circle cx="12" cy="7" r=".9" fill="#fff"/><circle cx="24" cy="12" r=".7" fill="#fff"/><circle cx="33" cy="5" r=".8" fill="#fff"/>';
@@ -2938,9 +3680,16 @@ function mapIcon(m, own) {
   s += '<rect y="' + hz + '" width="60" height="' + (72 - hz) + '" fill="' + m.verge + '"/>';
   if (m.water) s += '<path d="M0 ' + (hz + 3) + 'H14L2 72H0Z" fill="#2f7fa8"/><path d="M60 ' + (hz + 3) + 'H46L58 72H60Z" fill="#2f7fa8"/>';
   // road running into the distance
+  if (m.curve > 1.5) {
+    // a road snaking off into the hills
+    var sp = 'M30 ' + hz + 'C46 ' + (hz + 10) + ' 12 ' + (hz + 22) + ' 30 ' + (hz + 30) + 'S40 66 26 72';
+    s += '<path d="' + sp + '" stroke="' + m.line + '" stroke-width="19" fill="none"/><path d="' + sp + '" stroke="' + m.road + '" stroke-width="16" fill="none"/>';
+    s += '<path d="' + sp + '" stroke="' + m.line + '" stroke-width="1.4" stroke-dasharray="3 3" fill="none"/>';
+  } else {
   s += '<path d="M27 ' + hz + 'H33L52 72H8Z" fill="' + m.road + '"/>';
   s += '<path d="M27 ' + hz + 'L8 72M33 ' + hz + 'L52 72" stroke="' + m.line + '" stroke-width="1.2" opacity=".85"/>';
   s += '<path d="M30 ' + (hz + 2) + 'V72" stroke="' + m.line + '" stroke-width="1.8" stroke-dasharray="3 4"/>';
+  }
   if (m.vk === 'rush') s += '<rect x="21" y="52" width="6" height="10" rx="2" fill="#c8202f" stroke="#070912" stroke-width=".7"/><rect x="33" y="41" width="5" height="8" rx="1.8" fill="#1e4fa8" stroke="#070912" stroke-width=".7"/><rect x="26.5" y="35" width="4" height="6" rx="1.5" fill="#f2b705" stroke="#070912" stroke-width=".6"/>';
   if (m.vk === 'works') s += '<path d="M36 62l3-11 3 11z" fill="#ff7a2f" stroke="#3a1600" stroke-width=".7"/><path d="M37.3 57.5h3.4" stroke="#fff" stroke-width="1.4"/><rect x="34.5" y="62" width="9" height="2" rx=".8" fill="#ff7a2f" stroke="#3a1600" stroke-width=".6"/>';
   // scenery: one big feature on the left, a smaller one on the right
@@ -2978,6 +3727,47 @@ function rJobs() {
   OV.jobs.innerHTML = h;
 }
 
+/* ---------- police mode: the wanted board and the police garage ---------- */
+var pTab = 'wanted';
+function rPolice() {
+  var pol = save.police, pc = pcById(pol.car), h = head('Police mode') + '<div class="card wide flat">';
+  h += '<div class="chips"><button class="chip' + (pTab === 'wanted' ? ' on' : '') + '" data-act="ptab" data-v="wanted">Wanted board</button>' +
+       '<button class="chip' + (pTab === 'cars' ? ' on' : '') + '" data-act="ptab" data-v="cars">Police garage <small>' + Object.keys(pol.cars).length + '/' + POLICE_CARS.length + '</small></button></div>';
+  if (pTab === 'cars') {
+    h += '<p class="fine">Police cars only drive on police bounties. A faster police car closes in on criminals quicker.</p>';
+    POLICE_CARS.forEach(function (c) {
+      var own = !!pol.cars[c.id], on = pol.car === c.id;
+      h += '<div class="job' + (on ? ' on' : '') + '"><canvas class="wcv" data-pc="' + c.id + '" width="108" height="144"></canvas>' +
+        '<div class="jtx"><b>' + esc(c.name) + '</b><span class="fine">' + esc(c.info) + '</span>' +
+        statBar('Chase speed', Math.max(0.04, c.pace)) + statBar('Lives', c.lives / 6) + '</div>' +
+        '<div class="jr">' + (own ? (on ? '<em>Driving</em>' : '<button class="btn sm" data-act="psel" data-id="' + c.id + '">Drive</button>')
+                               : '<em>' + (c.price ? fmt(c.price) : 'Free') + '</em><button class="btn sm" data-act="pbuy" data-id="' + c.id + '"' + (save.wallet < c.price ? ' disabled' : '') + '>Buy</button>') +
+        '</div></div>';
+    });
+  } else {
+    h += '<p class="fine">Pick a wanted criminal. Stay in their lane to catch up, then ram them until they pull over. Bigger bounties are faster and trickier, so bring a fast police car.</p>';
+    h += '<div class="job on"><div class="jtx"><small>Your police car</small><b>' + esc(pc.name) + '</b>' + statBar('Chase speed', Math.max(0.04, pc.pace)) + '</div>' +
+         '<div class="jr"><button class="btn ghost sm" data-act="ptab" data-v="cars">Change</button></div></div>';
+    WANTED.forEach(function (w, i) {
+      var open = wantedOpen(i), b = Math.round(w.bounty * M.cash / 50) * 50;
+      h += '<div class="job' + (open ? '' : ' lock') + '"><canvas class="wcv" data-i="' + i + '" width="108" height="144"></canvas>' +
+        '<div class="jtx"><small class="stars">' + STARS.slice(0, w.stars) + '</small><b>' + esc(w.name) + '</b>' +
+        '<span class="fine">' + (open ? esc(w.info) : 'Catch the ' + esc(WANTED[i - 1].name) + ' to unlock') + '</span>' +
+        (pol.caught[i] ? '<span class="fine">Caught ' + pol.caught[i] + (pol.caught[i] === 1 ? ' time' : ' times') + '</span>' : '') + '</div>' +
+        '<div class="jr"><em>' + fmt(b) + '</em><button class="btn sm" data-act="chase" data-v="' + i + '"' + (open ? '' : ' disabled') + '>Chase</button></div></div>';
+    });
+    h += '<p class="fine">+25% for a clean catch (no crashes) and +25% for a fast catch. Catch them one after another and every bounty grows by 10%. Bounties on ' + esc(M.name) + ' pay x' + M.cash + '. Tap the spike strip button once per suspect to slow them down.</p>';
+    h += '<p class="fine">Best shift: ' + fmt(pol.best) + ' · ' + pol.busts + ' criminals busted</p>';
+  }
+  OV.police.innerHTML = h + '</div>';
+  var cvs = OV.police.querySelectorAll('.wcv');
+  for (var k = 0; k < cvs.length; k++) {
+    var g = cvs[k].getContext('2d'), id = cvs[k].getAttribute('data-pc'), spec = id ? pcById(id).spec : wantedSpec(WANTED[+cvs[k].getAttribute('data-i')]);
+    var sc = Math.min(1.9, 128 / spec.h, 90 / spec.w);
+    g.setTransform(sc, 0, 0, sc, 54, 72);
+    drawSpec(g, spec, 0, 0, { clock: 0.1 });
+  }
+}
 /* ---------- codes ----------
    Codes are stored only as SHA-256 hashes of "cargorun:" + CODE, so they can't be read from the page source.
    Each code works once per player. */
@@ -3062,33 +3852,44 @@ function doRedeem() {
 }
 
 /* ---------- top runs (online leaderboard) ---------- */
-var boardTok = 0;
+var boardTok = 0, boardTab = 'runs';
 function rBoard() {
-  var tok = ++boardTok, pend = save.lbQueue ? '<p class="fine">Your best run ' + fmt(save.lbQueue.score) + ' hasn’t been sent yet. It will go up as soon as you’re online.</p>' : '';
-  OV.board.innerHTML = head('Top runs') + '<div class="card wide flat">' +
-    '<div class="lbMe"><span>Your best run as <b style="color:#fff">' + esc(save.name) + '</b></span><b>' + fmt(save.best) + '</b></div>' + pend +
-    '<p id="bSrc" class="fine">Loading the leaderboard…</p><ol id="bList" class="board"></ol>' +
+  var tok = ++boardTok, cops = boardTab === 'cops', P2 = save.police, h = head(cops ? 'Top cops' : 'Top runs') + '<div class="card wide flat">';
+  h += '<div class="chips"><button class="chip' + (cops ? '' : ' on') + '" data-act="btab" data-v="runs">Top runs</button><button class="chip' + (cops ? ' on' : '') + '" data-act="btab" data-v="cops">Top cops</button></div>';
+  if (cops) {
+    h += '<div class="lbMe"><span>Criminals busted by <b style="color:#fff">' + esc(save.name) + '</b></span><b>' + P2.busts + '</b></div>' +
+      (P2.bq ? '<p class="fine">Your total of ' + P2.bq + ' hasn’t been sent yet. It will go up as soon as you’re online.</p>' : '');
+  } else {
+    h += '<div class="lbMe"><span>Your best run as <b style="color:#fff">' + esc(save.name) + '</b></span><b>' + fmt(save.best) + '</b></div>' +
+      (save.lbQueue ? '<p class="fine">Your best run ' + fmt(save.lbQueue.score) + ' hasn’t been sent yet. It will go up as soon as you’re online.</p>' : '');
+  }
+  OV.board.innerHTML = h + '<p id="bSrc" class="fine">Loading the leaderboard…</p><ol id="bList" class="board"></ol>' +
     '<button class="btn ghost ibtn wide" data-act="refresh">' + ICON.restart + 'Refresh</button></div>';
-  (save.lbQueue ? lbFlush() : Promise.resolve()).then(lbTop).then(function (rows) {
+  var load = cops ? (P2.bq ? bustFlush() : Promise.resolve()).then(copsTop) : (save.lbQueue ? lbFlush() : Promise.resolve()).then(lbTop);
+  load.then(function (rows) {
     if (tok !== boardTok || cur !== 'board') return;
     var src = document.getElementById('bSrc'), list = document.getElementById('bList'), me = String(save.name || '').toLowerCase();
     rows = Array.isArray(rows) ? rows : [];
-    src.textContent = rows.length ? 'The best run of every driver, from everyone who plays Cargo Run.' : 'No scores yet. Finish a run to take first place!';
+    src.textContent = rows.length ? (cops ? 'Most criminals busted in Police mode, from everyone who plays Cargo Run.' : 'The best run of every driver, from everyone who plays Cargo Run.')
+                                  : (cops ? 'Nobody has busted a criminal yet. Catch one in Police mode to take first place!' : 'No scores yet. Finish a run to take first place!');
     rows.forEach(function (row, i) {
       var li = document.createElement('li');
       li.className = (String(row.name).toLowerCase() === me ? 'me' : '') + (i < 3 ? ' top' : '');
       li.innerHTML = '<span class="rk"></span><span class="nm"></span><span class="sc"></span><span class="mt"></span>';
       li.children[0].textContent = i < 3 ? ['🥇', '🥈', '🥉'][i] : '#' + (i + 1);
-      li.children[1].textContent = row.name; li.children[2].textContent = fmt(row.score);
-      li.children[3].textContent = [row.car, row.map].filter(Boolean).join(' · ');
+      li.children[1].textContent = row.name;
+      if (cops) { li.children[2].textContent = row.busts + ' busted'; }
+      else { li.children[2].textContent = fmt(row.score); li.children[3].textContent = [row.car, row.map].filter(Boolean).join(' · '); }
       list.appendChild(li);
     });
-  }).catch(function () {
+  }).catch(function (e) {
     if (tok !== boardTok || cur !== 'board') return;
-    var src = document.getElementById('bSrc'); if (src) src.textContent = 'Can’t reach the leaderboard right now. Check your internet connection and tap Refresh.';
+    var src = document.getElementById('bSrc'); if (!src) return;
+    // a 404 means the Top cops table hasn't been created in the database yet
+    src.textContent = cops && /40[0-9]/.test(String(e && e.message)) ? 'The Top cops board isn’t switched on yet. Your busts are saved and will be sent once it is.'
+                                                                  : 'Can’t reach the leaderboard right now. Check your internet connection and tap Refresh.';
   });
 }
-
 /* ---------- settings ---------- */
 function tog(k, label) { return '<div class="it"><div class="itx"><b>' + label + '</b></div><button class="switch' + (SET()[k] ? ' on' : '') + '" data-act="tog" data-k="' + k + '" role="switch" aria-checked="' + !!SET()[k] + '" aria-label="' + label + '"><i></i></button></div>'; }
 function segs(k, label, opts) { return '<div class="it col"><div class="itx"><b>' + label + '</b></div><div class="segs">' + opts.map(function (o) { return '<button class="seg' + (SET()[k] === o[0] ? ' on' : '') + '" data-act="set" data-k="' + k + '" data-v="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div></div>'; }
@@ -3098,7 +3899,7 @@ function rSettings() {
     '<h4>Sound</h4>' + tog('sfx', 'Sound effects') + slider('sfxVol', 'Effects volume') + tog('music', 'Music') + slider('musicVol', 'Music volume') +
     '<h4>Controls</h4>' + segs('ctrl', 'Steering', [['tap', 'Tap sides'], ['swipe', 'Swipe'], ['buttons', 'Buttons']]) +
     '<p class="fine">Keyboard: ← → or A D to steer, Esc or P to pause. Game controllers work too.</p>' +
-    '<h4>Display</h4>' + segs('quality', 'Graphics', [['high', 'High'], ['low', 'Battery saver']]) + tog('shake', 'Screen shake') + tog('vibe', 'Vibration') + tog('fps', 'Show FPS') +
+    '<h4>Display</h4>' + segs('view', 'Game view', [['2d', '2D'], ['3d', '3D']]) + segs('quality', 'Graphics', [['high', 'High'], ['low', 'Battery saver']]) + tog('shake', 'Screen shake') + tog('vibe', 'Vibration') + tog('fps', 'Show FPS') +
     '<h4>Driver</h4><div class="it"><div class="itx"><b>' + esc(save.name) + '</b><span>Saved in this browser · ' + syncLabel() + '</span></div>' +
       (setBack === 'pause' ? '' : '<button class="btn ghost sm" data-act="rename" data-back="settings">Change name</button>') + '</div>' +
     '</div>';
@@ -3113,10 +3914,21 @@ function rPause() {
 }
 function rOver(res) {
   var r = res.run;
+  if (res.police) {
+    var pz = res.police;
+    OV.over.innerHTML = '<div class="card narrow center"><h1 class="ttl">' + esc(res.reason) + '</h1>' +
+      '<div class="big2"><div><b>' + fmt(res.earned) + '</b><span>Earned</span></div><div><b>' + fmt(res.best) + '</b><span>Best shift</span></div></div>' +
+      (res.newBest && res.earned > 0 ? '<p class="nb">New best shift!</p>' : '') +
+      '<div class="mini"><div><b>' + pz.busts + '</b><span>Busted</span></div><div><b>' + fmt(pz.bounty) + '</b><span>Bounties</span></div><div><b>' + r.crates + '</b><span>Crates</span></div><div><b>' + res.km.toFixed(1) + '</b><span>km</span></div></div>' +
+      (r.jobsDone && r.jobsDone.length ? '<div class="jdone">' + r.jobsDone.map(function (jd) { return '<div><span>' + esc(jd.title) + '</span><b>+' + fmt(jd.reward) + '</b></div>'; }).join('') + '</div>' : '') +
+      '<p class="fine">Wallet: ' + fmt(save.wallet) + '</p>' +
+      '<button class="btn big ibtn" data-act="chase" data-v="' + pz.lvl + '" autofocus>' + ICON.restart + 'CHASE AGAIN</button><div class="grid2"><button class="btn c-navy ibtn" data-act="go" data-to="police">' + ICON.police + 'Wanted</button><button class="btn c-grey ibtn" data-act="go" data-to="menu">' + ICON.home + 'Menu</button></div></div>';
+    return;
+  }
   OV.over.innerHTML = '<div class="card narrow center"><h1 class="ttl">' + esc(res.reason) + '</h1>' +
     '<div class="big2"><div><b>' + fmt(res.earned) + '</b><span>Earned</span></div><div><b>' + fmt(res.best) + '</b><span>Best run</span></div></div>' +
     (res.newBest && res.earned > 0 ? '<p class="nb">New personal best!</p>' : '') +
-    '<div class="mini"><div><b>' + res.km.toFixed(1) + '</b><span>km</span></div><div><b>' + r.crates + '</b><span>Crates</span></div><div><b>' + r.near + '</b><span>Near misses</span></div><div><b>' + r.booms + '</b><span>Explosions</span></div></div>' +
+    '<div class="mini"><div><b>' + (r.deliv || 0) + '</b><span>Delivered</span></div><div><b>' + r.near + '</b><span>Near misses</span></div><div><b>' + r.crates + '</b><span>Crates</span></div><div><b>' + res.km.toFixed(1) + '</b><span>km</span></div></div>' +
     (r.jobsDone && r.jobsDone.length ? '<div class="jdone">' + r.jobsDone.map(function (jd) { return '<div><span>' + esc(jd.title) + '</span><b>+' + fmt(jd.reward) + '</b></div>'; }).join('') + '</div>' : '') +
     '<p class="fine">Wallet: ' + fmt(save.wallet) + '</p><p id="ovRank" class="fine"></p>' +
     '<button class="btn big ibtn" data-act="play" autofocus>' + ICON.restart + 'RUN AGAIN</button><div class="grid2"><button class="btn c-blue ibtn" data-act="go" data-to="garage">' + ICON.garage + 'Garage</button><button class="btn c-grey ibtn" data-act="go" data-to="menu">' + ICON.home + 'Menu</button></div></div>';
@@ -3130,12 +3942,15 @@ function rOver(res) {
 }
 var HELP = [
   { t: 'Dodge ’em!', p: 'Tap the left or right side of the screen to swerve between lanes. Don’t hit anything!', art: 'dodge' },
+  { t: 'Hot cargo', p: 'Your trunk is full of contraband. Each company is off a highway exit. When the EXIT comes up, be in the right lane to turn off. At the loading dock you get paid and load new cargo.', art: 'cops' },
+  { t: 'Winding roads', p: 'The road twists left and right. Your car follows its lane, so just watch what’s coming.', art: 'dodge' },
   { t: 'Stack that cash', p: 'Green crates are money. Grab them in a row without crashing to build a multiplier.', art: 'cash' },
   { t: 'Keep it fuelled', p: 'Your tank drains as you drive. Snag the orange cans before the bar hits zero.', art: 'fuel' },
   { t: 'Live dangerously', p: 'Skim past cars without touching them. Every near miss pays bonus cash.', art: 'near' },
   { t: 'Watch the road', p: 'Broken-down cars, slow semis and wrong-way drivers. A red ! means trouble is coming.', art: 'danger' },
-  { t: 'Power-ups', p: 'Shields, magnets, double cash, cash bags and repair kits. Grab everything you see.', art: 'power' },
+  { t: 'Power-ups', p: 'Shields, magnets, nitro, double cash, cash bags and repair kits. Nitro makes you faster and lets you smash through traffic.', art: 'power' },
   { t: 'Build your ride', p: 'Spend your cash on ' + CARS.length + ' cars, upgrades, mods and wild paint jobs. Unlock ' + MAPS.length + ' maps.', art: 'garage' },
+  { t: 'Police mode', p: 'Switch sides! Pick a criminal from the Wanted board, chase them in your police car and ram them until they pull over.', art: 'police' },
   { t: 'Play every day', p: 'Open your daily gift, finish jobs for big payouts, and redeem secret codes for free stuff.', art: 'daily' }
 ];
 var helpPage = 0, helpRaf = 0;
@@ -3200,7 +4015,7 @@ function drawHelp(g, art) {
     label('!', lx(1), 25, '#070912', 16);
     car('hauler', lx(1), 150, 1);
   } else if (art === 'power') {
-    var types = [['shield', 'Shield'], ['magnet', 'Magnet'], ['fuel', 'Fuel'], ['dbl', 'x2 cash'], ['bag', 'Cash bag'], ['repair', 'Repair']];
+    var types = [['shield', 'Shield'], ['magnet', 'Magnet'], ['fuel', 'Fuel'], ['dbl', 'x2 cash'], ['nos', 'Nitro'], ['repair', 'Repair']];
     g.fillStyle = 'rgba(7,9,18,0.55)'; g.fillRect(0, 0, Wd, Hd);
     types.forEach(function (tp, k) { var cx = 55 + (k % 3) * 95, cy = 55 + Math.floor(k / 3) * 85; item(tp[0], cx, cy + Math.sin(t * 3 + k) * 4, 1.5); label(tp[1], cx, cy + 36, '#fff', 14); });
   } else if (art === 'garage') {
@@ -3209,6 +4024,19 @@ function drawHelp(g, art) {
       var col = PAINTS[(Math.floor(t * 1.5) + k * 9) % PAINTS.length];
       car(id, 70 + k * 80, 95 + Math.sin(t * 2 + k) * 5, id === 'behemoth' ? 1.2 : 1.6, { paint: col, glow: k === 0 ? '#37e4f0' : null, spoiler: k === 2 });
     });
+  } else if (art === 'cops') {
+    // the drop-off gate rolling towards your car
+    var gy = ((t * 50) % 150) - 20;
+    for (i = 0; i < 18; i++) { g.fillStyle = (i % 2) ? '#f1ecd9' : '#15171c'; g.fillRect(60 + i * 10, gy, 10, 6); g.fillStyle = (i % 2) ? '#15171c' : '#f1ecd9'; g.fillRect(60 + i * 10, gy + 6, 10, 6); }
+    g.fillStyle = '#ffc21a'; rr(g, 62, gy - 26, 176, 20, 5); g.fill(); g.strokeStyle = '#070912'; g.lineWidth = 2; g.stroke();
+    label('DROP-OFF', 150, gy - 16, '#2a1100', 13);
+    car('hauler', lx(1), 150, 1);
+    label('HOT CARGO', 150, 178, '#ffc21a', 16);  } else if (art === 'police') {
+    var py = 150 - ((t * 25) % 50);
+    tcar({ t: 'sedan', w: 31, h: 60, color: '#c8202f' }, lx(1), 55, 1, { clock: t });
+    g.strokeStyle = 'rgba(255,59,59,' + (0.5 + 0.3 * Math.sin(t * 7)) + ')'; g.lineWidth = 2.5; g.beginPath(); g.ellipse ? g.ellipse(lx(1), 55, 30, 40, 0, 0, TAU) : g.arc(lx(1), 55, 36, 0, TAU); g.stroke();
+    tcar(pcById('p_cruiser').spec, lx(1), py + 40, 1, { clock: t });
+    if (py < 108) label('BAM!', 230, 70, '#ffc21a', 24);
   } else if (art === 'daily') {
     g.fillStyle = 'rgba(7,9,18,0.55)'; g.fillRect(0, 0, Wd, Hd);
     // gift box
@@ -3239,7 +4067,15 @@ function act(a, el) {
     case 'rename': nameBack = d('back') || 'menu'; Aud.sfx('click'); show('name'); return;
     case 'redeem': doRedeem(); return;
     case 'refresh': Aud.sfx('click'); rBoard(); return;
-    case 'play': Aud.sfx('click'); hideAll(); startRun(); return;
+    case 'play': Aud.sfx('click'); mode = 'cargo'; hideAll(); startRun(); return;
+    case 'ptab': pTab = d('v'); Aud.sfx('click'); rPolice(); OV.police.scrollTop = 0; return;
+    case 'psel': if (save.police.cars[d('id')]) { save.police.car = d('id'); persist(); Aud.sfx('buy'); } rPolice(); return;
+    case 'pbuy':
+      c = pcById(d('id'));
+      if (!save.police.cars[c.id] && spend(c.price)) { save.police.cars[c.id] = 1; save.police.car = c.id; persist(); Aud.sfx('buy'); toast(c.name + ' is yours!'); } else Aud.sfx('deny');
+      rPolice(); return;
+    case 'btab': boardTab = d('v'); Aud.sfx('click'); rBoard(); return;
+    case 'chase': if (!wantedOpen(+d('v'))) return; Aud.sfx('click'); mode = 'police'; chaseLvl = +d('v'); hideAll(); startRun(); return;
     case 'settings': setBack = d('back') || 'menu'; Aud.sfx('click'); cur = 'settings'; for (var k in OV) OV[k].hidden = k !== 'settings'; rSettings(); return;
     case 'resume': hideAll(); resumeGame(); return;
     case 'restart': hideAll(); startRun(); return;
@@ -3295,7 +4131,10 @@ function act(a, el) {
       if (!save.maps[m.id] && spend(m.price)) { save.maps[m.id] = 1; save.map = m.id; persist(); prepare(); Aud.sfx('buy'); toast(m.name + ' unlocked!'); } else Aud.sfx('deny');
       rMaps(); return;
     case 'tog': SET()[d('k')] = !SET()[d('k')]; persist(); Aud.apply(); if (d('k') === 'fps') {} rSettings(); return;
-    case 'set': SET()[d('k')] = d('v'); persist(); if (d('k') === 'quality') { layout(); } Aud.sfx('click'); rSettings(); return;
+    case 'set':
+      // 3D is still being built: say so and stay in 2D
+      if (d('k') === 'view' && d('v') === '3d') { Aud.sfx('deny'); toast('3D isn’t available yet. Coming soon!', 2600); return; }
+      SET()[d('k')] = d('v'); persist(); if (d('k') === 'quality') { layout(); } Aud.sfx('click'); rSettings(); return;
   }
 }
 appEl.addEventListener('click', function (e) {
@@ -3322,11 +4161,11 @@ appEl.addEventListener('keydown', function (e) {
 window.addEventListener('keydown', function (e) {
   var tg = e.target && e.target.tagName;
   if (tg === 'INPUT') return;
-  if (e.key === 'Escape' && cur && ['garage', 'maps', 'jobs', 'codes', 'board'].indexOf(cur) >= 0) { show('menu'); e.preventDefault(); }
+  if (e.key === 'Escape' && cur && ['garage', 'maps', 'jobs', 'codes', 'board', 'police'].indexOf(cur) >= 0) { show('menu'); e.preventDefault(); }
   else if (e.key === 'Escape' && cur === 'name' && nameBack) { var nb = nameBack; nameBack = null; show(nb); e.preventDefault(); }
   else if (e.key === 'Escape' && cur === 'settings') { if (setBack === 'pause') { cur = 'pause'; for (var k in OV) OV[k].hidden = k !== 'pause'; rPause(); } else show('menu'); e.preventDefault(); }
   // Enter starts a run from the menu, but not when a button has focus (the button's own click handles that)
-  else if (e.key === 'Enter' && tg !== 'BUTTON' && (cur === 'menu' || cur === 'over')) { e.preventDefault(); hideAll(); startRun(); }
+  else if (e.key === 'Enter' && tg !== 'BUTTON' && (cur === 'menu' || cur === 'over')) { e.preventDefault(); if (cur === 'menu') mode = 'cargo'; hideAll(); startRun(); }
   else if (cur === 'help' && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) { helpPage = clamp(helpPage + (e.key === 'ArrowRight' ? 1 : -1), 0, HELP.length - 1); rHelp(); e.preventDefault(); }
   else if (e.key === 'Escape' && cur === 'help') { show('menu'); e.preventDefault(); }
 });
@@ -3355,15 +4194,26 @@ function boot() {
     save.lbQueue = { name: save.name.slice(0, 12), score: Math.min(100000000, save.best), car: carById(save.car).name.slice(0, 24), map: mapById(save.map).name.slice(0, 24) };
     persist();
   }
-  lbFlush();
+  lbFlush(); bustFlush();
   checkForUpdate();
 }
 boot();
 // developer test hooks: only exist when the page is opened with ?crtest in the address
 if (window.__CR_TEST || /[?&]crtest\b/.test(location.search)) window.__CR = {
   drawCar: function (canvas, id, look) { preview(canvas, carById(id), 4.2, look || {}); },
-  save: function () { return save; }, persist: persist, show: show, start: startRun, prepare: prepare,
-  st: function () { return { state: state, cash: cash, t: t, traffic: traffic.length, booms: run.booms, lives: lives, fuel: fuel, parts: parts.length, W: W, H: H }; },
+  save: function () { return save; }, persist: persist, show: show, start: function () { mode = 'cargo'; startRun(); }, prepare: prepare,
+  st: function () { return { state: state, cash: cash, t: t, traffic: traffic.length, booms: run.booms, lives: lives, fuel: fuel, parts: parts.length, W: W, H: H,
+    chase: chase ? { gap: Math.round(chase.gap), time: chase.time, busts: chase.busts, total: chase.total, hp: chase.sus ? chase.sus.hp : null, lane: chase.sus ? chase.sus.lane : null, pl: P.lane, why: chase.why, items: items.map(function (i) { return i.type; }).join(',') } : null }; },
+  smug: function () { return smug ? { why: run.why, n: smug.n, left: Math.round(smugLeft()), deliv: run.deliv || 0, lives: lives, pl: P.lane,
+    bend: Math.round(bendAt(0)) } : null; },
+  step: function () { if (state === 'count') countT = 0; if (state === 'paused') state = 'play'; update(1 / 60); },
+  exitInfo: function () { var e = smug && nextExit(); return e ? { lane: exitLane(e), rem: Math.round(exitRem(e)), kind: e.kind, cops: copCount(), bust: +smug.bust.toFixed(2), heat: heat() } : null; },
+  setN: function (n) { smug.n = n; },
+  phase: function () { return smug ? smug.phase + ' t=' + smug.t.toFixed(2) + ' rem=' + Math.round(smugRem()) : null; },
+  world: function () { return { traffic: traffic, items: items, P: P, LANES: LANES, laneX: laneX }; },
+  lanesCut: function () { return traffic.filter(function (c) { return c.pend != null; }).length; },
+  chase: function (lvl) { mode = 'police'; chaseLvl = lvl || 0; hideAll(); startRun(); },
+  steer: function (l) { P.lane = l; },
   inject: function (kind, lane, y, beh, sig) { var old = pool; pool = [kind]; var c = mkCar(lane, y, beh === 'stall' ? 1 : 0.6, beh || 'norm'); pool = old; if (beh === 'stall') c.sig = 2; if (sig) { c.pend = lane + sig; c.sigT = 99; c.sig = sig; } traffic.push(c); return traffic.length; },
   clear: function () { traffic.length = 0; items.length = 0; },
   freeze: function () { state = 'paused'; },

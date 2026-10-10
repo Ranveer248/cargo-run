@@ -189,7 +189,7 @@ input { -webkit-user-select: text; user-select: text; }
 .mr.on { border-color: var(--accent); box-shadow: 0 4px 0 var(--accent-dk); }
 .msw { width: 64px; height: 76px; border-radius: 12px; flex-shrink: 0; border: 3px solid var(--edge); overflow: hidden; box-shadow: 0 3px 0 var(--edge); background: #10142a; }
 .msw svg { display: block; width: 100%; height: 100%; }
-.mtx { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; } .mtx b { font-family: var(--disp); font-weight: 400; font-size: 18px; color: #fff; } .mtx span { font-size: 12px; color: var(--dim); font-weight: 700; }
+.mtx { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; } .mtx b { font-family: var(--disp); font-weight: 400; font-size: 18px; color: #fff; } .mtx span { font-size: 12px; color: var(--dim); font-weight: 700; } .mtx .mco { font-size: 11px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
 .chip svg, .tab svg { width: 16px; height: 16px; vertical-align: -3px; margin-right: 4px; }
 @media (max-width: 440px) { .tab { font-size: 14px; padding: 6px 2px; } .tab svg { display: block; margin: 0 auto 2px; width: 18px; height: 18px; } }
 .ibtn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
@@ -354,7 +354,13 @@ var CLS = [
   { k: 'lux',      label: 'Luxury',    body: 'limo',     names: ['Dominion', 'Majestro', 'Duchesse', 'Chancellor', 'Ambassa', 'Palatine'], price: [24000, 90000], w: [33, 36], h: [70, 82], lives: 3, drain: 1.0, agi: [12, 16], pay: [1.3, 1.7], nos: [1.1, 1.3], pu: 1.2, can: 40, startShield: true, perk: 'Starts every run with a shield.' },
   // top of the ladder ($10M to $100M)
   { k: 'royal',    label: 'Royal',     body: 'limo',     names: ['Spectre', 'Batur', 'Exelero'], price: [500000, 700000], w: [35, 37], h: [78, 84], lives: 4, drain: 0.95, agi: [15, 19], pay: [2.2, 2.6], nos: [1, 1], pu: 1.3, can: 45, startShield: true, perk: 'Built like a vault: four lives and a free shield.' },
-  { k: 'legend',   label: 'Legend',    body: 'hyper',    names: ['Evija', 'Roadstar', 'Spyder', 'Amgone', 'Senna', 'Laferra', 'Zonda', 'Regera', 'Valkyr', 'Tourbillon'], price: [800000, 2000000], w: [31, 33], h: [60, 64], lives: 3, drain: 1.05, agi: [34, 42], pay: [2.8, 3.6], nos: [1, 1], pu: 1.4, can: 40, perk: 'Legendary speed and pay, with an extra life.' }
+  { k: 'legend',   label: 'Legend',    body: 'hyper',    names: ['Evija', 'Roadstar', 'Spyder', 'Amgone', 'Senna', 'Laferra', 'Zonda', 'Regera', 'Valkyr', 'Tourbillon'], price: [800000, 2000000], w: [31, 33], h: [60, 64], lives: 3, drain: 1.05, agi: [34, 42], pay: [2.8, 3.6], nos: [1, 1], pu: 1.4, can: 40, perk: 'Legendary speed and pay, with an extra life.' },
+  // added October 2026 (new classes go at the end so the older cars keep their stats)
+  { k: 'kei',      label: 'Kei car',   body: 'hatch',    names: ['Pocketto', 'Mameko'], price: [2000, 4000], w: [26, 27], h: [46, 49], lives: 2, drain: 0.7, agi: [24, 27], pay: [1, 1.05], nos: [1, 1], pu: 1.1, can: 35, perk: 'Tiny, nimble and barely uses fuel.' },
+  { k: 'jdm',      label: 'JDM legend', body: 'sports',  names: ['Skyliner', 'Supremo', 'Rotora'], price: [30000, 60000], w: [30, 32], h: [58, 62], lives: 3, drain: 1.05, agi: [25, 29], pay: [1.2, 1.4], nos: [1, 1], pu: 1, can: 35, stripe: true, perk: 'Tuned legends: quick steering and good pay.' },
+  { k: 'etruck',   label: 'Electric truck', body: 'pickup', names: ['Voltrunner', 'Cyberline', 'Ampere'], price: [40000, 90000], w: [35, 37], h: [70, 76], lives: 4, drain: 0.55, agi: [12, 15], pay: [1.15, 1.3], nos: [1, 1], pu: 1, can: 30, perk: 'Electric pickup: tough, and barely uses fuel.' },
+  { k: 'psuv',     label: 'Super SUV', body: 'suv',      names: ['Urracan', 'Cayenna', 'Escaldo'], price: [60000, 150000], w: [35, 37], h: [66, 70], lives: 4, drain: 1.1, agi: [16, 20], pay: [1.4, 1.7], nos: [1, 1], pu: 1.1, can: 40, perk: 'Four lives with supercar pay.' },
+  { k: 'gt',       label: 'Grand tourer', body: 'coupe', names: ['Continent', 'Romana', 'Vantagio'], price: [90000, 250000], w: [32, 34], h: [62, 66], lives: 3, drain: 1.0, agi: [22, 26], pay: [1.6, 2.0], nos: [1, 1], pu: 1.2, can: 40, startShield: true, perk: 'Long-distance luxury: starts with a shield.' }
 ];
 var GEN = [];
 CLS.forEach(function (c, ci) {
@@ -428,21 +434,27 @@ var CAR_NAMES = {
   // legends (new)
   evija: ['Lotis', 'Evijah'], roadstar: ['Tezla', 'Roadstar'], spyder: ['Porsha', '918 Spydr'], amgone: ['Mercedez', 'AMG Won'],
   senna: ['McLaran', 'Senno'], laferra: ['Ferrarri', 'LaFerrarri'], zonda: ['Pagany', 'Zondo'], regera: ['Kronigsegg', 'Regerra'],
-  valkyr: ['Aston Martyn', 'Valkyrey'], tourbillon: ['Bugotti', 'Tourbillion']
+  valkyr: ['Aston Martyn', 'Valkyrey'], tourbillon: ['Bugotti', 'Tourbillion'],
+  // added October 2026
+  pocketto: ['Suzukki', 'Alto Works'], mameko: ['Daihatsoo', 'Copen'],
+  skyliner: ['Nisson', 'Skylain R34'], supremo: ['Toyoda', 'Supraa Mk4'], rotora: ['Mazdo', 'RX-7'],
+  voltrunner: ['Rivien', 'R1T'], cyberline: ['Tezla', 'Cybertrak'], ampere: ['Ferd', 'Lightnin'],
+  urracan: ['Lamborgini', 'Uruz'], cayenna: ['Porsha', 'Cayen Turbo'], escaldo: ['Cadillak', 'Escaleid'],
+  continent: ['Bentlee', 'Continentel GT'], romana: ['Ferrarri', 'Romah'], vantagio: ['Aston Martyn', 'Vantij']
 };
 var OLD_CAR_PRICE = {};
 LEGACY.concat(GEN).forEach(function (c) { OLD_CAR_PRICE[c.id] = c.price; });
 var CARS = LEGACY.concat(GEN.filter(function (c) { return CAR_NAMES[c.id]; }));
 CARS.forEach(function (c) { var n = CAR_NAMES[c.id]; c.brand = n[0]; c.model = n[1]; c.name = n[0] + ' ' + n[1]; });
 // showroom order, cheapest to dearest: everyday cars, then sporty, trucks and luxury, then supercars and hypercars
-var CAR_ORDER = ['hauler', 'pebble', 'thimble', 'button', 'kettle', 'halden', 'valcor', 'courier', 'buggy', 'tarrow',
+var CAR_ORDER = ['hauler', 'pebble', 'thimble', 'pocketto', 'mameko', 'button', 'kettle', 'halden', 'valcor', 'courier', 'buggy', 'tarrow',
   'foxtrot', 'parcel', 'bastion', 'portico', 'badger', 'drover', 'shuttle', 'rig', 'dispatch', 'fenwick',
   'pelham', 'rally', 'zing', 'whirl', 'vex', 'jolt', 'breeze', 'solane', 'trail', 'stevedore',
   'ironbark', 'yardley', 'photon', 'filament', 'gravel', 'scrabble', 'sidewinder', 'roadster', 'kite', 'marrow',
-  'brute', 'havoc', 'muscle', 'thunderhead', 'cudgel', 'drift', 'swallow', 'zephyra', 'vireo', 'crestline',
-  'freightly', 'scree', 'crusher', 'ashby', 'wexford', 'dominion', 'starlet', 'moraine', 'kingsfold', 'current',
+  'brute', 'havoc', 'muscle', 'thunderhead', 'cudgel', 'supremo', 'skyliner', 'rotora', 'drift', 'swallow', 'zephyra', 'vireo', 'crestline',
+  'freightly', 'voltrunner', 'ampere', 'cyberline', 'scree', 'crusher', 'ashby', 'wexford', 'dominion', 'starlet', 'moraine', 'kingsfold', 'cayenna', 'escaldo', 'urracan', 'current',
   'rapier', 'glaive', 'comet', 'velvet', 'tarn', 'ondine', 'falchion', 'poniard', 'mammoth', 'juggernaut',
-  'behemoth', 'iridis', 'ambassa', 'duchesse', 'aeon', 'quasar', 'helion', 'palatine', 'phantom', 'apex',
+  'behemoth', 'iridis', 'ambassa', 'duchesse', 'aeon', 'quasar', 'helion', 'palatine', 'romana', 'vantagio', 'continent', 'phantom', 'apex',
   'kronos', 'spectre', 'batur', 'zenith', 'exelero', 'evija', 'roadstar', 'maelstrom', 'singularity', 'spyder',
   'amgone', 'senna', 'laferra', 'zonda', 'regera', 'valkyr', 'tourbillon'];
 // price ladder: free, then $2,500 up to $100,000,000, each car about 12% more than the one before
@@ -547,6 +559,7 @@ var GOLD_HEX = '#d4af37';
 function hasGold() { return !!(save.codes.GOLDEN || save.admin); }
 
 /* ================= maps ================= */
+// the old map list, kept only so players get back what they paid for maps that were replaced
 var CLASSIC = [
   { id: 'night', name: 'Night Highway', cls: 'Classic', price: 0,     lanes: 4, verge: '#0d1017', road: '#232838', line: '#c9c4a8', dark: true,  decor: 'lamps', weather: 'none',   cash: 1,    drain: 1,   steer: 1,   traffic: 1,    aggr: 0.7, hz: {} },
   { id: 'dunes', name: 'Dune Road',     cls: 'Classic', price: 2500,  lanes: 4, verge: '#c9a56b', road: '#8a6a4a', line: '#f3e6c4', dark: false, decor: 'cacti', weather: 'none',   cash: 1.2,  drain: 1.1, steer: 1,   traffic: 1,    aggr: 0.85, hz: {} },
@@ -588,7 +601,7 @@ var VARS = [
 var HZ_NAMES = { rock: 'Rockfalls', barrel: 'Explosive barrels', oil: 'Oil slicks', pothole: 'Potholes' };
 function mapInfo(m) {
   var p = [m.lanes + ' lanes'];
-  if (m.curve > 1.5) p.push('Hairpin bends');
+  if (m.curve > 1.5) p.push('Hairpin bends'); else if (m.curve > 1.1) p.push('Winding');
   if (m.cash !== 1) p.push((m.cash > 1 ? '+' : '') + Math.round((m.cash - 1) * 100) + '% cash');
   if (m.weather === 'rain') p.push('Rain'); if (m.weather === 'fog') p.push('Fog'); if (m.weather === 'snow') p.push('Snow');
   if (m.lightning) p.push('Lightning');
@@ -635,8 +648,37 @@ GEN_MAPS.forEach(function (m, i) {
   m.cls = TIERS[Math.min(3, Math.floor(i * 4 / GEN_MAPS.length))];
   m.info = mapInfo(m);
 });
-var MAPS = CLASSIC.concat(GEN_MAPS);
-var MAP_GROUPS = ['Classic'].concat(TIERS);
+CLASSIC.concat(GEN_MAPS).forEach(function (m) { RETIRED_PRICE[m.id] = m.price; });
+
+/* ================= real places =================
+   Every map is a real road somewhere in the world, easiest first. decor/water/weather/tint pick the 2D scenery,
+   vk picks the sky on the map card, env is the scenery set the 3D version will use. */
+var PLACES = [
+  { id: 'atacama',    name: 'Atacama Desert',          country: 'Chile',               cls: 'Easy',    price: 0,      lanes: 4, verge: '#d2a878', road: '#4b4744', line: '#f3e6c4', decor: 'cacti',   cash: 1,    traffic: 0.9,  aggr: 0.7,  hz: {},                        vk: 'day',   env: 'desert' },
+  { id: 'route66',    name: 'Route 66',                country: 'Arizona, USA',        cls: 'Easy',    price: 3000,   lanes: 4, verge: '#b5562f', road: '#5a4a42', line: '#f6e3c2', decor: 'mesa',    cash: 1.15, drain: 1.1,    aggr: 0.85, hz: { rock: 0.25 },            vk: 'dusk',  tint: ['#ff7a2f', 0.12], env: 'canyon' },
+  { id: 'pch',        name: 'Pacific Coast Highway',   country: 'California, USA',     cls: 'Easy',    price: 7000,   lanes: 4, verge: '#2f7fa8', road: '#454b55', line: '#f0ecd8', decor: 'palms',   leaf: '#2f8f5a', water: true, cash: 1.25, aggr: 0.9, hz: { pothole: 0.25 }, curve: 1.3, vk: 'dawn', tint: ['#ff9ec4', 0.08], env: 'coast' },
+  { id: 'autobahn',   name: 'Autobahn A9',             country: 'Bavaria, Germany',    cls: 'Easy',    price: 12000,  lanes: 5, verge: '#3f6b34', road: '#50535a', line: '#ffffff', decor: 'trees',   leaf: '#2f6b3f', cash: 1.35, traffic: 1.15, aggr: 1.1, hz: { oil: 0.2 }, vk: 'day',   env: 'forest' },
+  { id: 'banff',      name: 'Icefields Parkway',       country: 'Alberta, Canada',     cls: 'Medium',  price: 18000,  lanes: 4, verge: '#dfe8f2', road: '#4a5568', line: '#f2f6fb', decor: 'snow',    weather: 'snow', steer: 0.72, cash: 1.45, aggr: 0.95, hz: { rock: 0.3 }, curve: 1.3, vk: 'frost', env: 'alpine' },
+  { id: 'greatocean', name: 'Great Ocean Road',        country: 'Victoria, Australia', cls: 'Medium',  price: 26000,  lanes: 3, verge: '#7a8a52', road: '#4b4f57', line: '#fff4d0', decor: 'rocks',   water: true, cash: 1.55, hz: { rock: 0.3 }, curve: 1.7, vk: 'dusk', tint: ['#ff7a2f', 0.16], env: 'cliffs' },
+  { id: 'tokyo',      name: 'Shuto Expressway',        country: 'Tokyo, Japan',        cls: 'Medium',  price: 36000,  lanes: 5, verge: '#120a24', road: '#1d1735', line: '#e8e4ff', decor: 'city',    dark: true, darkA: 0.12, tint: ['#0a1030', 0.2], cash: 1.7, traffic: 1.2, aggr: 1.15, hz: {}, vk: 'neon', env: 'citynight' },
+  { id: 'dubai',      name: 'Sheikh Zayed Road',       country: 'Dubai, UAE',          cls: 'Medium',  price: 48000,  lanes: 5, verge: '#d8c39a', road: '#3f4148', line: '#ffffff', decor: 'towers',  cash: 1.8, traffic: 1.15, aggr: 1.2, hz: { oil: 0.2 }, vk: 'day', env: 'skyline' },
+  { id: 'norway',     name: 'Atlantic Ocean Road',     country: 'Norway',              cls: 'Hard',    price: 65000,  lanes: 3, verge: '#5a6a5a', road: '#3d434c', line: '#f1eddb', decor: 'rocks',   water: true, weather: 'rain', steer: 0.88, cash: 1.95, hz: { pothole: 0.3 }, curve: 1.6, vk: 'rain', tint: ['#3a4a63', 0.2], env: 'fjord' },
+  { id: 'amazon',     name: 'BR-319 Highway',          country: 'Amazonas, Brazil',    cls: 'Hard',    price: 85000,  lanes: 3, verge: '#1c5a34', road: '#4a4038', line: '#e6e0c4', decor: 'jungle',  leaf: '#2c8a4a', weather: 'rain', steer: 0.88, cash: 2.05, hz: { pothole: 0.45, rock: 0.2 }, vk: 'rain', tint: ['#3a4a63', 0.12], env: 'jungle' },
+  { id: 'iceland',    name: 'Ring Road',               country: 'Iceland',             cls: 'Hard',    price: 110000, lanes: 3, verge: '#cfe6f2', road: '#58687a', line: '#e8f6ff', decor: 'ice',     weather: 'rain', lightning: true, dark: true, darkA: 0.3, steer: 0.75, cash: 2.2, hz: { rock: 0.35, oil: 0.2 }, vk: 'storm', tint: ['#1a2236', 0.3], env: 'glacier' },
+  { id: 'london',     name: 'M25 Motorway',            country: 'London, UK',          cls: 'Hard',    price: 140000, lanes: 5, verge: '#5f8f4e', road: '#4a4d54', line: '#f4f0dc', decor: 'houses',  weather: 'rain', steer: 0.88, cash: 2.35, traffic: 1.35, aggr: 1.3, hz: { pothole: 0.3, oil: 0.25 }, vk: 'rush', tint: ['#3a4a63', 0.16], env: 'suburb' },
+  { id: 'vegas',      name: 'Las Vegas Strip',         country: 'Nevada, USA',         cls: 'Extreme', price: 175000, lanes: 5, verge: '#1a0f2a', road: '#26203a', line: '#ffd23f', decor: 'city',    dark: true, darkA: 0.2, cash: 2.55, traffic: 1.3, aggr: 1.5, hz: { barrel: 0.3, oil: 0.3 }, vk: 'neon', tint: ['#2a0a40', 0.25], env: 'citynight' },
+  { id: 'mumbai',     name: 'Western Express Highway', country: 'Mumbai, India',       cls: 'Extreme', price: 215000, lanes: 5, verge: '#8a7a5a', road: '#4d4c48', line: '#f1e8c8', decor: 'industry', cash: 2.75, traffic: 1.4, aggr: 1.6, hz: { pothole: 0.45, oil: 0.3 }, vk: 'works', tint: ['#ffb020', 0.08], env: 'megacity' },
+  { id: 'stelvio',    name: 'Stelvio Pass',            country: 'Italy',               cls: 'Extreme', price: 260000, lanes: 3, verge: '#4f6a45', road: '#3b3f46', line: '#f4f0dc', decor: 'rocks',   drain: 1.1, cash: 2.95, hz: { rock: 0.45 }, curve: 2.6, vk: 'day', env: 'pass' },
+  { id: 'yungas',     name: 'Yungas Road',             country: 'Bolivia',             cls: 'Extreme', price: 320000, lanes: 3, verge: '#24503a', road: '#5a4a3a', line: '#d8d2b0', decor: 'jungle',  leaf: '#2c7a44', weather: 'fog', drain: 1.1, steer: 0.9, cash: 3.3, hz: { rock: 0.5, pothole: 0.4 }, curve: 2.4, vk: 'fog', tint: ['#c9d3dc', 0.1], env: 'deathroad' }
+];
+PLACES.forEach(function (m) {
+  m.dark = !!m.dark; m.water = !!m.water; m.lightning = !!m.lightning; m.tint = m.tint || null; m.darkA = m.darkA || 0;
+  m.weather = m.weather || 'none'; m.drain = m.drain || 1; m.steer = m.steer || 1; m.traffic = m.traffic || 1; m.aggr = m.aggr || 1; m.hz = m.hz || {};
+  m.info = mapInfo(m);
+});
+PLACES[0].info = 'The easy one: wide open desert, light traffic. ' + PLACES[0].info;
+var MAPS = PLACES, START_MAP = 'atacama';
+var MAP_GROUPS = TIERS;
 function mapById(id) { for (var i = 0; i < MAPS.length; i++) if (MAPS[i].id === id) return MAPS[i]; return MAPS[0]; }
 
 /* ================= jobs ================= */
@@ -1353,6 +1395,8 @@ function drawDecor(g) {
       g.fillStyle = '#7d827b'; g.beginPath(); g.moveTo(px + ox - 7 * k, yy - 8 * k); g.lineTo(px + ox + 3 * k, yy - 12 * k); g.lineTo(px + ox + 4 * k, yy - 2 * k); g.lineTo(px + ox - 5 * k, yy - 1 * k); g.closePath(); g.fill(); }); });
   } else if (d === 'industry') {
     buildings(g, 'industry');
+  } else if (d === 'towers') {
+    buildings(g, 'towers');
   } else if (d === 'crops') {
     rows(14, function (yy, nn) { g.fillStyle = (nn & 1) ? 'rgba(255,240,150,0.13)' : 'rgba(0,60,0,0.14)'; g.fillRect(0, yy, ROAD_X - 6, 7); g.fillRect(W - ROAD_X + 6, yy, ROAD_X, 7); });
     rows(210, function (yy, nn) { var px = hsh(nn, 5) > .5 ? lx : rx, k = vs; g.fillStyle = '#d7b94f'; g.beginPath(); g.arc(px, yy, 9 * k, 0, TAU); g.fill(); g.strokeStyle = '#a88a30'; g.lineWidth = 1.4; g.beginPath(); g.arc(px, yy, 5 * k, 0, TAU); g.stroke(); });
@@ -1425,8 +1469,8 @@ function buildings(g, kind) {
         var room = sd[1] < 0 ? x0 - 2 : W - 2 - x0;
         var bw = Math.min((kind === 'docks' ? 24 : 40) + hsh(n, 10 + si * 9 + k) * (kind === 'docks' ? 10 : 50), room);
         if (bw < 14) break;
-        var bh = kind === 'docks' ? 56 + hsh(n, 30 + si * 9 + k) * 8 : 70 + hsh(n, 30 + si * 9 + k) * 50, bx = sd[1] < 0 ? x0 - bw : x0;
-        var hue = kind === 'city' ? (hsh(n, 50 + k + si) > .5 ? '#1f1640' : '#2a1a55') : kind === 'industry' ? (hsh(n, 50 + k + si) > .5 ? '#3a3532' : '#45403b') : CC[Math.floor(hsh(n, 50 + k + si) * CC.length)];
+        var bh = kind === 'docks' ? 56 + hsh(n, 30 + si * 9 + k) * 8 : kind === 'towers' ? 100 + hsh(n, 30 + si * 9 + k) * 80 : 70 + hsh(n, 30 + si * 9 + k) * 50, bx = sd[1] < 0 ? x0 - bw : x0;
+        var hue = kind === 'towers' ? ['#a7c4d6', '#cfe0ea', '#d8cdb0', '#8fb3c9', '#bfc9d4'][Math.floor(hsh(n, 50 + k + si) * 5)] : kind === 'city' ? (hsh(n, 50 + k + si) > .5 ? '#1f1640' : '#2a1a55') : kind === 'industry' ? (hsh(n, 50 + k + si) > .5 ? '#3a3532' : '#45403b') : CC[Math.floor(hsh(n, 50 + k + si) * CC.length)];
         g.fillStyle = 'rgba(0,0,0,0.35)'; g.fillRect(bx + 4, y - bh + 6, bw, bh);
         g.fillStyle = hue; g.fillRect(bx, y - bh, bw, bh);
         g.fillStyle = shade(hue, .12); g.fillRect(bx, y - bh, bw, 4);
@@ -1437,8 +1481,8 @@ function buildings(g, kind) {
         } else {
           var nc = Math.max(2, Math.floor((bw - 8) / 9)), nr = Math.floor((bh - 14) / 16);
           for (r = 0; r < nr; r++) for (c = 0; c < nc; c++) {
-            if (hsh(n * 13 + r, c + k * 7 + si * 3) > (kind === 'industry' ? .72 : .55)) {
-              g.fillStyle = kind === 'industry' ? '#ff9628' : (hsh(n + r, c + k) > .82 ? '#ff4fd8' : (hsh(r + k, n + c) > .5 ? '#ffd23f' : '#7ad8ff'));
+            if (hsh(n * 13 + r, c + k * 7 + si * 3) > (kind === 'industry' ? .72 : kind === 'towers' ? .25 : .55)) {
+              g.fillStyle = kind === 'towers' ? (hsh(r + k, n + c) > .5 ? '#5b8db0' : '#e8f2fa') : kind === 'industry' ? '#ff9628' : (hsh(n + r, c + k) > .82 ? '#ff4fd8' : (hsh(r + k, n + c) > .5 ? '#ffd23f' : '#7ad8ff'));
               g.globalAlpha = .75; g.fillRect(bx + 5 + c * (bw - 10) / nc, y - bh + 9 + r * 16, 4, 7); g.globalAlpha = 1;
             }
           }
@@ -1459,7 +1503,7 @@ var KEY = 'cargorun-save-v4', KEY_OLD = 'cargorun-save-v3';
 var DEFSET = { view: '2d', sfx: true, sfxVol: 80, music: true, musicVol: 40, vibe: true, shake: true, quality: 'high', ctrl: 'tap', nosSide: 'center', fps: false, motion: true };
 var EMPTY_G = { paints: {}, mods: {}, opt: {} };
 function defaults() {
-  return { name: '', wallet: 0, best: 0, car: 'hauler', map: 'night', owned: { hauler: 1 }, maps: { night: 1 }, garage: {}, codes: {}, lbBest: 0, lbQueue: null,
+  return { name: '', wallet: 0, best: 0, car: 'hauler', map: 'atacama', owned: { hauler: 1 }, maps: { atacama: 1 }, garage: {}, codes: {}, lbBest: 0, lbQueue: null,
            police: { caught: [], best: 0, busts: 0, cars: { p_cruiser: 1 }, car: 'p_cruiser', lbBusts: 0, bq: 0 },
            stats: { runs: 0, km: 0, booms: 0, near: 0, crates: 0, earned: 0, jobs: 0 }, settings: {}, jobs: { board: [], active: [], n: 0 }, rev: 0, ts: 0 };
 }
@@ -1479,7 +1523,7 @@ function normalize(s) {
   s.police.cars.p_cruiser = 1;
   if (!s.police.cars[s.police.car]) s.police.car = 'p_cruiser';
   ['deliv'].forEach(function (x) { if (typeof s.stats[x] !== 'number') s.stats[x] = 0; });
-  s.owned.hauler = 1; s.maps.night = 1;
+  s.owned.hauler = 1; s.maps[START_MAP] = 1;
   var refund = 0;
   Object.keys(s.maps).forEach(function (id) { if (!MAPS.some(function (m) { return m.id === id; })) { refund += RETIRED_PRICE[id] || 0; delete s.maps[id]; } });
   // retired cars: refund what was paid, drop their garage data
@@ -1506,7 +1550,7 @@ function normalize(s) {
   s.jobs.active = s.jobs.active.filter(function (id) { return s.jobs.board.some(function (b) { return b.id === id; }); });
   if (!s.daily || typeof s.daily !== 'object') s.daily = { last: '', streak: 0 };
   if (!s.owned[s.car]) s.car = 'hauler';
-  if (!s.maps[s.map]) s.map = 'night';
+  if (!s.maps[s.map]) s.map = START_MAP;
   return s;
 }
 function loadLocal() {
@@ -1768,7 +1812,7 @@ var POOLS = {
   palms: 'sports hatch sedan suv van bus', rocks: 'suv offroad pickup wagon semi truck sedan', industry: 'semi truck truck van pickup bus sedan',
   crops: 'pickup pickup van truck hatch wagon', reeds: 'pickup offroad suv hatch sedan van', docks: 'semi semi truck van bus sedan taxi', airport: 'van bus sedan taxi suv police',
   houses: 'hatch sedan wagon suv van pickup bus hatch', barrier: 'sedan suv semi semi truck van sports bus sedan', mesa: 'pickup offroad semi truck suv',
-  ice: 'suv offroad pickup semi truck wagon', jungle: 'offroad pickup suv van truck hatch'
+  ice: 'suv offroad pickup semi truck wagon', jungle: 'offroad pickup suv van truck hatch', towers: 'super sports suv sedan taxi van bus sedan'
 };
 var TCOL = ['#c8202f', '#1e4fa8', '#2d2f36', '#e8e8ea', '#9aa3ad', '#1f7a4d', '#e2701a', '#5d2a86', '#0e7c86', '#7a4a2b', '#b3b9c2', '#f2b705', '#3b5c8a', '#8a2b3b'];
 var pool = [];
@@ -1824,7 +1868,7 @@ function resumeGame() { if (state === 'paused') { state = 'count'; countT = 1.2;
    The whole game is one file (index.html). When the game opens, or comes back from the background, it downloads
    a fresh copy of itself and reads the version written in it; if that is newer it reloads (never during a run).
    Bump APP_VERSION for every release. */
-var APP_VERSION = '2026-10-08.1', updBusy = false;
+var APP_VERSION = '2026-10-10.1', updBusy = false;
 function inRun() { return state === 'play' || state === 'count' || state === 'paused'; }
 function checkForUpdate() {
   if (updBusy || inRun() || !/^https?:$/.test(location.protocol)) return;
@@ -1966,7 +2010,7 @@ function mkCar(lane, y, f, beh) {
            beh: beh || 'norm', flip: false, wreck: false, wt: 1 + Math.random() * 2, reckless: !big && Math.random() < 0.05 * ag * ag, brake: false, near: false, burn: 0,
            pend: null, sigT: 0, sig: 0, sigHold: 0 };
 }
-function stallRate() { return M.id === 'night' ? 0.14 : (M.aggr >= 1.3 ? 0.09 : 0.06); }
+function stallRate() { return M.vk === 'night' ? 0.14 : (M.aggr >= 1.3 ? 0.09 : 0.06); }
 function spawnStall(lane) { var c = mkCar(lane, -100, 1, 'stall'); c.sig = 2; c.reckless = false; traffic.push(c); }
 function laneClear(c, l) {
   var lx = laneX(l), i, o;
@@ -2522,8 +2566,29 @@ function drawExitSign() {
     });
   });
 }
-function drawSmugHud() {
-  var sm = smug, g = ctx, L = 14, y = 116, rem = smugLeft(), fr = clamp(1 - rem / sm.len, 0, 1), blink = Math.floor(clock * 4) % 2 === 0, h = heat(), cops = copCount();
+function drawSmugHud(cpt, y) {
+  var sm = smug, g = ctx, L = 14, rem = smugLeft(), fr = clamp(1 - rem / sm.len, 0, 1), blink = Math.floor(clock * 4) % 2 === 0, h = heat(), cops = copCount(), endY;
+  var where = sm.phase === 'depot' ? 'at the dock' : (sm.target.side > 0 ? 'right' : 'left') + ' exit · ' + Math.ceil(rem) + ' m';
+  if (cpt) {
+    // one thin strip: company, exit, pay, progress, and the BUSTED meter while you're wanted
+    var x = 8, w = W - 16, hh = h ? 44 : 32;
+    panel(x, y, w, hh);
+    g.textBaseline = 'middle'; g.textAlign = 'right'; g.font = '800 12px ' + FONT; g.fillStyle = '#3ddc97';
+    var pay = fmt(sm.pay); g.fillText(pay, x + w - 10, y + 12); var pw = g.measureText(pay).width;
+    g.font = '700 11px ' + FONT; g.fillStyle = '#c9c5b3'; g.fillText(where, x + w - 18 - pw, y + 12); var ww = g.measureText(where).width;
+    g.textAlign = 'left'; var co = (sm.phase === 'depot' ? 'Loading: ' : '→ ') + sm.company; fitText(g, co, w - 40 - pw - ww, 13); g.fillStyle = '#f1ecd9'; g.fillText(co, x + 10, y + 12);
+    g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, x + 10, y + 22, w - 20, 4, 2); g.fill();
+    g.fillStyle = '#ffc21a'; rr(g, x + 10, y + 22, Math.max(4, (w - 20) * fr), 4, 2); g.fill();
+    if (h) {
+      g.font = '800 10px ' + FONT; g.fillStyle = cops ? (Math.floor(clock * 6) % 2 ? '#ff3b3b' : '#3d7bff') : '#ffc21a'; g.fillText(STARS.slice(0, h), x + 10, y + 35);
+      var sw2 = g.measureText(STARS.slice(0, h)).width + 16;
+      g.fillStyle = cops ? '#ff8a8a' : '#c9c5b3'; g.fillText(cops ? 'BUSTED' : (sm.calm > 0 ? 'lying low ' + Math.ceil(sm.calm) + 's' : 'WANTED'), x + 10 + sw2, y + 35);
+      var bx2 = x + 10 + sw2 + 60;
+      g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, bx2, y + 31, x + w - 10 - bx2, 7, 3.5); g.fill();
+      if (sm.bust > 0.01) { g.fillStyle = sm.bust > 0.7 && blink ? '#fff' : '#ff3b3b'; rr(g, bx2, y + 31, Math.max(6, (x + w - 10 - bx2) * sm.bust), 7, 3.5); g.fill(); }
+    }
+    endY = y + hh;
+  } else {
   panel(L, y, 178, 84);
   g.textAlign = 'left'; g.textBaseline = 'top';
   g.font = '700 11px ' + FONT; g.fillStyle = '#c9c5b3'; g.fillText(sm.phase === 'depot' ? 'LOADING CARGO FOR' : 'HOT CARGO TO', L + 10, y + 9);
@@ -2535,7 +2600,7 @@ function drawSmugHud() {
   g.fillStyle = '#ffc21a'; rr(g, L + 10, y + 45, Math.max(8, 158 * fr), 9, 4); g.fill();
   g.font = '800 14px ' + FONT; g.fillStyle = '#3ddc97'; g.fillText(fmt(sm.pay), L + 10, y + 62);
   g.textAlign = 'right'; g.font = '700 12px ' + FONT; g.fillStyle = '#c9c5b3';
-  g.fillText(sm.phase === 'depot' ? 'at the dock' : (sm.target.side > 0 ? 'right' : 'left') + ' exit · ' + Math.ceil(rem) + ' m', L + 168, y + 63);
+  g.fillText(where, L + 168, y + 63);
   // the BUSTED meter while the police are after you
   if (h) {
     var by = y + 90; panel(L, by, 178, 30);
@@ -2543,6 +2608,8 @@ function drawSmugHud() {
     g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, L + 64, by + 10, 104, 10, 5); g.fill();
     if (sm.bust > 0.01) { g.fillStyle = sm.bust > 0.7 && blink ? '#fff' : '#ff3b3b'; rr(g, L + 64, by + 10, Math.max(8, 104 * sm.bust), 10, 5); g.fill(); }
     else if (!cops) { g.fillStyle = '#c9c5b3'; g.font = '700 10px ' + FONT; g.fillText(sm.calm > 0 ? 'lying low ' + Math.ceil(sm.calm) + 's' : 'cops on the way', L + 70, by + 15); }
+  }
+  endY = y + 84;
   }
   // getting close to an exit you should take: say which lane
   var e = nextExit();
@@ -2554,6 +2621,7 @@ function drawSmugHud() {
     g.fillStyle = 'rgba(' + col + ',' + (inLane || blink ? 0.94 : 0.75) + ')'; rr(g, W / 2 - tw / 2, bny - 16, tw, 32, 10); g.fill();
     g.strokeStyle = '#f1ecd9'; g.lineWidth = 2; g.stroke(); g.fillStyle = '#fff'; g.fillText(txt, W / 2, bny + 1);
   }
+  return endY;
 }
 // the side streets: a short detour that loses the police
 function drawStreets() {
@@ -3136,7 +3204,7 @@ function drawWarns() {
 function arrowBtns() { var r = 36, y = H - 58; return [{ d: -1, x: Math.max(ROAD_X * .5, 52), y: y, r: r }, { d: 1, x: Math.min(W - ROAD_X * .5, W - 52), y: y, r: r }]; }
 
 function chip(idx, col, letter, frac) {
-  var cx = W - 26 - idx * 32, cy = HUD_RT + 66, g = ctx;
+  var cx = W - 26 - idx * 32, cy = CHIP_Y, g = ctx;
   g.fillStyle = 'rgba(10,13,19,0.75)'; g.beginPath(); g.arc(cx, cy, 14, 0, TAU); g.fill();
   g.strokeStyle = col; g.lineWidth = 3; g.beginPath(); g.arc(cx, cy, 12, -Math.PI / 2, -Math.PI / 2 + TAU * Math.max(0.001, frac)); g.stroke();
   g.fillStyle = col; g.font = '800 13px ' + FONT; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(letter, cx, cy + 1);
@@ -3161,8 +3229,32 @@ function drawChase() {
   g.restore();
 }
 function spikeBtn() { return { x: W / 2, y: H - 58, r: 30 }; }
-function drawChaseHud() {
-  var ch = chase, g = ctx, L = 14, y = 116, w = ch.w, s = ch.sus, blink = Math.floor(clock * 4) % 2 === 0, i;
+// police HUD for phones held upright: one strip with the suspect, bounty, timer, damage and gap
+function drawChaseStrip(y) {
+  var ch = chase, g = ctx, w = ch.w, s = ch.sus, x = 8, wd = W - 16, blink = Math.floor(clock * 4) % 2 === 0, i;
+  panel(x, y, wd, 42);
+  g.textBaseline = 'middle'; g.textAlign = 'left'; g.font = '800 12px ' + FONT;
+  var st = STARS.slice(0, w.stars); g.fillStyle = '#ffc21a'; g.fillText(st, x + 10, y + 12);
+  var sw = g.measureText(st).width; g.fillStyle = '#f1ecd9'; g.fillText(w.short + (ch.streak ? ' #' + (ch.streak + 1) : ''), x + 16 + sw, y + 12);
+  if (!s) {
+    g.textAlign = 'right'; g.fillStyle = '#3ddc97'; g.fillText(ch.busts + ' busted · ' + fmt(ch.total), x + wd - 10, y + 12);
+    g.textAlign = 'left'; g.font = '700 11px ' + FONT; g.fillStyle = '#c9c5b3'; g.fillText('Next suspect coming…', x + 10, y + 30);
+    return y + 42;
+  }
+  var tl = Math.max(0, Math.ceil(ch.time)), tt = Math.floor(tl / 60) + ':' + (tl % 60 < 10 ? '0' : '') + (tl % 60);
+  g.textAlign = 'right'; g.fillStyle = tl <= 10 && blink ? '#ff5d5d' : '#f1ecd9'; g.fillText(tt, x + wd - 10, y + 12);
+  var tw = g.measureText(tt).width; g.fillStyle = '#3ddc97'; g.fillText(fmt(ch.bounty), x + wd - 20 - tw, y + 12);
+  g.textAlign = 'left'; g.font = '800 9px ' + FONT; g.fillStyle = '#c9c5b3'; g.fillText('DMG', x + 10, y + 30);
+  var n = s.max, pw = Math.min(10, 96 / n - 2);
+  for (i = 0; i < n; i++) { g.fillStyle = i < n - s.hp ? '#ff5d5d' : 'rgba(255,255,255,0.18)'; rr(g, x + 34 + i * (pw + 2), y + 26, pw, 8, 2); g.fill(); }
+  var gx = x + 34 + n * (pw + 2) + 10; g.fillStyle = '#c9c5b3'; g.fillText('GAP', gx, y + 30);
+  var bx = gx + 26, bw = x + wd - 10 - bx, fr = clamp(1 - (ch.gap - 60) / 1290, 0, 1), col = ch.gap < 400 ? '#3ddc97' : ch.gap < 900 ? '#ffb020' : '#ff5d5d';
+  if (bw > 20) { g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, bx, y + 26, bw, 8, 4); g.fill(); g.fillStyle = ch.gap > 1000 && blink ? '#fff' : col; rr(g, bx, y + 26, Math.max(6, bw * fr), 8, 4); g.fill(); }
+  return y + 42;
+}
+function drawChaseHud(cpt, y) {
+  var ch = chase, g = ctx, L = 14, w = ch.w, s = ch.sus, blink = Math.floor(clock * 4) % 2 === 0, i, endY = y + 84;
+  if (cpt) { endY = drawChaseStrip(y); if (s) chaseExtras(); return endY; }
   panel(L, y, 178, 84);
   g.textAlign = 'left'; g.textBaseline = 'top';
   var st = STARS.slice(0, w.stars);
@@ -3171,7 +3263,7 @@ function drawChaseHud() {
   if (!s) {
     g.fillStyle = '#3ddc97'; g.font = '800 17px ' + FONT; g.fillText(ch.busts + ' busted · ' + fmt(ch.total), L + 10, y + 32);
     g.font = '700 13px ' + FONT; g.fillStyle = '#c9c5b3'; g.fillText('Next suspect coming…', L + 10, y + 58);
-    return;
+    return endY;
   }
   g.font = '800 17px ' + FONT; g.fillStyle = '#3ddc97'; g.fillText(fmt(ch.bounty), L + 10, y + 27);
   var tl = Math.max(0, Math.ceil(ch.time));
@@ -3184,6 +3276,12 @@ function drawChaseHud() {
   var fr = clamp(1 - (ch.gap - 60) / 1290, 0, 1), col = ch.gap < 400 ? '#3ddc97' : ch.gap < 900 ? '#ffb020' : '#ff5d5d';
   g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, L + 62, y + 67, 106, 9, 4); g.fill();
   g.fillStyle = ch.gap > 1000 && blink ? '#fff' : col; rr(g, L + 62, y + 67, Math.max(8, 106 * fr), 9, 4); g.fill();
+  chaseExtras();
+  return endY;
+}
+// the parts of the police HUD that are the same on every screen: where the suspect is, GETTING AWAY, the spike button
+function chaseExtras() {
+  var ch = chase, g = ctx, s = ch.sus, blink = Math.floor(clock * 4) % 2 === 0, i;
   g.textAlign = 'center'; g.textBaseline = 'middle';
   // an arrow showing where it is while it's off the top of the screen
   if (s.y < -s.h / 3) {
@@ -3207,29 +3305,69 @@ function drawChaseHud() {
   g.globalAlpha = 1;
 }
 
+// phones held upright get a compact HUD: thin strips across the top instead of a tall column over the road
+function compactHud() { return W < 560; }
+var CHIP_Y = 128;
 function drawHud() {
-  var g = ctx, i, L = 14, T = 12;
-  panel(L, T, 178, 98);
-  g.textBaseline = 'top'; g.textAlign = 'left';
-  var cs = '$' + Math.round(cash).toLocaleString('en-US');
-  g.fillStyle = dbl > 0 ? '#ffd23f' : '#f1ecd9'; g.font = '800 ' + (cs.length > 10 ? 20 : cs.length > 8 ? 24 : 30) + 'px ' + FONT;
-  g.fillText(cs, L + 12, T + 8);
-  var cw = g.measureText(cs).width;
-  var m = multNow();
-  if (m > 1) { g.fillStyle = '#3ddc97'; g.font = '800 19px ' + FONT; g.fillText('x' + m, L + 18 + cw, T + 15); }
-  g.font = '700 14px ' + FONT; g.fillStyle = '#c9c5b3';
-  g.fillText((dist / 1000).toFixed(1) + ' km · ' + Math.round(speedNow() * 0.26) + ' km/h' + (dbl > 0 ? '  ·  x2 ' + Math.ceil(dbl) + 's' : ''), L + 12, T + 42);
-  // fuel
-  var low = fuel < 25, blink = low && Math.floor(clock * 4) % 2 === 0, fcol = fuel > 50 ? '#3ddc97' : (fuel > 25 ? '#ffb020' : '#ff5d5d');
-  g.fillStyle = blink ? '#fff' : fcol;
-  g.beginPath(); g.moveTo(L + 18, T + 66); g.quadraticCurveTo(L + 24, T + 74, L + 18, T + 79); g.quadraticCurveTo(L + 12, T + 74, L + 18, T + 66); g.fill();
-  g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, L + 32, T + 68, 132, 10, 5); g.fill();
-  if (fuel > 0.5) { g.fillStyle = blink ? '#fff' : fcol; rr(g, L + 32, T + 68, Math.max(8, 132 * fuel / 100), 10, 5); g.fill(); }
-  if (low && blink) { g.fillStyle = '#ff5d5d'; g.font = '800 13px ' + FONT; g.fillText('LOW FUEL', L + 12, T + 84); }
-  // lives: squeeze the pips so the panel never runs into the cash panel on narrow screens
-  var lsp = Math.min(18, (W - 14 - (L + 186) - 16) / Math.max(1, maxLives)), lpw = Math.min(12, lsp - 3);
-  var lw = maxLives * lsp + 16, LT = HUD_RT; panel(W - 14 - lw, LT, lw, 40);
-  for (i = 0; i < maxLives; i++) { g.fillStyle = i < lives ? '#ffb020' : 'rgba(255,255,255,0.18)'; rr(g, W - 14 - lw + 8 + i * lsp + (lsp - lpw) / 2, LT + 9, lpw, 22, 4); g.fill(); }
+  var g = ctx, i, L = 14, T = 12, cpt = compactHud(), blink = Math.floor(clock * 4) % 2 === 0;
+  var cs = '$' + Math.round(cash).toLocaleString('en-US'), m = multNow(), cw;
+  var low = fuel < 25, fb = low && blink, fcol = fuel > 50 ? '#3ddc97' : (fuel > 25 ? '#ffb020' : '#ff5d5d');
+  var kmh = (dist / 1000).toFixed(1) + ' km · ' + Math.round(speedNow() * 0.26) + ' km/h';
+  if (cpt) {
+    var x = 8, y = 8, w = W - 68;
+    panel(x, y, w, 40);
+    g.textBaseline = 'top'; g.textAlign = 'left';
+    fitText(g, cs, 118, 21); g.fillStyle = dbl > 0 ? '#ffd23f' : '#f1ecd9'; g.fillText(cs, x + 10, y + 5);
+    if (m > 1) { cw = g.measureText(cs).width; g.fillStyle = '#3ddc97'; g.font = '800 13px ' + FONT; g.fillText('x' + m, x + 14 + cw, y + 8); }
+    g.font = '700 10.5px ' + FONT; g.fillStyle = '#c9c5b3'; g.fillText(kmh, x + 10, y + 27);
+    // lives on the right of the strip, fuel in the middle
+    var lp = Math.min(9, 54 / Math.max(1, maxLives)), lx = x + w - 10 - maxLives * lp;
+    for (i = 0; i < maxLives; i++) { g.fillStyle = i < lives ? '#ffb020' : 'rgba(255,255,255,0.18)'; rr(g, lx + i * lp, y + 11, lp - 2.5, 18, 2.5); g.fill(); }
+    var fx = x + Math.max(128, w * 0.46), fw = lx - 10 - fx;
+    if (fw > 24) {
+      g.fillStyle = fb ? '#fff' : fcol; g.beginPath(); g.moveTo(fx + 4, y + 13); g.quadraticCurveTo(fx + 9, y + 20, fx + 4, y + 26); g.quadraticCurveTo(fx - 1, y + 20, fx + 4, y + 13); g.fill();
+      g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, fx + 12, y + 16, fw - 12, 8, 4); g.fill();
+      if (fuel > 0.5) { g.fillStyle = fb ? '#fff' : fcol; rr(g, fx + 12, y + 16, Math.max(6, (fw - 12) * fuel / 100), 8, 4); g.fill(); }
+    }
+    var sy = y + 54;   // clear of the pause button
+    if (smug) sy = drawSmugHud(true, sy);
+    if (chase) sy = drawChaseHud(true, sy);
+    CHIP_Y = sy + 18;
+  } else {
+    panel(L, T, 178, 98);
+    g.textBaseline = 'top'; g.textAlign = 'left';
+    g.fillStyle = dbl > 0 ? '#ffd23f' : '#f1ecd9'; g.font = '800 ' + (cs.length > 10 ? 20 : cs.length > 8 ? 24 : 30) + 'px ' + FONT;
+    g.fillText(cs, L + 12, T + 8);
+    cw = g.measureText(cs).width;
+    if (m > 1) { g.fillStyle = '#3ddc97'; g.font = '800 19px ' + FONT; g.fillText('x' + m, L + 18 + cw, T + 15); }
+    g.font = '700 14px ' + FONT; g.fillStyle = '#c9c5b3';
+    g.fillText(kmh + (dbl > 0 ? '  ·  x2 ' + Math.ceil(dbl) + 's' : ''), L + 12, T + 42);
+    g.fillStyle = fb ? '#fff' : fcol;
+    g.beginPath(); g.moveTo(L + 18, T + 66); g.quadraticCurveTo(L + 24, T + 74, L + 18, T + 79); g.quadraticCurveTo(L + 12, T + 74, L + 18, T + 66); g.fill();
+    g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, L + 32, T + 68, 132, 10, 5); g.fill();
+    if (fuel > 0.5) { g.fillStyle = fb ? '#fff' : fcol; rr(g, L + 32, T + 68, Math.max(8, 132 * fuel / 100), 10, 5); g.fill(); }
+    if (fb) { g.fillStyle = '#ff5d5d'; g.font = '800 13px ' + FONT; g.fillText('LOW FUEL', L + 12, T + 84); }
+    // lives: squeeze the pips so the panel never runs into the cash panel
+    var lsp = Math.min(18, (W - 14 - (L + 186) - 16) / Math.max(1, maxLives)), lpw = Math.min(12, lsp - 3);
+    var lw = maxLives * lsp + 16, LT = HUD_RT; panel(W - 14 - lw, LT, lw, 40);
+    for (i = 0; i < maxLives; i++) { g.fillStyle = i < lives ? '#ffb020' : 'rgba(255,255,255,0.18)'; rr(g, W - 14 - lw + 8 + i * lsp + (lsp - lpw) / 2, LT + 9, lpw, 22, 4); g.fill(); }
+    CHIP_Y = HUD_RT + 66;
+    if (chase) drawChaseHud(false, 116);
+    if (smug) drawSmugHud(false, 116);
+    // active jobs (left out on phones held upright, where there's no room)
+    var aj = activeJobs();
+    if (aj.length && state !== 'count' && !chase) {
+      var jy = T + 104 + (smug ? (heat() ? 128 : 92) : 0); panel(L, jy, 178, 10 + aj.length * 26);
+      aj.forEach(function (j, ji) {
+        var v = jobVal(j), fr = clamp(v / j.n, 0, 1), yy = jy + 8 + ji * 26, off = (j.k === 'mapearn' && save.map !== j.map) || (j.k === 'classkm' && S.car.cls !== j.cls);
+        g.textAlign = 'left'; g.textBaseline = 'top'; g.font = '700 12px ' + FONT; g.fillStyle = off ? '#7d7a6c' : '#e8e4d2';
+        g.fillText(JOB_SHORT[j.k] + (off ? ' (not here)' : ''), L + 10, yy);
+        g.textAlign = 'right'; g.fillStyle = fr >= 1 ? '#3ddc97' : '#ffd23f'; g.fillText(jobFmt(j, v), L + 168, yy);
+        g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, L + 10, yy + 15, 158, 4, 2); g.fill();
+        g.fillStyle = '#ffd23f'; rr(g, L + 10, yy + 15, Math.max(4, 158 * fr), 4, 2); g.fill();
+      });
+    }
+  }
   var idx = 0;
   if (shield > 0) chip(idx++, '#5bc0ff', shield > 1 ? String(shield) : 'S', 1);
   if (magnet > 0) chip(idx++, '#b57bff', 'M', magnet / S.mag);
@@ -3245,26 +3383,11 @@ function drawHud() {
     // on a PC with a mouse, show keyboard hints instead of tap hints
     var kb = SET().ctrl === 'tap' && HAS_MOUSE;
     var tip = kb ? 'Press ← → or A / D to change lane' : SET().ctrl === 'swipe' ? 'Swipe left or right to change lane' : (SET().ctrl === 'buttons' ? 'Use the arrow buttons to change lane' : 'Tap left or right to change lane');
-    if (chase) { tip = 'Stay in the red car’s lane to catch up'; g.fillText(tip, W / 2, H * 0.42); g.fillText('then ram it until it pulls over!', W / 2, H * 0.42 + 22); }
+    if (chase) { g.fillText('Stay in the red car’s lane to catch up', W / 2, H * 0.42); g.fillText('then ram it until it pulls over!', W / 2, H * 0.42 + 22); }
     else { g.fillText('Deliver the hot cargo: take the EXIT', W / 2, H * 0.42); g.fillText('Grab green crates, dodge everything else', W / 2, H * 0.42 + 22); g.fillText(tip, W / 2, H * 0.42 + 44); }
   }
-  if (chase) drawChaseHud();
-  if (smug) drawSmugHud();
-  var aj = activeJobs();
-  if (aj.length && state !== 'count' && !chase) {
-    var jy = T + 104 + (smug ? (heat() ? 128 : 92) : 0); panel(L, jy, 178, 10 + aj.length * 26);
-    aj.forEach(function (j, ji) {
-      var v = jobVal(j), fr = clamp(v / j.n, 0, 1), yy = jy + 8 + ji * 26, off = (j.k === 'mapearn' && save.map !== j.map) || (j.k === 'classkm' && S.car.cls !== j.cls);
-      g.textAlign = 'left'; g.textBaseline = 'top'; g.font = '700 12px ' + FONT; g.fillStyle = off ? '#7d7a6c' : '#e8e4d2';
-      g.fillText(JOB_SHORT[j.k] + (off ? ' (not here)' : ''), L + 10, yy);
-      g.textAlign = 'right'; g.fillStyle = fr >= 1 ? '#3ddc97' : '#ffd23f'; g.fillText(jobFmt(j, v), L + 168, yy);
-      g.fillStyle = 'rgba(255,255,255,0.12)'; rr(g, L + 10, yy + 15, 158, 4, 2); g.fill();
-      g.fillStyle = '#ffd23f'; rr(g, L + 10, yy + 15, Math.max(4, 158 * fr), 4, 2); g.fill();
-    });
-  }
-  if (SET().fps) { g.fillStyle = '#9be7ff'; g.font = '700 12px ' + FONT; g.textAlign = 'left'; g.fillText(Math.round(fpsA) + ' fps', L, T + 108); }
+  if (SET().fps) { g.fillStyle = '#9be7ff'; g.font = '700 12px ' + FONT; g.textAlign = 'left'; g.textBaseline = 'top'; g.fillText(Math.round(fpsA) + ' fps', cpt ? 12 : L, cpt ? CHIP_Y + 10 : T + 108); }
 }
-
 function drawCount() {
   var n = Math.ceil(countT - 0.2), g = ctx, txt = n > 0 ? String(Math.min(3, n)) : 'GO!';
   var fr = (countT - 0.2) % 1, sc = 1 + (fr < 0 ? 0 : fr) * 0.5;
@@ -3389,7 +3512,7 @@ var OV = {};
   var d = document.createElement('div'); d.className = 'ov'; d.id = 'sc-' + n; d.hidden = true; appEl.appendChild(d); OV[n] = d;
 });
 var pauseBtn = document.getElementById('pauseBtn'), toastEl = document.getElementById('toast');
-var cur = null, gView = save.car, gTab = 'upg', gClass = 'All', mGroup = 'Classic', setBack = 'menu';
+var cur = null, gView = save.car, gTab = 'upg', gClass = 'All', mGroup = 'Easy', setBack = 'menu';
 
 // chunky outlined icons to match the cartoon look
 var OL = ' stroke="#070912" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"';
@@ -3618,7 +3741,7 @@ function rMaps() {
   h += '</div><p class="fine pad">' + Object.keys(save.maps).length + ' of ' + MAPS.length + ' maps unlocked. Tougher maps pay more cash.</p><div class="maplist">';
   MAPS.filter(function (m) { return m.cls === mGroup; }).forEach(function (m) {
     var own = !!save.maps[m.id], sel = save.map === m.id;
-    h += '<div class="mr' + (sel ? ' on' : '') + '"><div class="msw">' + mapIcon(m, own) + '</div><div class="mtx"><b>' + esc(m.name) + '</b><span>' + esc(m.info) + '</span></div>' +
+    h += '<div class="mr' + (sel ? ' on' : '') + '"><div class="msw">' + mapIcon(m, own) + '</div><div class="mtx"><small class="mco">' + esc(m.country) + '</small><b>' + esc(m.name) + '</b><span>' + esc(m.info) + '</span></div>' +
       (sel ? '<button class="btn ghost sm" disabled>Selected</button>' : own ? '<button class="btn sm" data-act="selmap" data-id="' + m.id + '">Select</button>' :
         '<button class="btn sm" data-act="buymap" data-id="' + m.id + '"' + (save.wallet < m.price ? ' disabled' : '') + '>' + fmt(m.price) + '</button>') + '</div>';
   });
@@ -3641,6 +3764,7 @@ function mapEmblem(m, big) {
     case 'trees': return '<path d="M0-23L8-9H4L10 0H-10L-4-9H-8Z" fill="' + leaf + '" stroke="' + shade(leaf, -.4) + '" stroke-width=".8"/><rect x="-1.5" y="0" width="3" height="3" fill="#5a3a1e"/>';
     case 'palms': return '<path d="M0 2C1-6 2.5-12 1.5-18" stroke="#7a5230" stroke-width="2.4" fill="none"/><path d="M1.5-18c-6-4-11-2-13 2 5-3 9-2 13-2zM1.5-18c6-4 11-2 13 2-5-3-9-2-13-2zM1.5-18c-3-5-2-9 2-10-2 3-2 6-2 10zM1.5-18c-5 0-9 3-10 7 3-4 6-6 10-7zM1.5-18c5 0 9 3 10 7-3-4-6-6-10-7z" fill="' + (m.leaf || '#2f8f5a') + '"/>';
     case 'rocks': return '<path d="M-15 2L-5-17 1-8 6-13 15 2Z" fill="#7d827b" stroke="#3f433f" stroke-width=".8"/><path d="M-5-17L-2-11-5-12-8-10ZM6-13L8.5-9 6-10 4-9Z" fill="#fff"/>';
+    case 'towers': return '<g stroke="#3a3f4a" stroke-width=".8"><rect x="-13" y="-16" width="7" height="18" fill="#a7c4d6"/><path d="M-4 2V-22L-.5-30 3-22V2Z" fill="#cfe0ea"/><rect x="5" y="-12" width="7" height="14" fill="#d8cdb0"/></g><path d="M-11-12h3M-11-8h3M-2-18h3M-2-13h3M-2-8h3M7-8h3" stroke="#5b8db0" stroke-width="1.2"/>';
     case 'city': return '<g stroke="#0d0620" stroke-width=".8"><rect x="-13" y="-14" width="7" height="16" fill="#3a2475"/><rect x="-5" y="-23" width="8" height="25" fill="#4b2e8f"/><rect x="4" y="-17" width="8" height="19" fill="#3a2475"/></g><path d="M-11-10h3M-11-6h3M-3-19h4M-3-15h4M-3-11h4M6-13h4M6-9h4" stroke="#ff4fd8" stroke-width="1.4"/><path d="M-3-7h4M6-5h4" stroke="#37e4f0" stroke-width="1.4"/>';
     case 'lava': return '<path d="M-15 2L-5-14H5L15 2Z" fill="#4a2a22" stroke="#1f0f0a" stroke-width=".8"/><path d="M-5-14H5L3-9 .5-12-2-8Z" fill="#ff6a2a"/><path d="M1-9L-1-2 2 2" stroke="#ff6a2a" stroke-width="1.4" fill="none"/><circle cx="-2" cy="-19" r="3" fill="#6b5a55"/><circle cx="3" cy="-23" r="4" fill="#7d6b66"/>';
     case 'industry': return '<path d="M-14 2V-8L-8-12V-8L-2-12V-8L4-12V2Z" fill="#5a524c" stroke="#231f1c" stroke-width=".8"/><rect x="6" y="-20" width="5" height="22" fill="#6b625b" stroke="#231f1c" stroke-width=".8"/><circle cx="9" cy="-24" r="3" fill="rgba(210,210,210,.75)"/><circle cx="12" cy="-28" r="2.2" fill="rgba(210,210,210,.55)"/><rect x="-11" y="-5" width="3" height="3" fill="#ff9628"/><rect x="-5" y="-5" width="3" height="3" fill="#ff9628"/><rect x="1" y="-5" width="3" height="3" fill="#ff9628"/>';
@@ -3658,7 +3782,7 @@ function mapEmblem(m, big) {
 }
 function mapSkyThing(m) {
   var k = m.vk;
-  if (k === 'day' || k === 'rush' || k === 'works' || k === 'dunes' || k === 'pass') return '<g stroke="#ffd23f" stroke-width="1.6" stroke-linecap="round"><path d="M47 5v-2.5M47 19v2.5M40 12h-2.5M54 12h2.5M42 7l-1.8-1.8M52 17l1.8 1.8M52 7l1.8-1.8M42 17l-1.8 1.8"/></g><circle cx="47" cy="12" r="5" fill="#ffe066" stroke="#e8a200" stroke-width="1"/>';
+  if (k === 'day' || k === 'rush' || k === 'works') return '<g stroke="#ffd23f" stroke-width="1.6" stroke-linecap="round"><path d="M47 5v-2.5M47 19v2.5M40 12h-2.5M54 12h2.5M42 7l-1.8-1.8M52 17l1.8 1.8M52 7l1.8-1.8M42 17l-1.8 1.8"/></g><circle cx="47" cy="12" r="5" fill="#ffe066" stroke="#e8a200" stroke-width="1"/>';
   if (k === 'dawn') return '<circle cx="46" cy="24" r="7" fill="#ffd08a"/><circle cx="46" cy="24" r="4.5" fill="#fff2c8"/>';
   if (k === 'dusk') return '<circle cx="46" cy="23" r="7.5" fill="#ff7a2f"/><circle cx="46" cy="23" r="5" fill="#ffb35c"/>';
   if (k === 'night' || k === 'neon') return '<circle cx="47" cy="11" r="6" fill="#f4f1d8"/><circle cx="50" cy="9" r="5.2" fill="' + SKY[k] + '"/><circle cx="12" cy="7" r=".9" fill="#fff"/><circle cx="24" cy="12" r=".7" fill="#fff"/><circle cx="33" cy="5" r=".8" fill="#fff"/>';
@@ -3778,7 +3902,7 @@ var CODES = {
   '5d09e18f13763ad53b8166a04ffecfd8a265c12b217d3329c295b4b50ef50e4a': { cash: 75000 },
   '809043a7420798c7a873127636b22cdd7a9cb1c758075194aebe12a27a7cd39e': { cash: 25000 },
   'f9abdb198a8d565835dffbc4c41304ebb3b466400f0e67c86701a3bf08bf1133': { car: 'photon' },
-  '58a428594c695bb40df0776e0cf92aeeb6f12734106dbaff6e429b8c8465e374': { map: 'dunes' },
+  '58a428594c695bb40df0776e0cf92aeeb6f12734106dbaff6e429b8c8465e374': { map: 'route66' },
   '1e6276e3bf587637b76fe4120c6fbbfe70e5e95bba42ad958fea055afa87e85b': { gold: true, key: 'GOLDEN' }
 };
 function sha256(msg) {
